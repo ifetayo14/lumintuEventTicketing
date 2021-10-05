@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');
+@import 'intl-tel-input/build/css/intlTelInput.css';
+
+.iti__flag {background-image: url("path/to/flags.png");}
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .iti__flag {background-image: url("path/to/flags@2x.png");}
+}
+
+body{
+    font-family: 'Montserrat', sans-serif;
+}
+
+.login-side{
+    background-color: #38435F;
+    height: 100vh;
+    color: white;
+}
+
+.login-side-header .h1, .login-side-header .h2 {
+    font-weight: 700;
+}
+
+.login-side-header .h3 {
+    font-weight: 400;
+}
+
+#show_hide_password a{
+    color:#333;
+    margin-left: -50%;
+}
+
+.btn-submit {
+    background-color: #6F778A;
+    color: white;
+    font-size: large;
+}
+
+.login-side-bottom{
+    left: 0;
+    right: 0;
+    bottom: 0;
+    text-align: center;
+}
