@@ -11,36 +11,23 @@
     <!-- CSS Independent -->
     <link rel="stylesheet" href="./public/css/main.css">
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput.min.js" integrity="sha512-QMUqEPmhXq1f3DnAVdXvu40C8nbTgxvBGvNruP6RFacy3zWKbNTmx7rdQVVM2gkd2auCWhlPYtcW2tHwzso4SA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
     <title>Hello, world!</title>
   </head>
   <body>
     <div class="container-fluid">
         <div class="row d-flex">
-            <div class="col-lg-8 col-md-6"></div> <!-- Col-8 -->
-            <div class="col-lg-4 col-md-6 col-xs-12 login-side p-5"> <!-- Start Registration Side -->
-                <div class="login-side-header mb-2">
-                    <p class="h2 text-center mb-3">Create an account</p>
+            <div class="col-lg-4 col-md-6 col-xs-12 login-side p-5"> <!-- Start Login Side -->
+                <div class="login-side-header mb-5">
+                    <p class="h1 text-center mb-3">Welcome</p>
                     <p class="font-italic text-center">Lorem, ipsum dolor sit amet consectetur adipisicing elit.</p>
                 </div>
 
                 <div class="login-side-form">
                     <form>
                         <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text" class="form-control" id="username">
+                            <label for="exampleInputEmail1">Username</label>
+                            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
                         </div>
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" class="form-control" id="email">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="phone">No. Hp</label>
-                            <input id="phone" type="tel" class="form-control">
-                        </div>
-
                         <div class="form-group">
                             <label for="inlineFormInputGroup">Password</label>
                             <div class="input-group">
@@ -53,15 +40,16 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-lg btn-submit w-100 mt-2">Registrasi</button>
+                        <button type="submit" class="btn btn-lg btn-submit w-100 mt-2">Submit</button>
                       </form>
                 </div>
 
                 <div class="login-side-bottom position-absolute mb-4">
-                    <p class="text-center">Already have an account? <a href="">Sign-In</a></p>
+                    <p class="text-center">Don’t have an account? <a href="">Sign-Up</a></p>
                 </div>
-            </div> <!-- End Registration Side -->
-            
+
+            </div> <!-- End Login Side -->
+            <div class="col-lg-8 col-md-6"></div>
         </div>
     </div>
 
@@ -76,6 +64,6 @@
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script src="./public/js/registrasi.js"></script>
+    <script src="./public/js/login.js"></script>
   </body>
 </html>
