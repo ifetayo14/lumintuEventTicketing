@@ -1,0 +1,28 @@
+#contain {
+    border-radius: 2px;
+}
+
+.header h3 {
+    color: #D4AF37;
+}
+
+.header p {
+    color: white;
+}
+
+.content label {
+    color: white;
+    margin-left: 2px;
+}
+
+#name-warning {
+    color:  red;
+}
+
+.content button {
+    background-color: #D4AF37;
+    color: #38435f;
+    border: none;
+    padding-left: 32px;
+    padding-right: 32px;
+}
