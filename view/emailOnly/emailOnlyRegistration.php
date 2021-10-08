@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <!-- CSS Independent -->
-    <link rel="stylesheet" href="../public/css/main.css">
+    <link rel="stylesheet" href="../../public/css/main.css">
 
     <title>Hello, world!</title>
   </head>
@@ -23,7 +23,7 @@
                 </div>
 
                 <div class="login-side-form">
-                    <form method="post" action="../controller/emailOnlyRegistrationProcess.php">
+                    <form method="post" action="../../controller/emailOnlyRegistrationProcess.php">
                         <div class="form-group">
                             <label for="exampleInputEmail1">Email</label>
                             <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
@@ -52,6 +52,6 @@
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script src="../public/js/login.js"></script>
+    <script src="../../public/js/login.js"></script>
   </body>
 </html>

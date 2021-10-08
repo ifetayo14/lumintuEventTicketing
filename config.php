@@ -7,7 +7,7 @@ define('DB_SERVER_PASSWORD', '');
 define('DB_DATABASE', 'ticketing');
 
 define('SITE_URL', 'http://localhost/intern/ticketing/view/emailOnlyRegistration.php');
-define('VERIFY_URL', 'http://localhost/intern/ticketing/view/emailOnlyRegistration.php');
+define('VERIFY_URL', 'http://localhost/intern/ticketing/view/emailOnly/invitation.php');
 
 $dboptions = array(
     PDO::ATTR_PERSISTENT => FALSE,

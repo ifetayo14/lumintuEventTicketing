@@ -17,7 +17,7 @@
     />
 
     <!-- CSS Independent -->
-    <link rel="stylesheet" href="./public/css/invitation.css" />
+    <link rel="stylesheet" href="../../public/css/invitation.css" />
 
     <title>Hello, world!</title>
   </head>
