@@ -102,6 +102,19 @@ header{
     background-image: url('../img/event3.jpg');
 }
 
+.nama-event{
+    color: #D4AF37;
+    font-weight: 700;
+}
+.tanggal{
+    color: #ffffff;
+    font-weight: 700;
+}
+.btn-more{
+    background-color: #D4AF37;
+    color: #ffffff;
+}
+
 /* .slider-area{
     position: relative;
     z-index: 0;
