@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <!-- CSS Independent -->
-    <link rel="stylesheet" href="./public/css/main.css">
+    <link rel="stylesheet" href="../public/css/main.css">
 
     <title>Hello, world!</title>
   </head>
@@ -23,22 +23,10 @@
                 </div>
 
                 <div class="login-side-form">
-                    <form>
+                    <form method="post" action="../controller/emailOnlyRegistrationProcess.php">
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Username</label>
-                            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                        </div>
-                        <div class="form-group">
-                            <label for="inlineFormInputGroup">Password</label>
-                            <div class="input-group">
-                                <input type="password" class="form-control password" id="inlineFormInputGroup">
-                                <div class="input-group-append">
-                                    <span class="input-group-text" onclick="password_show_hide();">
-                                        <i class="fa fa-eye-slash" id="show_eye"></i>
-                                        <i class="fa fa-eye d-none" id="hide_eye"></i>
-                                      </span>
-                                </div>
-                            </div>
+                            <label for="exampleInputEmail1">Email</label>
+                            <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
                         </div>
                         <button type="submit" class="btn btn-lg btn-submit w-100 mt-2">Submit</button>
                       </form>
@@ -64,6 +52,6 @@
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script src="./public/js/login.js"></script>
+    <script src="../public/js/login.js"></script>
   </body>
 </html>
