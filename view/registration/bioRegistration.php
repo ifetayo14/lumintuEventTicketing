@@ -29,22 +29,30 @@
           <p>From Mohammad Arafat Maku</p>
         </div>
         <div class="content">
-          <form>
+          <form method="post" action="../../controller/registrasiBiodataProgress.php">
             <div class="mb-3">
-              <label for="email" class="form-label">Email address</label>
-              <input type="email" class="form-control" id="email" />
+              <label for="email" class="form-label">Email</label>
+              <input disabled name="email" type="email" class="form-control" id="email" value="<?php echo base64_decode($_GET['m']); ?>" />
             </div>
             <div class="mb-3">
-              <label for="name" class="form-label">Example textarea</label>
-              <input type="text" class="form-control" id="name" />
+              <label for="name" class="form-label">Name</label>
+              <input type="text" name="name" class="form-control" id="name" />
               <div id="name-warning" class="form-text">
                 *Your name will be place in your certificate
               </div>
             </div>
             <div class="mb-3">
               <label for="phone" class="form-label">Phone Number</label>
-              <input type="number" class="form-control" id="phone" />
+              <input type="number" name="phoneNum" class="form-control" id="phone" />
             </div>
+              <div class="mb-3">
+                  <label for="password" class="form-label">Password</label>
+                  <input type="password" name="password" class="form-control" id="password" />
+              </div>
+              <div class="mb-3">
+                  <label for="repeatPassword" class="form-label">Repeat Password</label>
+                  <input type="password" name="repeatPassword" class="form-control" id="repeatPassword" />
+              </div>
             <div class="mb-3 form-check">
               <input
                 type="checkbox"
