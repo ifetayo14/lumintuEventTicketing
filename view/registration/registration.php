@@ -16,6 +16,11 @@
     <title>Hello, world!</title>
 </head>
 <body>
+<?php
+    if (isset($_GET['success'])){
+        echo '<script>showPopUp()</script>';
+    }
+?>
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-8 col-md-6"></div> <!-- Col-8 -->
@@ -55,7 +60,7 @@
                                       </span>
                             </div>
                         </div>
-                        <small id="passwordHelpBlock" class="form-text text-danger">
+                        <small id="passwordHelpBlock" class="form-text">
                             Your password must be more than 8 characters!
                         </small>
                     </div>
@@ -71,16 +76,14 @@
                                       </span>
                             </div>
                         </div>
-                        <?php
-                            if (isset($_GET['pnm'])){
-                                echo '<small id="passwordHelpBlock" class="form-text text-danger">
-                                        Your password must be more than 8 characters!
-                                    </small>';
-                            }
-                        ?>
-                        <small id="confirmHelpBlock" class="form-text text-danger d-block">
-                            Make sure to match your password!
+                        <small id="confirmHelpBlock" class="form-text">
+                            Make sure to match your password
                         </small>
+<!--                            if (isset($_GET['pnm'])){-->
+<!--                                echo '<small id="passwordHelpBlock" class="form-text text-danger">-->
+<!--                                        Make sure to match your password!-->
+<!--                                    </small>';-->
+<!--                            }-->
                     </div>
 
                     <button class="btn btn-lg btn-submit w-100 mt-2">Registrasi</button>
@@ -109,6 +112,6 @@
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script src="./public/js/registrasi.js"></script>
+<script src="../../public/js/registrasi.js"></script>
 </body>
 </html>

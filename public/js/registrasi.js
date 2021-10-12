@@ -66,7 +66,7 @@ $('.confirm').on('input', function(){
   }
 })
 
-$('.btn-submit').click(function(){
+function showPopUp(){
   Swal.fire({
     icon: 'success',
     title: 'Registration Success!',
@@ -74,4 +74,4 @@ $('.btn-submit').click(function(){
     confirmButtonColor: '#3085d6',
     text: "Make sure to check your email to verify your account.",
   })
-})
+}
