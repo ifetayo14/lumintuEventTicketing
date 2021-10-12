@@ -39,9 +39,17 @@
                     <div class="form-group email-form">
                         <label for="email">Email</label>
                         <input type="email" name="email" class="form-control" id="email" oninput="validate()" placeholder="example : ex@gmail.com">
-<!--                        <small id="emailHelpBlock" class="form-text text-danger">-->
-<!--                            Your email is not valid-->
-<!--                        </small>-->
+                        <small id="emailHelpBlock" class="form-text">
+                            Your email is not valid
+                        </small>
+
+                        <?php
+                            if (isset($_GET['me'])){
+                                echo '<small id="emailHelpBlock" class="form-text text-danger">
+                                        Your email has been taken. Use a different email.
+                                    </small>';
+                            }
+                        ?>
                     </div>
 
                     <div class="form-group">
@@ -92,7 +100,7 @@
             </div>
 
             <div class="registrasi-side-bottom position-absolute mt-5">
-                <p class="text-center">Already have an account? <a href="">Sign-In</a></p>
+                <p class="text-center">Already have an account? <a href="../login.php">Sign-In</a></p>
             </div>
         </div> <!-- End Registration Side -->
 

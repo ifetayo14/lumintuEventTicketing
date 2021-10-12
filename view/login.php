@@ -25,19 +25,27 @@
                     if (isset($_GET['success'])){
                         echo '<p style="color: green">Your account has been verified! Go ahead and login to access our page.</p>';
                     }
+
+                    if (isset($_GET['wp'])){
+                        echo '<p style="color: red">Email or password is wrong.</p>';
+                    }
+
+                    if (isset($_GET['st'])){
+                        echo '<p style="color: red">Please verify your email first.</p>';
+                    }
                     ?>
                 </div>
 
                 <div class="login-side-form">
-                    <form>
+                    <form action="../controller/loginProcess.php" method="post">
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Username</label>
-                            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                            <label for="exampleInputEmail1">Email</label>
+                            <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
                         </div>
                         <div class="form-group">
                             <label for="inlineFormInputGroup">Password</label>
                             <div class="input-group">
-                                <input type="password" class="form-control password" id="inlineFormInputGroup">
+                                <input name="password" type="password" class="form-control password" id="inlineFormInputGroup">
                                 <div class="input-group-append">
                                     <span class="input-group-text" onclick="password_show_hide();">
                                         <i class="fa fa-eye-slash" id="show_eye"></i>
@@ -51,7 +59,7 @@
                 </div>
 
                 <div class="login-side-bottom position-absolute mb-4">
-                    <p class="text-center">Don’t have an account? <a href="">Sign-Up</a></p>
+                    <p class="text-center">Don’t have an account? <a href="registration/registration.php">Sign-Up</a></p>
                 </div>
 
             </div> <!-- End Login Side -->
@@ -70,6 +78,6 @@
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script src="./public/js/login.js"></script>
+    <script src="../public/js/login.js"></script>
   </body>
 </html>
