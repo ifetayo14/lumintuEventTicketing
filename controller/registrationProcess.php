@@ -19,7 +19,7 @@
     $loginLink = 'http://localhost/intern/ticketing/controller/verificationProcess.php';
 
     if ($password != $repeatPassword){
-        header('Location: ../view/registration/registration.php?err='.$_POST['']);
+        header('Location: ../view/registration/registration.php?pnm');
     }else{
         $query = "INSERT INTO `customer` (`customer_email`, `customer_password`, `customer_name`, `customer_phone`, `status`)
                 VALUES ('$email', '$password', '$name', '$phoneNum', 'Pending')";

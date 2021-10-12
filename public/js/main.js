@@ -4,7 +4,6 @@ $('.owl-carousel').owlCarousel({
     nav:true,
     animateOut: 'fadeOut',
 	animateIn: 'fadeIn',
-    navText : ["<span class='ion-ios-arrow-back'></span>","<span class='ion-ios-arrow-forward'></span>"],
     responsive:{
         0:{
             items:1
