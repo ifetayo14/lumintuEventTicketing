@@ -9,6 +9,9 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.css" integrity="sha512-OTcub78R3msOCtY3Tc6FzeDJ8N9qvQn1Ph49ou13xgA9VsH9+LRxoFU6EqLhW4+PKRfU+/HReXmSZXHEkpYoOA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 
@@ -51,7 +54,7 @@
                 </div>
               </div>
               <div class="modal-body">
-                <div class="body-popup m-3">
+                <div class="body-popup mx-3">
                   <div class="peserta p-2 rounded" id="peserta1">
                       <form>
                           <h5>Peserta 1</h5>
@@ -76,10 +79,19 @@
                           </div>
                           
                       </form>
+                      
                   </div>
+                  <div class="toggle-buyMe mr-2 d-flex flex-row-reverse">
+                    <label class="switch">
+                      <input type="checkbox">
+                      <span class="slider round"></span>
+                    </label>
+                    <small class="mr-1">Buy For Me</small>
+                  </div>
+                  
                 </div>
                 <div class="text-right mx-4 ">
-                  <button type="button" class="mb-4 btn btn-default btn-circle btn-lg rounded-circle" onclick="tambahkan()"> 
+                  <button type="button" class="btn btn-default btn-circle btn-lg rounded-circle" onclick="tambahkan()"> 
                       <i class="fa fa-plus"></i>
                   </button>
                 </div>
@@ -139,7 +151,7 @@
                 <tr>
                   <td class="date-session">10.00 AM - 10.45 AM
                   </td>
-                  <td class="title-session font-weight-bold"">Registration<br>
+                  <td class="title-session font-weight-bold">Registration<br>
                     <span class="detail-session font-weight-normal">Moderated By : Dr. RM. Pramutomo, MA ISI Surakarta</span>
                   </td>
                 </tr>
@@ -163,11 +175,13 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
 
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+
     <script src="https://use.fontawesome.com/7a7a4d3981.js"></script>
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script src="./public/js/details.js"></script>
+    <script src="../public/js/details.js"></script>
 
     <script>
       

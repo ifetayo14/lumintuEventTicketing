@@ -86,8 +86,9 @@ function tambahkan() {
         cln.id = "peserta" + ++quantity
         
         $('.body-popup').append(cln)
-        document.querySelector(`#peserta${quantity} h3`).innerHTML = `Peserta ${quantity}`
+        document.querySelector(`#peserta${quantity} h5`).innerHTML = `Peserta ${quantity}`
         $('.btn-circle').addClass('d-none')
     }
     $('.modal-dialogue').scrollTop($('.modal-dialogue').height())
 }
+

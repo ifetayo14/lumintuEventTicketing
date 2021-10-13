@@ -59,7 +59,7 @@
                 </div>
 
                 <div class="login-side-bottom position-absolute mb-4">
-                    <p class="text-center">Don’t have an account? <a href="registration/registration.php">Sign-Up</a></p>
+                    <p class="text-center">Don’t have an account? <a href="../view/registration/registration.php">Sign-Up</a></p>
                 </div>
 
             </div> <!-- End Login Side -->
