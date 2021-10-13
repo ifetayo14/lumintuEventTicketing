@@ -39,19 +39,19 @@
                 $mail->SMTPSecure = 'tls';
                 $mail->Host = 'smtp.gmail.com';
                 $mail->SMTPAuth = true;
-                $mail->Username = 'mintuticketing@gmail.com';
-                $mail->Password = 'Mintu123';
+                $mail->Username = 'alvinsimbolon6@gmail.com';
+                $mail->Password = 'powerofbr4in';
                 $mail->Port = 587;
 
                 $mail->setFrom('mintuticketing@gmail.com', 'Lumintu Events');
                 $mail->addAddress($email);
                 $mail->Subject = "[Lumintu Events] Verifikasi Email";
                 $mail->isHTML(true);
-                $mail->Body = 'Hai ' . $name . ', silahkan klik link berikut untuk verifikasi email anda. <br/><br/>
+                $mail->Body = 'Hai ' . $name . ', silahkan klik link berikut untuk verifikasi email anda. Link ini juga digunakan untuk akses landing page<br/><br/>
                             <a href="' . $loginLink . '?m=' . base64_encode($email) .'">Verifikasi Email</a>';
 
                 if ($mail->send()){
-                    header('Location: ../view/registration/registration.php?success');
+                    header('Location: ../view/registration/registration.php?scs');
                 }
                 else{
                     header('Location: ../view/registration/registration.php?mailErr');

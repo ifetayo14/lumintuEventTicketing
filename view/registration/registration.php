@@ -17,7 +17,8 @@
 </head>
 <body>
 <?php
-    if (isset($_GET['success'])){
+    if (isset($_GET['scs'])){
+        echo 'sukses';
         echo '<script>showPopUp()</script>';
     }
 ?>
