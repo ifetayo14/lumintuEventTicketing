@@ -34,24 +34,12 @@
                             <label for="exampleInputEmail1">Username</label>
                             <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
                         </div>
-                        <div class="form-group">
-                            <label for="inlineFormInputGroup">Password</label>
-                            <div class="input-group">
-                                <input type="password" class="form-control password" id="inlineFormInputGroup">
-                                <div class="input-group-append">
-                                    <span class="input-group-text" onclick="password_show_hide();">
-                                        <i class="fa fa-eye-slash" id="show_eye"></i>
-                                        <i class="fa fa-eye d-none" id="hide_eye"></i>
-                                      </span>
-                                </div>
-                            </div>
-                        </div>
                         <button type="submit" class="btn btn-lg btn-submit w-100 mt-2">Submit</button>
                       </form>
                 </div>
 
                 <div class="login-side-bottom position-absolute mb-4">
-                    <p class="text-center">Don’t have an account? <a href="">Sign-Up</a></p>
+                    <p class="text-center">Don’t have an account? <a href="../view/registration/registration.php">Sign-Up</a></p>
                 </div>
 
             </div> <!-- End Login Side -->
@@ -70,6 +58,6 @@
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script src="./public/js/login.js"></script>
+    <script src="../public/js/login.js"></script>
   </body>
 </html>

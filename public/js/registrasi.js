@@ -1,37 +1,3 @@
-// Function untuk ShowHide Password
-function password_show_hide() {
-  var x = document.querySelector(".password");
-  var show_eye = document.getElementById("show_eye_password");
-  var hide_eye = document.getElementById("hide_eye_password");
-  hide_eye.classList.remove("d-none");
-  if (x.type === "password") {
-    x.type = "text";
-    show_eye.style.display = "none";
-    hide_eye.style.display = "block";
-  } else {
-    x.type = "password";
-    show_eye.style.display = "block";
-    hide_eye.style.display = "none";
-  }
-}
-
-// Function untuk ShowHide Confirm Password
-function confirm_show_hide() {
-  var x = document.querySelector(".confirm");
-  var show_eye = document.getElementById("show_eye");
-  var hide_eye = document.getElementById("hide_eye");
-  hide_eye.classList.remove("d-none");
-  if (x.type === "password") {
-    x.type = "text";
-    show_eye.style.display = "none";
-    hide_eye.style.display = "block";
-  } else {
-    x.type = "password";
-    show_eye.style.display = "block";
-    hide_eye.style.display = "none";
-  }
-}
-
 function validateEmail(email) {
   const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(email);
@@ -74,4 +40,50 @@ function showPopUp(){
     confirmButtonColor: '#3085d6',
     text: "Make sure to check your email to verify your account.",
   })
+}
+
+//  REGEX NUMBER
+
+function allLetter(inputtxt){ 
+  var letters = /^[a-zA-Z\s]*$/; 
+  if(inputtxt.value.match(letters)){
+    $('#nameHelpBlock').text = "Numbers Not Allowed"
+    $('#nameHelpBlock').addClass('d-none')
+  }
+  else{
+    let str = $('.name-input').val()
+    $('#nameHelpBlock').text = "Numbers Not Allowed"
+    $('#nameHelpBlock').removeClass('d-none')
+    Swal.fire({
+      icon: 'error',
+      title: 'Numbers Not Allowed!',
+      showConfirmButton: true,
+      confirmButtonColor: '#3085d6',
+      text: " Please Check Your Input!",
+    })
+    $('.name-input').val(str.substring(0, str.length - 1))
+    return false;
+  }
+}
+
+function allNumber(inputnbr){
+  var numbers = /^[0-9]*$/;
+  if(inputnbr.value.match(numbers)){
+    $('#phoneHelpBlock').text = "Numbers Not Allowed"
+    $('#phoneHelpBlock').addClass('d-none')
+  }
+  else{
+    let str = $('.phone-input').val()
+    $('#phoneHelpBlock').text = "Numbers Not Allowed"
+    $('#phoneHelpBlock').removeClass('d-none')
+    Swal.fire({
+      icon: 'error',
+      title: 'Letter Not Allowed!',
+      showConfirmButton: true,
+      confirmButtonColor: '#3085d6',
+      text: " Please Check Your Input!",
+    })
+    $('.phone-input').val(str.substring(0, str.length - 1))
+    return false;
+  }
 }
