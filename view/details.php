@@ -22,6 +22,11 @@
     <title>Hello, world!</title>
   </head>
   <body>
+  <?php
+    if (isset($_GET['scs'])){
+        echo '<p style="color: green">Account verified</p>';
+    }
+  ?>
     <div class="container banner-event rounded d-flex align-items-center p-5 mb-4">
       <div class="deskripsi w-50 p-5">
         <p class="h1 nama-event">Dream World Wide in Jogja</p>

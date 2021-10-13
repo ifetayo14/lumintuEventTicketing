@@ -25,14 +25,34 @@
                     if (isset($_GET['success'])){
                         echo '<p style="color: green">Your account has been verified! Go ahead and login to access our page.</p>';
                     }
+
+                    if (isset($_GET['wp'])){
+                        echo '<p style="color: red">Email or password is wrong.</p>';
+                    }
+
+                    if (isset($_GET['st'])){
+                        echo '<p style="color: red">Please verify your email first.</p>';
+                    }
                     ?>
                 </div>
 
                 <div class="login-side-form">
-                    <form>
+                    <form action="../controller/loginProcess.php" method="post">
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Username</label>
-                            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                            <label for="exampleInputEmail1">Email</label>
+                            <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        </div>
+                        <div class="form-group">
+                            <label for="inlineFormInputGroup">Password</label>
+                            <div class="input-group">
+                                <input name="password" type="password" class="form-control password" id="inlineFormInputGroup">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" onclick="password_show_hide();">
+                                        <i class="fa fa-eye-slash" id="show_eye"></i>
+                                        <i class="fa fa-eye d-none" id="hide_eye"></i>
+                                      </span>
+                                </div>
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-lg btn-submit w-100 mt-2">Submit</button>
                       </form>
