@@ -1,3 +1,5 @@
+let check = [false, false, false]
+
 function validateEmail(email) {
   const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(email);
@@ -9,28 +11,16 @@ function validate() {
 
   if (validateEmail(email)) {
       result.text("Your email is valid")
+      check[0] = true
+      checkStatus()
   } else {
       result.text("Your email is not valid")
+      check[0] = false
+      checkStatus()
   }
   return false;
 }
 
-
-$('.password').on('input', function(){
-  if($('.password').val().length > 8) {
-      $('#passwordHelpBlock').addClass('d-none')
-  } else {
-      $('#passwordHelpBlock').removeClass('d-none')
-  }
-})
-
-$('.confirm').on('input', function(){
-  if($('.confirm').val() === $('.password').val()) {
-      $('#confirmHelpBlock').addClass('d-none')
-  } else {
-      $('#confirmHelpBlock').removeClass('d-none')
-  }
-})
 
 function showPopUp(){
   Swal.fire({
@@ -49,6 +39,9 @@ function allLetter(inputtxt){
   if(inputtxt.value.match(letters)){
     $('#nameHelpBlock').text = "Numbers Not Allowed"
     $('#nameHelpBlock').addClass('d-none')
+    check[1] = true
+    checkStatus()
+    return true
   }
   else{
     let str = $('.name-input').val()
@@ -71,6 +64,8 @@ function allNumber(inputnbr){
   if(inputnbr.value.match(numbers)){
     $('#phoneHelpBlock').text = "Numbers Not Allowed"
     $('#phoneHelpBlock').addClass('d-none')
+    check[2] = true
+    checkStatus()
   }
   else{
     let str = $('.phone-input').val()
@@ -86,4 +81,13 @@ function allNumber(inputnbr){
     $('.phone-input').val(str.substring(0, str.length - 1))
     return false;
   }
+}
+
+function checkStatus(){
+  if(check.indexOf(false) == -1){
+    $('.btn-registrasi').prop('disabled', false)
+  } else {
+    $('.btn-registrasi').prop('disabled', true)
+  }
+  
 }

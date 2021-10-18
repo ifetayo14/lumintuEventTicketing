@@ -35,14 +35,14 @@
                         <div class="form-group email-form">
                             <label for="email">Email</label>
                             <input type="email" name="email" class="form-control" id="email" oninput="validate()" placeholder="example : ex@gmail.com">
-                            <small id="emailHelpBlock" class="form-text text-danger">
-                                Your email is not valid
+                            <small id="emailHelpBlock" class="form-text text-danger d-none">
+                                Your email is not valid!
                             </small>
                         </div>
 
                         <div class="form-group">
                             <label for="username">Name</label>
-                            <input type="text" name="name" class="form-control name-input" id="username" oninput="allLetter(document.formReg.name)">
+                            <input type="text" name="name" class="form-control name-input" id="username" oninput="allLetter(document.formReg.name)" placeholder="example : Bambang">
                             <small id="nameHelpBlock" class="form-text text-danger d-none">
                                 Numbers Not Allowed!
                             </small>
@@ -50,46 +50,21 @@
 
                         <div class="form-group">
                             <label for="phone">No. Hp</label>
-                            <input id="phone" name="phoneNum" type="tel" class="form-control phone-input" placeholder="example : 081234567890" oninput="allNumber(document.formReg.phoneNum)">
+                            <input id="phone" name="phoneNum" type="text" class="form-control phone-input" placeholder="example : 081234567890" oninput="allNumber(document.formReg.phoneNum)">
                             <small id="phoneHelpBlock" class="form-text text-danger d-none">
                                 Letters Not Allowed!
                             </small>
                         </div>
 
-<!--                        <div class="form-group">-->
-<!--                            <label for="inlineFormInputGroup">Password</label>-->
-<!--                            <div class="input-group">-->
-<!--                                <input type="password" name="password" class="form-control password" aria-describedby="passwordHelpBlock">-->
-<!--                                <div class="input-group-append">-->
-<!--                                        <span class="input-group-text" onclick="password_show_hide()">-->
-<!--                                            <i class="fa fa-eye-slash" id="show_eye_password"></i>-->
-<!--                                            <i class="fa fa-eye d-none" id="hide_eye_password"></i>-->
-<!--                                        </span>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <small id="passwordHelpBlock" class="form-text">-->
-<!--                                Your password must be more than 8 characters!-->
-<!--                            </small>-->
-<!--                        </div>-->
-<!--                        <small id="confirmHelpBlock" class="form-text">-->
-<!--                            Make sure to match your password-->
-<!--                        </small>-->
-<!--                          if (isset($_GET['pnm'])){-->
-<!--                                echo '<small id="passwordHelpBlock" class="form-text text-danger">-->
-<!--                                        Make sure to match your password!-->-->
-<!--                                    </small>';-->
-<!--                            }-->
+                        <button disabled class="btn btn-lg btn-registrasi w-100 mt-2">Registrasi</button>
+                    </form>
                 </div>
 
-                        <button class="btn btn-lg btn-submit w-100 mt-2">Registrasi</button>
-                    </form>
+                <div class="registrasi-side-bottom position-absolute mt-5">
+                    <p class="text-center">Already have an account? <a href="../login.php">Sign-In</a></p>
+                </div>
 
             </div>
-
-            <div class="registrasi-side-bottom position-absolute mt-5">
-                <p class="text-center">Already have an account? <a href="../login.php">Sign-In</a></p>
-            </div>
-
         </div>
     </div>
 

@@ -9,8 +9,10 @@ function validate() {
 
   if (validateEmail(email)) {
       result.text("Your email is valid")
+      $('#emailHelpBlock').addClass('d-none')
   } else {
       result.text("Your email is not valid")
+      $('#emailHelpBlock').removeClass('d-none')
   }
   return false;
 }

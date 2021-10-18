@@ -42,18 +42,9 @@
                             <label for="exampleInputEmail1">Email</label>
                             <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
                         </div>
-                        <div class="form-group">
-                            <label for="inlineFormInputGroup">Password</label>
-                            <div class="input-group">
-                                <input name="password" type="password" class="form-control password" id="inlineFormInputGroup">
-                                <div class="input-group-append">
-                                    <span class="input-group-text" onclick="password_show_hide();">
-                                        <i class="fa fa-eye-slash" id="show_eye"></i>
-                                        <i class="fa fa-eye d-none" id="hide_eye"></i>
-                                      </span>
-                                </div>
-                            </div>
-                        </div>
+                        <small id="emailHelpBlock" class="form-text text-danger d-none">
+                            Your email is not valid!
+                        </small>
                         <button type="submit" class="btn btn-lg btn-submit w-100 mt-2">Submit</button>
                       </form>
                 </div>

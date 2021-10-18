@@ -1,0 +1,18 @@
+.banner {
+    height: 400px;
+    background-image: url('../img/event1.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.title-status{
+    color: #D4AF37;
+}
+.checkout {
+    border: 0px; 
+    background-color: #D4AF37;
+    font-weight: 500;
+    letter-spacing: 1px;
+    color: #38435F;
+}
