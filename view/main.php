@@ -1,3 +1,6 @@
+<?php
+    $cred = base64_decode($_GET['m']);
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -13,7 +16,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 
     <!-- CSS Independent -->
-    <link rel="stylesheet" href="./public/css/main.css">
+    <link rel="stylesheet" href="../public/css/main.css">
 
 
     <title>Hello, world!</title>
@@ -64,7 +67,7 @@
             <p class="h3 nama-event text-center">Event 1</p>
             <p class="tanggal text-center">17, 24,31 July, 7 Agustus 2021</p>
             <div class="mt-3 text-center more d-none">
-              <button class="btn btn-more w-75">Click More</button>
+              <a href="<?php echo 'details.php?m=' . base64_encode($cred) ?>" class="btn btn-more w-75">Click More</a>
             </div>
           </div>
         </div>
@@ -108,7 +111,7 @@
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script src="./public/js/main.js"></script>
+    <script src="../public/js/main.js"></script>
 
     <script>
       

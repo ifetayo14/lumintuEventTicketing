@@ -56,7 +56,7 @@
                             </small>
                         </div>
 
-                        <button disabled class="btn btn-lg btn-registrasi w-100 mt-2">Registrasi</button>
+                        <button disabled class="btn btn-lg btn-registrasi w-100 mt-2" onclick="showPopUp()">Registrasi</button>
                     </form>
                 </div>
 

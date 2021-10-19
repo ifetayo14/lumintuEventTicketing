@@ -27,7 +27,7 @@
             header('Location: ../view/registration/registration.php?me');
         }else{
             $encPassword = md5($password);
-            $query = "INSERT INTO `customer` (`customer_email`, `customer_password`, `customer_name`, `customer_phone`, `status`)
+            $query = "INSERT INTO `customer` (`customer_email`, `customer_password`, `customer_name`, `customer_phone`, `customer_status`)
                 VALUES ('$email', '$encPassword', '$name', '$phoneNum', 'Pending')";
             $runQuery = mysqli_query($conn, $query) or die(mysqli_error($conn));
             $result = $conn->affected_rows;
@@ -39,8 +39,8 @@
                 $mail->SMTPSecure = 'tls';
                 $mail->Host = 'smtp.gmail.com';
                 $mail->SMTPAuth = true;
-                $mail->Username = 'alvinsimbolon6@gmail.com';
-                $mail->Password = 'powerofbr4in';
+                $mail->Username = 'mintuticketing@gmail.com';
+                $mail->Password = 'Mintu123';
                 $mail->Port = 587;
 
                 $mail->setFrom('mintuticketing@gmail.com', 'Lumintu Events');

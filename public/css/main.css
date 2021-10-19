@@ -4,7 +4,7 @@
 .iti__flag {background-image: url("path/to/flags.png");}
 
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  .iti__flag {background-image: url("path/to/flags@2x.png");}
+    .iti__flag {background-image: url("path/to/flags@2x.png");}
 }
 
 /* Start CSS Slider */
@@ -172,15 +172,15 @@ header{
     background-repeat: no-repeat;
     background-position: center center;
 }
-.item1{   
+.item1{
     background-image: url('../img/event1.jpg');
 }
 
-.item2{   
+.item2{
     background-image: url('../img/event2.jpg');
 }
 
-.item3{   
+.item3{
     background-image: url('../img/event3.jpg');
 }
 
@@ -287,4 +287,46 @@ input#voucher {
 
 .form-group{
 
+}
+
+.details-pageStatus {
+    background: rgba(0,0,0,0.5);
+    z-index: 2;
+}
+
+.banner-status {
+    height: 400px;
+    background-image: url('../img/event1.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.title-status{
+    color: #D4AF37;
+    font-weight: 700;
+}
+.checkout {
+    border: 0px;
+    background-color: #D4AF37;
+    font-weight: 500;
+    letter-spacing: 1px;
+    color: #38435F;
+}
+
+.container-invitation{
+    height: 100vh;
+    width: 40%;
+    background-color: #38435f;
+}
+
+
+.btn-accept{
+    background-color: #D4AF37;
+}
+
+.footer-accept{
+    z-index: 5;
+    bottom: 0;
+    left: 0;
 }

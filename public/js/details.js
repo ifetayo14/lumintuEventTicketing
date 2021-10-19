@@ -20,16 +20,23 @@ function tambahkan() {
         let elem = document.getElementById('peserta1')
         let cln = elem.cloneNode(true)
         cln.id = "peserta" + ++quantity
-        
+
+
         $('.body-popup').append(cln)
         document.querySelector(`#peserta${quantity} h5`).innerHTML = `Peserta ${quantity}`
+        $(`#peserta${quantity} .form-group input`).attr('name', `peserta${quantity}`)
+        $(`#peserta${quantity} .form-group input`).attr('id', `peserta${quantity}`)
+        $(`#peserta${quantity} .form-group input`).val("")
     } else if (quantity == 4) {
         let elem = document.getElementById('peserta1')
         let cln = elem.cloneNode(true)
         cln.id = "peserta" + ++quantity
-        
+
         $('.body-popup').append(cln)
         document.querySelector(`#peserta${quantity} h5`).innerHTML = `Peserta ${quantity}`
+        $(`#peserta${quantity} .form-group input`).attr('name', `peserta${quantity}`)
+        $(`#peserta${quantity} .form-group input`).attr('id', `peserta${quantity}`)
+        $(`#peserta${quantity} .form-group input`).val("")
         $('.btn-circle').addClass('d-none')
     }
     $('.modal-dialogue').scrollTop($('.modal-dialogue').height())
