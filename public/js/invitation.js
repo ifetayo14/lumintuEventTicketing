@@ -87,11 +87,10 @@ $('#selectAgree').change(function(){
     if(this.checked){
         check[3] = true
     } else {
-        check[4] = false
+        check[3] = false
     }
-    checkStatus()
+    validate()
 })
-
 function checkStatus(){
     if(check.indexOf(false) == -1){
         $('.btn-accept').prop('disabled', false)

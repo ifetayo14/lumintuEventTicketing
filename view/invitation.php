@@ -1,3 +1,6 @@
+<?php
+    $myEmail = base64_decode($_GET['invm']);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,7 +30,7 @@
             <form name="formReg" method="post" action="../../controller/registrationProcess.php">
                 <div class="form-group email-form">
                     <label for="email">Email</label>
-                    <input type="email" name="email" class="form-control" id="email" oninput="validate()" placeholder="example : ex@gmail.com">
+                    <input disabled type="email" name="email" class="form-control" id="email" oninput="validate()" placeholder="example : ex@gmail.com" value="<?php echo $myEmail; ?>">
                     <small id="emailHelpBlock" class="form-text text-danger d-none">
                         Your email is not valid!
                     </small>
