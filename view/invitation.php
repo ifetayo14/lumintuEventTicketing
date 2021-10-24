@@ -1,5 +1,12 @@
 <?php
-    $myEmail = base64_decode($_GET['invm']);
+    include '../config.php';
+    if (isset($_GET['invm'])){
+        $myEmail = base64_decode($_GET['invm']);
+
+        $sql = "SELECT `customer_name` FROM `customer` WHERE `customer_id` = (SELECT `customer_inviter_id` FROM `invitation` WHERE `customer_id` = (SELECT `customer_id` FROM `customer` WHERE `customer_email` = '$myEmail'))";
+        $runQuery = mysqli_query($conn, $sql) or die($conn);
+        $inviter = $runQuery->fetch_array()[0];
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,14 +30,15 @@
 <div class="container p-5 container-invitation position-relative">
     <div class="text-center header">
         <p class="h3 title-status">Event Invitation</p>
-        <p class="text-white">From Mohammad Arafat Maku</p>
+        <p class="text-white">From <?php echo $inviter; ?></p>
     </div>
     <div class="content">
         <div class="invitation-form text-white">
-            <form name="formReg" method="post" action="../../controller/registrationProcess.php">
+            <form name="formReg" method="post" action="../controller/biodataProcess.php">
                 <div class="form-group email-form">
                     <label for="email">Email</label>
-                    <input disabled type="email" name="email" class="form-control" id="email" oninput="validate()" placeholder="example : ex@gmail.com" value="<?php echo $myEmail; ?>">
+                    <input hidden type="email" name="email" value="<?php echo $myEmail; ?>">
+                    <input disabled type="email" class="form-control" id="email" oninput="validate()" placeholder="example : ex@gmail.com" value="<?php if (isset($_GET['invm']))echo $myEmail; ?>">
                     <small id="emailHelpBlock" class="form-text text-danger d-none">
                         Your email is not valid!
                     </small>

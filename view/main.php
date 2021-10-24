@@ -1,5 +1,14 @@
 <?php
-    $cred = base64_decode($_GET['m']);
+    session_start();
+    $cred = base64_decode($_SESSION['cred']);
+
+//    if (time()-$_SESSION['accessTime'] > 60){
+//        session_unset();
+//        session_destroy();
+//        header('Location: registration/registration.php');
+//
+//        $_SESSION['accessTime'] = time();
+//    }
 ?>
 <!doctype html>
 <html lang="en">
@@ -67,7 +76,7 @@
             <p class="h3 nama-event text-center">Event 1</p>
             <p class="tanggal text-center">17, 24,31 July, 7 Agustus 2021</p>
             <div class="mt-3 text-center more d-none">
-              <a href="<?php echo 'details.php?m=' . base64_encode($cred) ?>" class="btn btn-more w-75">Click More</a>
+              <a href="details.php" class="btn btn-more w-75">Click More</a>
             </div>
           </div>
         </div>

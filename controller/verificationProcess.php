@@ -1,7 +1,10 @@
 <?php
+    session_start();
+    $_SESSION['cred'] = $_GET['m'];
+//    $_SESSION['accessTime'] = time();
     include('../config.php');
 
-    $email = base64_decode($_GET['m']);
+    $email = base64_decode($_SESSION['cred']);
     $statusQuery = "SELECT `customer_status` FROM `customer` WHERE `customer_email` = '$email'";
     $runQuery = mysqli_query($conn, $statusQuery) or die(mysqli_error($conn));
 
@@ -11,9 +14,9 @@
         $result = $conn->affected_rows;
 
         if ($result > 0){
-            header('Location: ../view/main.php?scs&m=' . base64_encode($email));
+            header('Location: ../view/main.php?scs');
         }
     }else{
-        header('Location: ../view/main.php?m=' . base64_encode($email));
+        header('Location: ../view/main.php');
     }
 ?>

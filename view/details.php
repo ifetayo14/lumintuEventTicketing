@@ -1,9 +1,8 @@
 <?php
+    session_start();
     include('../config.php');
 
-//    $credential = base64_decode($_GET['m']);
-//    echo $credential;
-//    $myDataQuery = "SELECT * FROM `customers`";
+    $cred = base64_decode($_SESSION['cred']);
 
 ?>
 <!doctype html>
@@ -177,7 +176,7 @@
 
 <script type="text/javascript">
 
-    var cred = " <?php echo(base64_decode($_GET['m'])); ?>";
+    var cred = " <?php echo($cred); ?>";
     console.log(cred);
 
     $(document).on('change', '.switchMe', function() {
