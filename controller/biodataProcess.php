@@ -1,27 +1,83 @@
 <?php
     include('../config.php');
 
+    $customerURL = '192.168.0.130:8055/items/customer';
+    $invitationURL = '192.168.0.130:8055/items/invitation';
+
+    $custID = $_POST['custID'];
     $email = $_POST['email'];
     $name = $_POST['name'];
     $phone = $_POST['phoneNum'];
+    $customerCode = hash('sha512', $email.$phone);
 
+    $curl = curl_init();
 
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => $customerURL . '/' . $custID,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'PATCH',
+        CURLOPT_POSTFIELDS =>'{
+                    "customer_code": "' . $customerCode . '",
+                    "customer_name": "' . $name . '",
+                    "customer_phone": "' . $phone . '",
+                    "customer_status": "1"
+                }',
+        CURLOPT_HTTPHEADER => array(
+            'Content-Type: application/json'
+        ),
+    ));
 
-    $sql = "UPDATE `customer` SET `customer_name` = '$name', `customer_phone` = '$phone', `customer_status` = 'Verified' WHERE `customer_email` = '$email'";
-    $runQuery = mysqli_query($conn, $sql) or die (mysqli_error($conn));
-    $aff = $conn->affected_rows;
+    $responseCustomer = curl_exec($curl);
+    $resultCustomer = json_decode($responseCustomer, true);
 
-    if ($aff > 0){
-        $sql = "UPDATE `invitation` SET `invitation_status` = 'Accepted' WHERE `customer_id` = (SELECT `customer_id` FROM `customer` WHERE `customer_email` = '$email')";
-        $runQuery = mysqli_query($conn, $sql) or die (mysqli_error($conn));
-        $aff2 = $conn->affected_rows;
+    curl_close($curl);
 
-        if ($aff2 > 0){
-            header('Location: ../view/invitation.php?scs');
+    if (!isset($resultCustomer['errors'][0]['extensions']['code'])){
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $invitationURL . '?&filter[customer_id]=' . $custID);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $responseID = curl_exec($curl);
+        $resultID = json_decode($responseID, true);
+        $invitationID = $resultID['data'][0]['invitation_id'];
+
+        curl_close($curl);
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $invitationURL . '/' . $invitationID,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'PATCH',
+            CURLOPT_POSTFIELDS =>'{
+                    "invitation_status": "1"
+                }',
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json'
+            ),
+        ));
+
+        $responseInvitation = curl_exec($curl);
+        $resultInvitation = json_decode($responseInvitation, true);
+
+        curl_close($curl);
+
+        if (!isset($resultInvitation['errors'][0]['extensions']['code'])){
+            header('Location: ../view/invitation.php?allScs');
         }else{
             header('Location: ../view/invitation.php?errInv');
         }
+
     }else{
-        header('Location: ../view/invitation.php?errCus');
+        header('Location: ../view/invitation.php?errOnCus');
     }
 ?>

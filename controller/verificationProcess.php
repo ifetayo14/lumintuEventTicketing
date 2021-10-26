@@ -2,7 +2,7 @@
     session_start();
     $_SESSION['cred'] = $_GET['m'];
 
-    $customerURL = '192.168.0.145:8055/items/customer';
+    $customerURL = '192.168.0.130:8055/items/customer';
 
     $curl = curl_init();
 
@@ -20,7 +20,7 @@
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => '192.168.0.145:8055/items/customer/' . $resultID['data'][0]['customer_id'],
+            CURLOPT_URL => $customerURL . '/' . $resultID['data'][0]['customer_id'],
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,

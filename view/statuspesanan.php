@@ -32,7 +32,14 @@
             </div>
         </div>
 
-        <div class="">
+
+        <div class="container mb-3 d-none voucher text-right">
+            <div class="d-flex justify-content-end">
+                <input type="text" name="voucher" class="form-control kode-input w-25" placeholder="Voucher Code">
+            </div>
+        </div>
+
+        <div class="container">
             <table class="table table-responsive-sm">
                 <thead>
                 <tr>
@@ -44,20 +51,37 @@
                     <th scope="col">Status</th>
                 </tr>
                 </thead>
-                <tbody>
-                </tbody>
+                <tbody></tbody>
                 <tfoot>
                 <tr>
                     <th colspan="5" class="text-right">Total Invoice :</th>
-                    <td><input type="number" class="input-status" id="total-harga" name="total-harga" value=0 readonly></td>
+                    <td>
+                        <input type="text" class="input-status" id="total-harga" name="total-harga" value="0" readonly/>
+                    </td>
                 </tr>
                 </tfoot>
             </table>
         </div>
         <div class="text-center py-4">
-            <button class="rounded py-2 px-5 btn-checkout" disabled>Checkout</button>
+            <button class="rounded py-2 px-5 btn-checkout" disabled>
+                Checkout
+            </button>
         </div>
     </form>
+</div>
+
+<div class="outer d-none" id="loader">
+    <div class="middle">
+        <div class="inner text-center">
+            <blockquote class="blockquote text-center">
+                <p class="mb-0">Sabar dan ikhlas bisa menjadikan kamu seorang yang mulia dan terhormat di dunia sekalipun kamu bukan apa-apa.</p>
+                <footer class="blockquote-footer">Someone famous in <cite title="Source Title">PINTAR</cite></footer>
+            </blockquote>
+            <div class="spinner-border text-light" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
 </div>
 
 

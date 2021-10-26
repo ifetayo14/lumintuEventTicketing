@@ -9,7 +9,7 @@
     require '../vendor/phpmailer/phpmailer/src/POP3.php';
     require '../vendor/phpmailer/phpmailer/src/SMTP.php';
 
-    $customerURL = '192.168.0.145:8055/items/customer';
+    $customerURL = '192.168.0.130:8055/items/customer';
 
     $name = $_POST['name'];
     $email = $_POST['email'];

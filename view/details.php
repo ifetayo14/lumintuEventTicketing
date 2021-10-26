@@ -3,7 +3,7 @@
     session_start();
     $cred = $_SESSION['cred'];
 
-    $customerURL = '192.168.0.145:8055/items/customer';
+    $customerURL = '192.168.0.130:8055/items/customer';
 
     $curl = curl_init();
 

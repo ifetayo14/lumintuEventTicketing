@@ -1,11 +1,29 @@
 <?php
     include '../config.php';
+
+    $customerURL = '192.168.0.130:8055/items/customer';
+    $invitationURL = '192.168.0.130:8055/items/invitation';
+
     if (isset($_GET['invm'])){
         $myEmail = base64_decode($_GET['invm']);
 
-        $sql = "SELECT `customer_name` FROM `customer` WHERE `customer_id` = (SELECT `customer_inviter_id` FROM `invitation` WHERE `customer_id` = (SELECT `customer_id` FROM `customer` WHERE `customer_email` = '$myEmail'))";
-        $runQuery = mysqli_query($conn, $sql) or die($conn);
-        $inviter = $runQuery->fetch_array()[0];
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $customerURL . '?&filter[customer_email]=' . $myEmail);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $responseID = curl_exec($curl);
+        $resultID = json_decode($responseID, true);
+        $customerID = $resultID['data'][0]['customer_id'];
+
+        curl_close($curl);
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $invitationURL . '?fields=customer_inviter_id.customer_name&filter[customer_id]=' . $customerID);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $responseID = curl_exec($curl);
+        $resultID = json_decode($responseID, true);
+        $customerName = $resultID['data'][0]['customer_inviter_id']['customer_name'];
+
+        curl_close($curl);
     }
 ?>
 <!DOCTYPE html>
@@ -30,15 +48,15 @@
 <div class="container p-5 container-invitation position-relative">
     <div class="text-center header">
         <p class="h3 title-status">Event Invitation</p>
-        <p class="text-white">From <?php echo $inviter; ?></p>
+        <p class="text-white">From <?php if (isset($_GET['invm'])) echo $customerName; ?></p>
     </div>
     <div class="content">
         <div class="invitation-form text-white">
             <form name="formReg" method="post" action="../controller/biodataProcess.php">
                 <div class="form-group email-form">
+                    <input readonly hidden type="text" name="custID" value="<?php echo $customerID; ?>">
                     <label for="email">Email</label>
-                    <input hidden type="email" name="email" value="<?php echo $myEmail; ?>">
-                    <input disabled type="email" class="form-control" id="email" oninput="validate()" placeholder="example : ex@gmail.com" value="<?php if (isset($_GET['invm']))echo $myEmail; ?>">
+                    <input readonly type="email" name="email" class="form-control" id="email" oninput="validate()" placeholder="example : ex@gmail.com" value="<?php if (isset($_GET['invm'])) echo $myEmail; ?>">
                     <small id="emailHelpBlock" class="form-text text-danger d-none">
                         Your email is not valid!
                     </small>
