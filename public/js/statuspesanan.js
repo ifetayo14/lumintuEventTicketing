@@ -48,7 +48,7 @@ $(document).ready(function() {
 
     // AJAX terjual
     $.ajax({
-        url: 'http://192.168.0.114:8055/items/order?aggregate[sum]=order_quantity&groupBy[]=ticket_id',
+        url: 'http://192.168.0.145:8055/items/order?aggregate[sum]=order_quantity&groupBy[]=ticket_id',
         type: 'GET',
         dataType: 'json',
         success: function(data, textStatus, xhr) {
@@ -65,7 +65,7 @@ $(document).ready(function() {
 
     // AJAX jenis Tiket
     $.ajax({
-        url: 'http://192.168.0.114:8055/items/ticket/',
+        url: 'http://192.168.0.145:8055/items/ticket/',
         type: 'GET',
         dataType: 'json',
         success: function(data, textStatus, xhr) {
@@ -104,7 +104,7 @@ $(document).ready(function() {
 
     // AJAX data Table
     $.ajax({
-        url: `http://192.168.0.114:8055/items/invitation?fields=invitation_id,customer_id.customer_email,customer_id.customer_name,customer_inviter_id.customer_email,invitation_status&filter[customer_inviter_id][customer_email]="${atob(params)}"`,
+        url: `http://192.168.0.145:8055/items/invitation?fields=invitation_id,customer_id.customer_email,customer_id.customer_name,customer_inviter_id.customer_email,invitation_status&filter[customer_inviter_id][customer_code]="${params}"`,
         type: 'GET',
         dataType: 'json',
         success: function(data, textStatus, xhr) {

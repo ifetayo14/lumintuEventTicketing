@@ -1,9 +1,9 @@
 <?php
     session_start();
-    $url = 'http://192.168.0.114:8055/items/invitation?fields=invitation_id,customer_id.customer_id,customer_id.customer_email,customer_id.customer_name,customer_inviter_id.customer_email,invitation_status&filter[customer_inviter_id][customer_email]=' . base64_decode($_SESSION['cred']);
-    $invoiceURL = 'http://192.168.0.114:8055/items/invoice';
-    $customerURL = 'http://192.168.0.114:8055/items/customer';
-    $orderURL = 'http://192.168.0.114:8055/items/order';
+    $url = '192.168.0.145:8055/items/invitation?fields=invitation_id,customer_id.customer_id,customer_id.customer_email,customer_id.customer_name,customer_inviter_id.customer_email,invitation_status&filter[customer_inviter_id][customer_email]=' . base64_decode($_SESSION['cred']);
+    $invoiceURL = '192.168.0.145:8055/items/invoice';
+    $customerURL = '192.168.0.145:8055/items/customer';
+    $orderURL = '192.168.0.145:8055/items/order';
 
     $totalPrice = $_POST['total-harga'];
     $curl = curl_init();
@@ -48,9 +48,6 @@
 
     $server_response = curl_exec($curl);
     $postResponse = json_decode($server_response, true);
-
-//    echo $_POST['tiket-peserta-0'] . '</br>';
-//    echo $_POST['tiket-peserta-1'];
 
     curl_close($curl);
     $curl = curl_init();

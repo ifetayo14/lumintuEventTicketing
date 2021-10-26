@@ -5,7 +5,7 @@
     $name = $_POST['name'];
     $phone = $_POST['phoneNum'];
 
-//    echo $email, $name, $phone;
+
 
     $sql = "UPDATE `customer` SET `customer_name` = '$name', `customer_phone` = '$phone', `customer_status` = 'Verified' WHERE `customer_email` = '$email'";
     $runQuery = mysqli_query($conn, $sql) or die (mysqli_error($conn));

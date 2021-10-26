@@ -1,32 +1,39 @@
-<?php
-    session_start();
-    include('../config.php');
-
-    $cred = base64_decode($_SESSION['cred']);
-
-?>
 <!doctype html>
+    <?php
+    session_start();
+    $cred = $_SESSION['cred'];
+
+    $customerURL = '192.168.0.145:8055/items/customer';
+
+    $curl = curl_init();
+
+    //get customer ID
+    curl_setopt($curl, CURLOPT_URL, $customerURL . '?&filter[customer_code]=' . $_SESSION['cred']);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    $responseID = curl_exec($curl);
+    $resultID = json_decode($responseID, true);
+    $customerEmail = $resultID['data'][0]['customer_email'];
+
+    curl_close($curl);
+?>
 <html lang="en">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.css" integrity="sha512-UTNP5BXLIptsaj5WdKFrkFov94lDx+eBvbKyoe1YAfjeRPC+gT5kyZ10kOHCfNZqEui1sxmqvodNUx3KbuYI/A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.css" integrity="sha512-OTcub78R3msOCtY3Tc6FzeDJ8N9qvQn1Ph49ou13xgA9VsH9+LRxoFU6EqLhW4+PKRfU+/HReXmSZXHEkpYoOA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 
-    <!-- CSS Independent -->
-    <link rel="stylesheet" href="../public/css/main.css">
+    <!-- Owl Carousel CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
 
-    <link rel="stylesheet" href="sweetalert2.min.css">
+    <!-- Independent CSS-->
+    <link rel="stylesheet" href="../public/css/details.css">
+    <link rel="stylesheet" href="../public/css/slider.css">
 
-    <script defer src="sweetalert2.min.js"></script>
-
-    <title>Hello, world!</title>
+    <title>Details</title>
 </head>
 <body>
 <div class="container banner-event rounded d-flex align-items-center p-5 mb-4">
@@ -38,7 +45,7 @@
     </div>
 </div>
 
-<div class="container detail-container">
+<div class="container">
     <div class="row">
         <div class="col-6 description">
             <p class="h4 title-event mb-3">Description</p>
@@ -54,26 +61,34 @@
                         </div>
                     </div>
                     <div class="modal-body">
-                        <form class="body-form" method="post" action="../controller/insertInvitationProcess.php">
+                        <form class="body-form" name="bodyForm" method="post" action="../controller/insertInvitationProcess.php">
                             <div class="body-popup mx-3">
-                                <div class="special">
-                                    <div class="peserta p-2 rounded" id="peserta1">
-                                        <h5>Peserta 1</h5>
-                                        <div class="form-group">
-                                            <label for="exampleInputEmail1">Email</label>
-                                            <input type="email" name="peserta1" class="form-control" id="inputPeserta1" aria-describedby="emailHelp">
+                                <div class="peserta rounded" id="peserta1">
+                                    <div class="row special mb-2 align-items-center">
+                                        <div class="col-6">
+                                            <div class="form-group my-auto">
+                                                <input type="text" name="voucher" class="form-control kode-input" id="voucher" placeholder="Voucher Code">
+                                            </div>
                                         </div>
+                                        <div class="col-6 text-right "><div class="toggle-buyMe">
+                                                <label class="switch">
+                                                    <input type="checkbox" class="switchMe">
+                                                    <span class="slider round"></span>
+                                                </label>
+                                                <small class="mr-1">Buy For Me</small>
+                                            </div></div>
                                     </div>
-                                    <div class="special d-flex align-items-center mx-2 mb-2 justify-content-between">
-                                        <div class="form-group w-50 my-auto">
-                                            <input type="text" name="voucher" class="form-control kode-input" id="voucher" placeholder="Voucher Code">
+                                    <div class="row my-auto input-section mb-2">
+                                        <div class="col-4 my-auto">
+                                            <h5>Peserta 1</h5>
                                         </div>
-                                        <div class="toggle-buyMe d-flex flex-row-reverse ">
-                                            <label class="switch">
-                                                <input type="checkbox" class="switchMe">
-                                                <span class="slider round"></span>
-                                            </label>
-                                            <small class="mr-1">Buy For Me</small>
+                                        <div class="col-8">
+                                            <div class="form-group my-auto">
+                                                <input type="email" name="peserta1" class="form-control" id="inputPeserta1" aria-describedby="emailHelp" placeholder="example : ex@gmail.com" oninput="validate(this.name)">
+                                                <small id="emailHelpBlock" class="form-text text-danger">
+                                                    Your email is not valid!
+                                                </small>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -168,6 +183,8 @@
 
 <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <script src="https://use.fontawesome.com/7a7a4d3981.js"></script>
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -176,7 +193,7 @@
 
 <script type="text/javascript">
 
-    var cred = " <?php echo($cred); ?>";
+    var cred = " <?php echo($customerEmail); ?>";
     console.log(cred);
 
     $(document).on('change', '.switchMe', function() {
@@ -189,5 +206,6 @@
         }
     });
 </script>
+
 </body>
 </html>

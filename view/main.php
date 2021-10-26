@@ -1,6 +1,5 @@
 <?php
     session_start();
-    $cred = base64_decode($_SESSION['cred']);
 
 //    if (time()-$_SESSION['accessTime'] > 60){
 //        session_unset();

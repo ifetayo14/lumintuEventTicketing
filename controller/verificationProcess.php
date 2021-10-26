@@ -1,19 +1,46 @@
 <?php
     session_start();
     $_SESSION['cred'] = $_GET['m'];
-//    $_SESSION['accessTime'] = time();
-    include('../config.php');
 
-    $email = base64_decode($_SESSION['cred']);
-    $statusQuery = "SELECT `customer_status` FROM `customer` WHERE `customer_email` = '$email'";
-    $runQuery = mysqli_query($conn, $statusQuery) or die(mysqli_error($conn));
+    $customerURL = '192.168.0.145:8055/items/customer';
 
-    if ($runQuery->fetch_array()[0] == 'Pending'){
-        $updateQuery = "UPDATE `customer` SET `customer_status` = 'Verified' WHERE `customer_email` = '$email'";
-        $runQuery = mysqli_query($conn, $updateQuery) or die(mysqli_error($conn));
-        $result = $conn->affected_rows;
+    $curl = curl_init();
 
-        if ($result > 0){
+    //get customer ID
+    curl_setopt($curl, CURLOPT_URL, $customerURL . '?&filter[customer_code]=' . $_SESSION['cred']);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    $responseID = curl_exec($curl);
+    $resultID = json_decode($responseID, true);
+    $customerStatus = $resultID['data'][0]['customer_status'];
+
+    curl_close($curl);
+
+    if ($customerStatus == '0'){
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => '192.168.0.145:8055/items/customer/' . $resultID['data'][0]['customer_id'],
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'PATCH',
+            CURLOPT_POSTFIELDS =>'{
+                "customer_status": 1
+            }',
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json'
+            ),
+        ));
+
+        $responseInvID = curl_exec($curl);
+        $resultInvID = json_decode($responseInvID, true);
+
+        if (!isset($postResponse['errors'][0]['extensions']['code'])){
+//            echo $postResponse['errors'][0]['extensions']['code'];
             header('Location: ../view/main.php?scs');
         }
     }else{
