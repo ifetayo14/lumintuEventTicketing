@@ -9,7 +9,7 @@
     require '../vendor/phpmailer/phpmailer/src/POP3.php';
     require '../vendor/phpmailer/phpmailer/src/SMTP.php';
 
-    $customerURL = '192.168.0.130:8055/items/customer';
+    $customerURL = '192.168.18.68:8055/items/customer';
 
     $name = $_POST['name'];
     $email = $_POST['email'];
@@ -79,8 +79,14 @@
             $mail->addAddress($email);
             $mail->Subject = "[Lumintu Events] Verifikasi Email";
             $mail->isHTML(true);
-            $mail->Body = 'Hai ' . $name . ', silahkan klik link berikut untuk verifikasi email anda. Link ini juga digunakan untuk akses landing page<br/><br/>
-                        <a href="' . $loginLink . '?m=' . $cusCode .'">Verifikasi Email</a>';
+//            $mail->Body = 'Hai ' . $name . ', silahkan klik link berikut untuk verifikasi email anda. Link ini juga digunakan untuk akses landing page<br/><br/>
+//                        <a href="' . $loginLink . '?m=' . $cusCode .'">Verifikasi Email</a>';
+
+            $mailLocation = '../view/email/emailVerification.html';
+            $message = file_get_contents($mailLocation);
+
+            $mail->msgHTML($message);
+            $mail->addEmbeddedImage('../public/img/kraton.png', 'kratonLogo');
 
             if ($mail->send()){
                 header('Location: ../view/registration/registration.php?scs');
