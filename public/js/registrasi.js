@@ -32,6 +32,16 @@ function showPopUp(){
   })
 }
 
+function showMailExist(){
+  Swal.fire({
+    icon: 'success',
+    title: 'Registration Failed!',
+    showConfirmButton: true,
+    confirmButtonColor: '#3085d6',
+    text: "Your Email Already Exist",
+  })
+}
+
 //  REGEX NUMBER
 
 function allLetter(inputtxt){ 

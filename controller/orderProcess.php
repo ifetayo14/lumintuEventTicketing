@@ -1,10 +1,30 @@
 <?php
     session_start();
-    $url = '192.168.0.130:8055/items/invitation?fields=invitation_id,customer_id.customer_id,customer_id.customer_email,customer_id.customer_name,customer_inviter_id.customer_email,invitation_status&filter[customer_inviter_id][customer_code]=' . $_SESSION['cred'];
-    $invoiceURL = '192.168.0.130:8055/items/invoice';
-    $customerURL = '192.168.0.130:8055/items/customer';
-    $orderURL = '192.168.0.130:8055/items/order';
-    $voucherURL = '192.168.0.130:8055/items/voucher';
+
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\SMTP;
+    use Dompdf\Adapter\CPDF;
+    use Dompdf\Dompdf;
+    use Dompdf\Exception;
+
+    require '../vendor/phpmailer/phpmailer/src/Exception.php';
+    require '../vendor/phpmailer/phpmailer/src/OAuth.php';
+    require '../vendor/phpmailer/phpmailer/src/PHPMailer.php';
+    require '../vendor/phpmailer/phpmailer/src/POP3.php';
+    require '../vendor/phpmailer/phpmailer/src/SMTP.php';
+    require "../vendor/autoload.php";
+
+    require_once '../vendor/dompdf/dompdf/src/Autoloader.php';
+
+    $urlIP = '192.168.18.226:8001';
+
+    $url = 'http://' . $urlIP . '/items/invitation?fields=invitation_id,customer_id.customer_id,customer_id.customer_email,customer_id.customer_name,customer_inviter_id.customer_email,invitation_status&filter[customer_inviter_id][customer_code]=' . $_SESSION['cred'];
+    $invoiceURL = 'http://' . $urlIP . '/items/invoice';
+    $customerURL = 'http://' . $urlIP . '/items/customer';
+    $orderURL = 'http://' . $urlIP . '/items/order';
+    $voucherURL = 'http://' . $urlIP . '/items/voucher';
+
+    $document = new DOMPDF();
 
     $price = $_POST['total-harga'];
     $curl = curl_init();
@@ -16,6 +36,7 @@
     $resultID = json_decode($responseID, true);
     $dataLengthID = $resultID["data"];
     $customerID = $resultID['data'][0]['customer_id'];
+    $inviterEmail = $resultID['data'][0]['customer_email'];
 
     curl_close($curl);
     $curl = curl_init();
@@ -31,7 +52,7 @@
     $curl = curl_init();
 
     if (sizeof($invitationDataLength) == 1){
-        if (isset($_POST['voucher'])){
+        if ($_POST['voucher'] != ''){
             $voucher = $_POST['voucher'];
             //      get voucher
             curl_setopt($curl, CURLOPT_URL, $voucherURL . '?&filter[voucher_code]=' . $voucher);
@@ -65,6 +86,7 @@
                 ),
             ));
         }else{
+            $voucherID = '0';
             $curl = curl_init();
 
             //post to invoice
@@ -108,142 +130,347 @@
             curl_close($curl);
             $curl = curl_init();
 
-            if ($_POST['tiket-peserta-0'] > 3) {
-                $curl2 = curl_init();
-                if ($_POST['tiket-peserta-0'] == 4){
-                    curl_setopt_array($curl, array(
-                        CURLOPT_URL => $orderURL,
-                        CURLOPT_RETURNTRANSFER => true,
-                        CURLOPT_ENCODING => '',
-                        CURLOPT_MAXREDIRS => 10,
-                        CURLOPT_TIMEOUT => 0,
-                        CURLOPT_FOLLOWLOCATION => true,
-                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                        CURLOPT_CUSTOMREQUEST => 'POST',
-                        CURLOPT_POSTFIELDS =>'{
+            if ($_POST['voucher'] != ''){
+                if ($_POST['tiket-peserta-0'] > 3) {
+                    $curl2 = curl_init();
+                    if ($_POST['tiket-peserta-0'] == 4){
+                        curl_setopt_array($curl, array(
+                            CURLOPT_URL => $orderURL,
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_ENCODING => '',
+                            CURLOPT_MAXREDIRS => 10,
+                            CURLOPT_TIMEOUT => 0,
+                            CURLOPT_FOLLOWLOCATION => true,
+                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                            CURLOPT_CUSTOMREQUEST => 'POST',
+                            CURLOPT_POSTFIELDS =>'{
                         "invoice_id": "' . $invID . '",
                         "customer_id": "' . $customerID . '",
                         "ticket_id": "1",
-                        "order_quantity": "1"
+                        "order_quantity": "1",
+                        "voucher_id": "' . $voucherID . '"
                     }',
-                        CURLOPT_HTTPHEADER => array(
-                            'Content-Type: application/json'
-                        ),
-                    ));
+                            CURLOPT_HTTPHEADER => array(
+                                'Content-Type: application/json'
+                            ),
+                        ));
 
-                    curl_setopt_array($curl2, array(
-                        CURLOPT_URL => $orderURL,
-                        CURLOPT_RETURNTRANSFER => true,
-                        CURLOPT_ENCODING => '',
-                        CURLOPT_MAXREDIRS => 10,
-                        CURLOPT_TIMEOUT => 0,
-                        CURLOPT_FOLLOWLOCATION => true,
-                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                        CURLOPT_CUSTOMREQUEST => 'POST',
-                        CURLOPT_POSTFIELDS =>'{
+                        curl_setopt_array($curl2, array(
+                            CURLOPT_URL => $orderURL,
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_ENCODING => '',
+                            CURLOPT_MAXREDIRS => 10,
+                            CURLOPT_TIMEOUT => 0,
+                            CURLOPT_FOLLOWLOCATION => true,
+                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                            CURLOPT_CUSTOMREQUEST => 'POST',
+                            CURLOPT_POSTFIELDS =>'{
                         "invoice_id": "' . $invID . '",
                         "customer_id": "' . $customerID . '",
                         "ticket_id": "2",
-                        "order_quantity": "1"
+                        "order_quantity": "1",
+                        "voucher_id": "' . $voucherID . '"
                     }',
-                        CURLOPT_HTTPHEADER => array(
-                            'Content-Type: application/json'
-                        ),
-                    ));
-                }elseif ($_POST['tiket-peserta-0'] == 5){
-                    curl_setopt_array($curl, array(
-                        CURLOPT_URL => $orderURL,
-                        CURLOPT_RETURNTRANSFER => true,
-                        CURLOPT_ENCODING => '',
-                        CURLOPT_MAXREDIRS => 10,
-                        CURLOPT_TIMEOUT => 0,
-                        CURLOPT_FOLLOWLOCATION => true,
-                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                        CURLOPT_CUSTOMREQUEST => 'POST',
-                        CURLOPT_POSTFIELDS =>'{
+                            CURLOPT_HTTPHEADER => array(
+                                'Content-Type: application/json'
+                            ),
+                        ));
+                    }elseif ($_POST['tiket-peserta-0'] == 5){
+                        curl_setopt_array($curl, array(
+                            CURLOPT_URL => $orderURL,
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_ENCODING => '',
+                            CURLOPT_MAXREDIRS => 10,
+                            CURLOPT_TIMEOUT => 0,
+                            CURLOPT_FOLLOWLOCATION => true,
+                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                            CURLOPT_CUSTOMREQUEST => 'POST',
+                            CURLOPT_POSTFIELDS =>'{
                         "invoice_id": "' . $invID . '",
                         "customer_id": "' . $customerID . '",
                         "ticket_id": "1",
-                        "order_quantity": "1"
+                        "order_quantity": "1",
+                        "voucher_id": "' . $voucherID . '"
                     }',
-                        CURLOPT_HTTPHEADER => array(
-                            'Content-Type: application/json'
-                        ),
-                    ));
+                            CURLOPT_HTTPHEADER => array(
+                                'Content-Type: application/json'
+                            ),
+                        ));
 
-                    curl_setopt_array($curl2, array(
-                        CURLOPT_URL => $orderURL,
-                        CURLOPT_RETURNTRANSFER => true,
-                        CURLOPT_ENCODING => '',
-                        CURLOPT_MAXREDIRS => 10,
-                        CURLOPT_TIMEOUT => 0,
-                        CURLOPT_FOLLOWLOCATION => true,
-                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                        CURLOPT_CUSTOMREQUEST => 'POST',
-                        CURLOPT_POSTFIELDS =>'{
+                        curl_setopt_array($curl2, array(
+                            CURLOPT_URL => $orderURL,
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_ENCODING => '',
+                            CURLOPT_MAXREDIRS => 10,
+                            CURLOPT_TIMEOUT => 0,
+                            CURLOPT_FOLLOWLOCATION => true,
+                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                            CURLOPT_CUSTOMREQUEST => 'POST',
+                            CURLOPT_POSTFIELDS =>'{
                         "invoice_id": "' . $invID . '",
                         "customer_id": "' . $customerID . '",
                         "ticket_id": "3",
-                        "order_quantity": "1"
+                        "order_quantity": "1",
+                        "voucher_id": "' . $voucherID . '"
                     }',
-                        CURLOPT_HTTPHEADER => array(
-                            'Content-Type: application/json'
-                        ),
-                    ));
-                }elseif ($_POST['tiket-peserta-0'] == 6){
-                    curl_setopt_array($curl, array(
-                        CURLOPT_URL => $orderURL,
-                        CURLOPT_RETURNTRANSFER => true,
-                        CURLOPT_ENCODING => '',
-                        CURLOPT_MAXREDIRS => 10,
-                        CURLOPT_TIMEOUT => 0,
-                        CURLOPT_FOLLOWLOCATION => true,
-                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                        CURLOPT_CUSTOMREQUEST => 'POST',
-                        CURLOPT_POSTFIELDS =>'{
+                            CURLOPT_HTTPHEADER => array(
+                                'Content-Type: application/json'
+                            ),
+                        ));
+                    }elseif ($_POST['tiket-peserta-0'] == 6){
+                        curl_setopt_array($curl, array(
+                            CURLOPT_URL => $orderURL,
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_ENCODING => '',
+                            CURLOPT_MAXREDIRS => 10,
+                            CURLOPT_TIMEOUT => 0,
+                            CURLOPT_FOLLOWLOCATION => true,
+                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                            CURLOPT_CUSTOMREQUEST => 'POST',
+                            CURLOPT_POSTFIELDS =>'{
                         "invoice_id": "' . $invID . '",
                         "customer_id": "' . $customerID . '",
                         "ticket_id": "2",
-                        "order_quantity": "1"
+                        "order_quantity": "1",
+                        "voucher_id": "' . $voucherID . '"
                     }',
-                        CURLOPT_HTTPHEADER => array(
-                            'Content-Type: application/json'
-                        ),
-                    ));
+                            CURLOPT_HTTPHEADER => array(
+                                'Content-Type: application/json'
+                            ),
+                        ));
 
-                    curl_setopt_array($curl2, array(
-                        CURLOPT_URL => $orderURL,
-                        CURLOPT_RETURNTRANSFER => true,
-                        CURLOPT_ENCODING => '',
-                        CURLOPT_MAXREDIRS => 10,
-                        CURLOPT_TIMEOUT => 0,
-                        CURLOPT_FOLLOWLOCATION => true,
-                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                        CURLOPT_CUSTOMREQUEST => 'POST',
-                        CURLOPT_POSTFIELDS =>'{
+                        curl_setopt_array($curl2, array(
+                            CURLOPT_URL => $orderURL,
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_ENCODING => '',
+                            CURLOPT_MAXREDIRS => 10,
+                            CURLOPT_TIMEOUT => 0,
+                            CURLOPT_FOLLOWLOCATION => true,
+                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                            CURLOPT_CUSTOMREQUEST => 'POST',
+                            CURLOPT_POSTFIELDS =>'{
                         "invoice_id": "' . $invID . '",
                         "customer_id": "' . $customerID . '",
                         "ticket_id": "3",
-                        "order_quantity": "1"
+                        "order_quantity": "1",
+                        "voucher_id": "' . $voucherID . '"
                     }',
-                        CURLOPT_HTTPHEADER => array(
-                            'Content-Type: application/json'
-                        ),
-                    ));
-                }elseif ($_POST['tiket-peserta-0'] == 7){
-                    curl_setopt_array($curl, array(
-                        CURLOPT_URL => $orderURL,
-                        CURLOPT_RETURNTRANSFER => true,
-                        CURLOPT_ENCODING => '',
-                        CURLOPT_MAXREDIRS => 10,
-                        CURLOPT_TIMEOUT => 0,
-                        CURLOPT_FOLLOWLOCATION => true,
-                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                        CURLOPT_CUSTOMREQUEST => 'POST',
-                        CURLOPT_POSTFIELDS =>'{
+                            CURLOPT_HTTPHEADER => array(
+                                'Content-Type: application/json'
+                            ),
+                        ));
+                    }elseif ($_POST['tiket-peserta-0'] == 7){
+                        curl_setopt_array($curl, array(
+                            CURLOPT_URL => $orderURL,
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_ENCODING => '',
+                            CURLOPT_MAXREDIRS => 10,
+                            CURLOPT_TIMEOUT => 0,
+                            CURLOPT_FOLLOWLOCATION => true,
+                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                            CURLOPT_CUSTOMREQUEST => 'POST',
+                            CURLOPT_POSTFIELDS =>'{
                         "invoice_id": "' . $invID . '",
                         "customer_id": "' . $customerID . '",
                         "ticket_id": "4",
+                        "order_quantity": "1",
+                        "voucher_id": "' . $voucherID . '"
+                    }',
+                            CURLOPT_HTTPHEADER => array(
+                                'Content-Type: application/json'
+                            ),
+                        ));
+                    }
+                    $customer_server_response2 = curl_exec($curl2);
+                    $customerPostResponse = json_decode($customer_server_response2, true);
+
+                    curl_close($curl2);
+                }else{
+                    $tiket = $_POST['tiket-peserta-0'];
+                    curl_setopt_array($curl, array(
+                        CURLOPT_URL => $orderURL,
+                        CURLOPT_RETURNTRANSFER => true,
+                        CURLOPT_ENCODING => '',
+                        CURLOPT_MAXREDIRS => 10,
+                        CURLOPT_TIMEOUT => 0,
+                        CURLOPT_FOLLOWLOCATION => true,
+                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                        CURLOPT_CUSTOMREQUEST => 'POST',
+                        CURLOPT_POSTFIELDS =>'{
+                        "invoice_id": "' . $invID . '",
+                        "customer_id": "' . $customerID . '",
+                        "ticket_id": "' . $tiket . '",
+                        "order_quantity": "1",
+                        "voucher_id": "' . $voucherID . '"
+                    }',
+                        CURLOPT_HTTPHEADER => array(
+                            'Content-Type: application/json'
+                        ),
+                    ));
+                }
+            }else{
+                if ($_POST['tiket-peserta-0'] > 3) {
+                    $curl2 = curl_init();
+                    if ($_POST['tiket-peserta-0'] == 4){
+                        curl_setopt_array($curl, array(
+                            CURLOPT_URL => $orderURL,
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_ENCODING => '',
+                            CURLOPT_MAXREDIRS => 10,
+                            CURLOPT_TIMEOUT => 0,
+                            CURLOPT_FOLLOWLOCATION => true,
+                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                            CURLOPT_CUSTOMREQUEST => 'POST',
+                            CURLOPT_POSTFIELDS =>'{
+                        "invoice_id": "' . $invID . '",
+                        "customer_id": "' . $customerID . '",
+                        "ticket_id": "1",
+                        "order_quantity": "1"
+                    }',
+                            CURLOPT_HTTPHEADER => array(
+                                'Content-Type: application/json'
+                            ),
+                        ));
+
+                        curl_setopt_array($curl2, array(
+                            CURLOPT_URL => $orderURL,
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_ENCODING => '',
+                            CURLOPT_MAXREDIRS => 10,
+                            CURLOPT_TIMEOUT => 0,
+                            CURLOPT_FOLLOWLOCATION => true,
+                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                            CURLOPT_CUSTOMREQUEST => 'POST',
+                            CURLOPT_POSTFIELDS =>'{
+                        "invoice_id": "' . $invID . '",
+                        "customer_id": "' . $customerID . '",
+                        "ticket_id": "2",
+                        "order_quantity": "1"
+                    }',
+                            CURLOPT_HTTPHEADER => array(
+                                'Content-Type: application/json'
+                            ),
+                        ));
+                    }elseif ($_POST['tiket-peserta-0'] == 5){
+                        curl_setopt_array($curl, array(
+                            CURLOPT_URL => $orderURL,
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_ENCODING => '',
+                            CURLOPT_MAXREDIRS => 10,
+                            CURLOPT_TIMEOUT => 0,
+                            CURLOPT_FOLLOWLOCATION => true,
+                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                            CURLOPT_CUSTOMREQUEST => 'POST',
+                            CURLOPT_POSTFIELDS =>'{
+                        "invoice_id": "' . $invID . '",
+                        "customer_id": "' . $customerID . '",
+                        "ticket_id": "1",
+                        "order_quantity": "1"
+                    }',
+                            CURLOPT_HTTPHEADER => array(
+                                'Content-Type: application/json'
+                            ),
+                        ));
+
+                        curl_setopt_array($curl2, array(
+                            CURLOPT_URL => $orderURL,
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_ENCODING => '',
+                            CURLOPT_MAXREDIRS => 10,
+                            CURLOPT_TIMEOUT => 0,
+                            CURLOPT_FOLLOWLOCATION => true,
+                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                            CURLOPT_CUSTOMREQUEST => 'POST',
+                            CURLOPT_POSTFIELDS =>'{
+                        "invoice_id": "' . $invID . '",
+                        "customer_id": "' . $customerID . '",
+                        "ticket_id": "3",
+                        "order_quantity": "1"
+                    }',
+                            CURLOPT_HTTPHEADER => array(
+                                'Content-Type: application/json'
+                            ),
+                        ));
+                    }elseif ($_POST['tiket-peserta-0'] == 6){
+                        curl_setopt_array($curl, array(
+                            CURLOPT_URL => $orderURL,
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_ENCODING => '',
+                            CURLOPT_MAXREDIRS => 10,
+                            CURLOPT_TIMEOUT => 0,
+                            CURLOPT_FOLLOWLOCATION => true,
+                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                            CURLOPT_CUSTOMREQUEST => 'POST',
+                            CURLOPT_POSTFIELDS =>'{
+                        "invoice_id": "' . $invID . '",
+                        "customer_id": "' . $customerID . '",
+                        "ticket_id": "2",
+                        "order_quantity": "1"
+                    }',
+                            CURLOPT_HTTPHEADER => array(
+                                'Content-Type: application/json'
+                            ),
+                        ));
+
+                        curl_setopt_array($curl2, array(
+                            CURLOPT_URL => $orderURL,
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_ENCODING => '',
+                            CURLOPT_MAXREDIRS => 10,
+                            CURLOPT_TIMEOUT => 0,
+                            CURLOPT_FOLLOWLOCATION => true,
+                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                            CURLOPT_CUSTOMREQUEST => 'POST',
+                            CURLOPT_POSTFIELDS =>'{
+                        "invoice_id": "' . $invID . '",
+                        "customer_id": "' . $customerID . '",
+                        "ticket_id": "3",
+                        "order_quantity": "1"
+                    }',
+                            CURLOPT_HTTPHEADER => array(
+                                'Content-Type: application/json'
+                            ),
+                        ));
+                    }elseif ($_POST['tiket-peserta-0'] == 7){
+                        curl_setopt_array($curl, array(
+                            CURLOPT_URL => $orderURL,
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_ENCODING => '',
+                            CURLOPT_MAXREDIRS => 10,
+                            CURLOPT_TIMEOUT => 0,
+                            CURLOPT_FOLLOWLOCATION => true,
+                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                            CURLOPT_CUSTOMREQUEST => 'POST',
+                            CURLOPT_POSTFIELDS =>'{
+                        "invoice_id": "' . $invID . '",
+                        "customer_id": "' . $customerID . '",
+                        "ticket_id": "4",
+                        "order_quantity": "1"
+                    }',
+                            CURLOPT_HTTPHEADER => array(
+                                'Content-Type: application/json'
+                            ),
+                        ));
+                    }
+                    $customer_server_response2 = curl_exec($curl2);
+                    $customerPostResponse = json_decode($customer_server_response2, true);
+
+                    curl_close($curl2);
+                }else{
+                    $tiket = $_POST['tiket-peserta-0'];
+                    curl_setopt_array($curl, array(
+                        CURLOPT_URL => $orderURL,
+                        CURLOPT_RETURNTRANSFER => true,
+                        CURLOPT_ENCODING => '',
+                        CURLOPT_MAXREDIRS => 10,
+                        CURLOPT_TIMEOUT => 0,
+                        CURLOPT_FOLLOWLOCATION => true,
+                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                        CURLOPT_CUSTOMREQUEST => 'POST',
+                        CURLOPT_POSTFIELDS =>'{
+                        "invoice_id": "' . $invID . '",
+                        "customer_id": "' . $customerID . '",
+                        "ticket_id": "' . $tiket . '",
                         "order_quantity": "1"
                     }',
                         CURLOPT_HTTPHEADER => array(
@@ -251,31 +478,6 @@
                         ),
                     ));
                 }
-                $customer_server_response2 = curl_exec($curl2);
-                $customerPostResponse = json_decode($customer_server_response2, true);
-
-                curl_close($curl2);
-            }else{
-                $tiket = $_POST['tiket-peserta-0'];
-                curl_setopt_array($curl, array(
-                    CURLOPT_URL => $orderURL,
-                    CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_ENCODING => '',
-                    CURLOPT_MAXREDIRS => 10,
-                    CURLOPT_TIMEOUT => 0,
-                    CURLOPT_FOLLOWLOCATION => true,
-                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                    CURLOPT_CUSTOMREQUEST => 'POST',
-                    CURLOPT_POSTFIELDS =>'{
-                        "invoice_id": "' . $invID . '",
-                        "customer_id": "' . $customerID . '",
-                        "ticket_id": "' . $tiket . '",
-                        "order_quantity": "1"
-                    }',
-                    CURLOPT_HTTPHEADER => array(
-                        'Content-Type: application/json'
-                    ),
-                ));
             }
 
             $customer_server_response = curl_exec($curl);
@@ -285,7 +487,6 @@
         }
     }
     else {
-
         $curl = curl_init();
 
         //post to invoice
@@ -308,14 +509,14 @@
             ),
         ));
 
-        $customer_server_response = curl_exec($curl);
-        $customerPostResponse = json_decode($customer_server_response, true);
+        $invoice_server_response = curl_exec($curl);
+        $invoicePostResponse = json_decode($invoice_server_response, true);
 
         curl_close($curl);
         $curl = curl_init();
 
-        if (isset($customerPostResponse['errors'][0]['extensions']['code'])) {
-        echo $customerPostResponse['errors'][0]['extensions']['code'];
+        if (isset($invoicePostResponse['errors'][0]['extensions']['code'])) {
+        echo $invoicePostResponse['errors'][0]['extensions']['code'];
 //            header('Location: ../view/statuspesanan.php?errInv');
         } else {
             //      get invoice
@@ -500,9 +701,235 @@
                 }
 
                 $response1 = curl_exec($curl1_[$x]);
+                $customerPostResponse = json_decode($response1, true);
                 curl_close($curl1_[$x]);
 
             }
         }
+    }
+
+    if (isset($customerPostResponse['errors'][0]['extensions']['code'])){
+        header('Location: ../view/statusPesanan.php?errCus');
+    }else{
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $orderURL . '?fields=customer_id.customer_name,ticket_id.ticket_type,ticket_id.ticket_price,invoice_id.invoice_total&filter%5Binvoice_id%5D%5Bcustomer_id%5D=' . $customerID,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+        ));
+
+        $response = curl_exec($curl);
+        $result = json_decode($response, true);
+        $length = $result["data"];
+        curl_close($curl);
+
+        //ToPDF
+        $output = '
+                        <html>
+    
+    <style>
+        .imgEvent {
+            margin-bottom: 32px;
+        }
+    
+        .imgEvent img {
+            height: 300px;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            margin: 10px 0;
+        }
+    
+        .imgEvent p,
+        h4 {
+            margin: 8px;
+        }
+    
+        #detail {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    
+        #detail td {
+            border-bottom: 1pt solid grey;
+            padding: 10px;
+        }
+    
+        .leftSide {
+            text-align: left;
+        }
+    
+        .rightSide {
+            text-align: end;
+        }
+    
+        .textCenter {
+            text-align: center;
+        }
+    
+        .bank {
+            padding: 10px 24px;
+            margin: 10px 0;
+        }
+    
+        /* .bank table {
+            margin: 0 auto;
+        } */
+    </style>
+    
+    <body style="margin:0;padding:0;">
+        <table role="presentation"
+            style="width:100%;border-collapse:collapse;border:0;border-spacing:0;background:#ffffff;">
+            <tr>
+                <td align="center" style="padding:0;">
+                    <table role="presentation"
+                        style="width:602px;border-collapse:collapse;border:1px solid #cccccc;border-spacing:0;text-align:left;">
+                        <tr>
+                            <td align="center" style="padding:20px 0 0 0;background:#38435F;">
+                                <img src="../public/img/kraton.jpg" alt="" width="20%" height="20%"
+                                    style="height:auto;display:block;" />
+                                <h2 style="color: #D4AF37;">Welcome to Symposium</h2>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:20px 40px;">
+                                <table role="presentation"
+                                    style="width:100%;border-collapse:collapse;border:0;border-spacing:0;">
+                                    <tr>
+                                        <td style="color:#153643;">
+                                            <div class="invoice">
+                                                <div class="">
+                                                    <h2 class="textCenter">
+                                                        Thanks For You Order!
+                                                    </h2>
+                                                    <div>
+                                                        <h3 class="textCenter" style=" margin:0;line-height:24px;">
+                                                            <u>Your Order</u>
+                                                        </h3>
+                                                        <p class="textCenter" style=" font-size: small; margin-bottom: 32px">Monday, Oct 20 2021
+                                                            at 03.00pm</p>
+                                                        <!-- <div class="imgEvent" alt="" align="center">
+                                                            <img src="./assets/event1.jpg" alt="">
+                                                            <h4 style="color: #D4AF37;">Dream World Wide in Jogja</h4>
+                                                            <p style="color: #38435F;">By Lumintu Logic</p>
+                                                        </div> -->
+                                                    </div>
+                                                    <table id="detail" align="center">
+                                                        <tr>
+                                                            <td class="leftSide"><b>Name</b></td>
+                                                            <td><b>Ticket</b></td>
+                                                            <td class="rightSide"><b>Price</b></td>
+                                                        </tr>
+                    ';
+
+        for ($i = 0; $i < sizeof($length); $i++){
+            $output .= '
+                                                        <tr>
+                                                            <td class="leftSide">' . $result["data"][$i]["customer_id"]["customer_name"] . '</td>
+                                                            <td>' . $result["data"][$i]["ticket_id"]["ticket_type"] . '</td>
+                                                            <td class="rightSide">' . $result["data"][$i]["ticket_id"]["ticket_price"] . '</td>
+                                                        </tr>
+                        ';
+        }
+
+        $output .= '
+                                                        <tr>
+                                                            <td class="leftSide"><b>Total</b></td>
+                                                            <td></td>
+                                                            <td class="rightSide">' . $result["data"][0]["invoice_id"]["invoice_total"] . '</td>
+                                                        </tr>
+                        ';
+
+        $output .= '
+                                                    </table>
+                                                </div>
+                                                <div>
+                                                    <h3 style="margin:20px 0;line-height:24px;">
+                                                        Account Info
+                                                    </h3>
+                                                    <div class="bank" style="color: white; background-color: #38435F;">
+                                                        <p style="font-size: 24px; margin: 10px 0 20px 0;"><b>BRI</b></p>
+                                                        <table style="text-align: center;">
+                                                            <tr>
+                                                                <td style="padding-bottom: 10px;">Mohammad Arafat Maku</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>720222190601002</td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <p style="font-size:16px;line-height:24px; margin: 20px 0;">
+                                                    Choose one for your payment, and upload payment receipt by click this button below</p>
+                                                <!-- <p style="margin:0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;"><a href="http://www.example.com" style="color:#ee4c50;text-decoration:underline;">In tempus felis blandit</a></p> -->
+                                                <br>
+                                                <div class="buttonDiv" ><a class="btnVerif" href="%link%">Send Payment Receipt</a></div>
+                                                <br>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:20px 40px;background:#38435F;">
+                                    <table role="presentation"
+                                        style="width:100%;border-collapse:collapse;border:0;border-spacing:0;font-size:9px;font-family:Arial,sans-serif;">
+                                        <tr>
+                                            <td style="padding:0;width:50%;" align="center">
+                                                <p
+                                                    style="margin:0;font-size:14px;line-height:16px;font-family:Arial,sans-serif;color:#ffffff;">
+                                                    &copy; Lumintu Events<br />
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </body>
+    
+        </html>';
+
+        $document->loadHtml($output);
+        $document->setPaper('A4', 'portrait');
+        $document->render();
+        $invoiceOutput = $document->output();
+        file_put_contents('../public/invoiceFile/Invoice-' . $customerID . '.pdf', $invoiceOutput);
+    //                $document->stream('Invoice', array("Attachment"=>0));
+
+        $mail = new PHPMailer();
+        $mail->SMTPDebug = 0;
+        $mail->isSMTP();
+        $mail->SMTPSecure = 'tls';
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'mintuticketing@gmail.com';
+        $mail->Password = 'Mintu123';
+        $mail->Port = 587;
+
+        $mail->setFrom('mintuticketing@gmail.com', 'Lumintu Events');
+        $mail->addAddress($inviterEmail);
+        $mail->Subject = "[Lumintu Events] Thank you for your order.";
+        $mail->isHTML(true);
+
+        $mailLocation = '../view/email/emailInvoice.html';
+        $message = file_get_contents($mailLocation);
+        $message = str_replace('%name%', $resultID['data'][0]['customer_name'], $message);
+
+        $mail->msgHTML($message);
+        $mail->addAttachment('../public/invoiceFile/Invoice-' . $customerID . '.pdf');
+
+        $mail->send();
     }
 ?>

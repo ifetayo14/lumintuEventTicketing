@@ -4,8 +4,8 @@
     $cred = $_SESSION['cred'];
     $buyTicketLink = 'http://localhost/intern/ticketing/view/statuspesanan.php';
     $bioLink = 'http://localhost/intern/ticketing/view/invitation.php';
-    $customerURL = '192.168.0.130:8055/items/customer';
-    $invitationURL = '192.168.0.130:8055/items/invitation';
+    $customerURL = 'http://192.168.18.226:8001/items/customer';
+    $invitationURL = 'http://192.168.18.226:8001/items/invitation';
 
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\SMTP;
@@ -16,7 +16,7 @@
     require '../vendor/phpmailer/phpmailer/src/POP3.php';
     require '../vendor/phpmailer/phpmailer/src/SMTP.php';
 
-    $numberOfPost = count($_POST) - 1;
+    $numberOfPost = count($_POST);
 
     $counter = 0;
 
@@ -32,6 +32,32 @@
 
     if ($numberOfPost == 1) {
         if ($inviterEmail == $_POST['peserta1']) {
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => $invitationURL,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS =>'{
+                        "customer_id": "' . $inviterID . '",
+                        "customer_inviter_id": " '. $inviterID .' ",
+                        "invitation_status": "1"
+                    }',
+                CURLOPT_HTTPHEADER => array(
+                    'Content-Type: application/json'
+                ),
+            ));
+
+            $getResponse = curl_exec($curl);
+            $onCreateResponseInvitation = json_decode($getResponse, true);
+
+            curl_close($curl);
+
             $mail = new PHPMailer();
             $mail->SMTPDebug = 0;
             $mail->isSMTP();
@@ -191,15 +217,27 @@
                     $mail->addAddress($inviterEmail);
                     $mail->Subject = "[Lumintu Events] Link Pemesanan Tiket";
                     $mail->isHTML(true);
-                    $mail->Body = 'Hai ' . $inviterEmail . ', silahkan klik link berikut untuk melakukan pemesanan tiket<br/><br/>
-                                        <a href="' . $buyTicketLink . '?m=' . $cred .'">Pesan Tiket</a>';
+//                    $mail->Body = 'Hai ' . $inviterEmail . ', silahkan klik link berikut untuk melakukan pemesanan tiket<br/><br/>
+//                                        <a href="' . $buyTicketLink . '?m=' . $cred .'">Pesan Tiket</a>';
+                    $mailLocation = '../view/email/emailToOrder.html';
+                    $message = file_get_contents($mailLocation);
+                    $message = str_replace('%inviterMail%', $inviterEmail, $message);
+                    $message = str_replace('%link%', $buyTicketLink . '?m=' . $cred, $message);
+                    $mail->msgHTML($message);
                 }
                 else{
                     $mail->addAddress($pesertaEmail);
                     $mail->Subject = "[Lumintu Events] Link Pengisian Biodata Pemesanan Tiket";
                     $mail->isHTML(true);
-                    $mail->Body = 'Silahkan klik link berikut untuk melakukan pengisian biodata untuk pemesanan tiket.<br/><br/>
-                                <a href="' . $bioLink . '?invm=' . base64_encode($pesertaEmail) .'">Pesan Tiket</a>';
+//                    $mail->Body = 'Silahkan klik link berikut untuk melakukan pengisian biodata untuk pemesanan tiket.<br/><br/>
+//                                <a href="' . $bioLink . '?invm=' . base64_encode($pesertaEmail) .'">Pesan Tiket</a>';
+
+                    $mailLocation = '../view/email/emailInvitation.html';
+                    $message = file_get_contents($mailLocation);
+                    $message = str_replace('%receiverMail%', $pesertaEmail, $message);
+                    $message = str_replace('%inviterMail%', $inviterEmail, $message);
+                    $message = str_replace('%link%', $bioLink . '?invm=' . base64_encode($pesertaEmail), $message);
+                    $mail->msgHTML($message);
                 }
 
                 if ($mail->send()){

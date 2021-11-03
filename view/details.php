@@ -3,7 +3,7 @@
     session_start();
     $cred = $_SESSION['cred'];
 
-    $customerURL = '192.168.0.130:8055/items/customer';
+    $customerURL = 'http://192.168.18.226:8001/items/customer';
 
     $curl = curl_init();
 
@@ -16,42 +16,55 @@
 
     curl_close($curl);
 ?>
+<!doctype html>
 <html lang="en">
+
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 
     <!-- Owl Carousel CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
 
     <!-- Independent CSS-->
     <link rel="stylesheet" href="../public/css/details.css">
     <link rel="stylesheet" href="../public/css/slider.css">
+    <link rel="stylesheet" href="../public/css/loader.css">
 
-    <title>Details</title>
+    <title>Details Event | Lumintu Event</title>
 </head>
+
 <body>
-<div class="container banner-event rounded d-flex align-items-center p-5 mb-4">
-    <div class="deskripsi w-50 p-5">
-        <p class="h1 nama-event">Dream World Wide in Jogja</p>
-        <p class="h4 tanggal mb-4">By Lumintu Logic</p>
-        <p class="text-white">Gang, Jalan Candirejo, Jl. Pandega Siwi No.6A, Manggung, Caturtunggal, Depok Sub-District, Sleman Regency, Special Region of Yogyakarta 55281</p>
-        <button class="btn btn-lg btn-buy w-50" data-toggle="modal" data-target="#exampleModalScrollable">Buy Ticket</button>
+<div class="container-fluid banner-event mb-4">
+    <div class="container deskripsi d-flex align-items-center justify-content-start">
+        <div class="jumbotron rounded my-auto p-lg-5 p-sm-3 p-3">
+            <h1 class="h3 nama-event"></h1>
+            <h4 class="h5 tanggal eventClient mb-4"></h4>
+            <p class="text-white eventAddress"></p>
+            <button class="btn btn-buy" data-toggle="modal" data-target="#exampleModalScrollable">Buy
+                Ticket</button>
+        </div>
     </div>
+
+
 </div>
 
 <div class="container">
     <div class="row">
-        <div class="col-6 description">
-            <p class="h4 title-event mb-3">Description</p>
-            <p class="text-justify"> Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.</p>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 description">
+            <p class="h5 title-event mb-3">Description</p>
+            <p class="text-justify eventDesc"></p>
         </div>
-        <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+
+        <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -63,28 +76,27 @@
                     <div class="modal-body">
                         <form class="body-form" name="bodyForm" method="post" action="../controller/insertInvitationProcess.php">
                             <div class="body-popup mx-3">
-                                <div class="peserta rounded" id="peserta1">
+                                <div class="peserta rounded mb-3" id="peserta1">
                                     <div class="row special mb-2 align-items-center">
-                                        <div class="col-6">
-                                            <div class="form-group my-auto">
-                                                <input type="text" name="voucher" class="form-control kode-input" id="voucher" placeholder="Voucher Code">
-                                            </div>
-                                        </div>
-                                        <div class="col-6 text-right "><div class="toggle-buyMe">
+                                        <div class="col-12 text-right ">
+                                            <div class="toggle-buyMe">
                                                 <label class="switch">
                                                     <input type="checkbox" class="switchMe">
                                                     <span class="slider round"></span>
                                                 </label>
-                                                <small class="mr-1">Buy For Me</small>
-                                            </div></div>
-                                    </div>
-                                    <div class="row my-auto input-section mb-2">
-                                        <div class="col-4 my-auto">
-                                            <h5>Peserta 1</h5>
+                                                <small class="mr-1 my-auto">Buy For Me</small>
+                                            </div>
                                         </div>
-                                        <div class="col-8">
+                                    </div>
+                                    <div class="row my-auto input-section">
+                                        <div class="col-lg-4 col-md-4 col-sm-12 my-auto">
+                                            <p>Peserta 1</p>
+                                        </div>
+                                        <div class="col-lg-8 col-md-8 col-sm-12">
                                             <div class="form-group my-auto">
-                                                <input type="email" name="peserta1" class="form-control" id="inputPeserta1" aria-describedby="emailHelp" placeholder="example : ex@gmail.com" oninput="validate(this.name)">
+                                                <input type="email" name="peserta1" class="form-control" id="inputPeserta1"
+                                                       aria-describedby="emailHelp" placeholder="example : ex@gmail.com"
+                                                       oninput="validate(this.name)">
                                                 <small id="emailHelpBlock" class="form-text text-danger">
                                                     Your email is not valid!
                                                 </small>
@@ -111,56 +123,18 @@
                 </div>
             </div>
         </div>
-        <div class="col-6">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <div class="header-carousel">
                 <div class="owl-carousel owl-theme">
-                    <div class="item border-carousel-item active">
-                        <p class="h5">Day 1</p>
-                        <p class="tanggal-event">17 July 2021</p>
-                    </div>
-                    <div class="item border-carousel-item">
-                        <p class="h5">Day 2</p>
-                        <p class="tanggal-event">28 July 2021</p>
-                    </div>
-                    <div class="item border-carousel-item">
-                        <p class="h5">Day 3</p>
-                        <p class="tanggal-event">04 Agustus 2021</p>
-                    </div>
-                    <div class="item border-carousel-item">
-                        <p class="h5">Day 4</p>
-                        <p class="tanggal-event">05 Agustus 2021</p>
-                    </div>
-                    <div class="item border-carousel-item">
-                        <p class="h5">Day 4</p>
-                        <p class="tanggal-event">05 Agustus 2021</p>
-                    </div>
                 </div>
             </div>
 
             <div class="body-session">
                 <div class="table-responsive">
                     <table class="table">
-                        <tr>
-                            <td class="date-session">08.00AM - 09.00 AM</td>
-                            <td class="title-session  font-weight-bold">Registration</td>
-                        </tr>
-                        <tr>
-                            <td class="date-session">09.00 AM - 10.00 AM</td>
-                            <td class="title-session  font-weight-bold">Talk Show <br>
-                                <span class="detail-session  font-weight-normal">Digitalization Project in the Palace of Yogyakarta</span></td>
-                        </tr>
-                        <tr>
-                            <td class="date-session">10.00 AM - 10.45 AM
-                            </td>
-                            <td class="title-session">Registration</td>
-                        </tr>
-                        <tr>
-                            <td class="date-session">10.00 AM - 10.45 AM
-                            </td>
-                            <td class="title-session font-weight-bold">Registration<br>
-                                <span class="detail-session font-weight-normal">Moderated By : Dr. RM. Pramutomo, MA ISI Surakarta</span>
-                            </td>
-                        </tr>
+                        <div class="spinner-border text-primary spinner-event d-none" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
                     </table>
                 </div>
             </div>
@@ -168,27 +142,44 @@
     </div>
 </div>
 
+<div class="outer d-none" id="loader">
+    <div class="middle">
+        <div class="inner text-center">
+            <blockquote class="blockquote text-center">
+                <p class="mb-0">Sabar dan ikhlas bisa menjadikan kamu seorang yang mulia dan terhormat di dunia sekalipun kamu bukan apa-apa.</p>
+                <footer class="blockquote-footer">Someone famous in <cite title="Source Title">PINTAR</cite></footer>
+            </blockquote>
+            <div class="spinner-border text-light" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
+</div>
 
+<!-- Jquery CDN -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<!-- Bootstrap CDN -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+        crossorigin="anonymous"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
-
-<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
+<!-- Font Awesome CDN -->
 <script src="https://use.fontawesome.com/7a7a4d3981.js"></script>
 
+<!-- SweetAlert2 CDN -->
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<!-- OwlCarousel2 CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+        integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!-- MomentJS CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!-- Independent Js -->
 <script src="../public/js/details.js"></script>
 
 <script type="text/javascript">
@@ -199,13 +190,12 @@
     $(document).on('change', '.switchMe', function() {
         if(this.checked) {
             $("input#inputPeserta1").val(cred);
-            $("input#voucher").css('visibility', 'visible');
         } else{
             $("input#inputPeserta1").val('');
-            $("input#voucher").css('visibility', 'hidden');
         }
     });
 </script>
 
 </body>
+
 </html>

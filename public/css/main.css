@@ -1,120 +1,98 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');
-@import 'intl-tel-input/build/css/intlTelInput.css';
-
-.iti__flag {background-image: url("path/to/flags.png");}
-
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    .iti__flag {background-image: url("path/to/flags@2x.png");}
-}
-
-/* Start CSS Slider */
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 30px;
-    height: 17px;
-}
-
-.switch input { /* Hide default HTML checkbox */
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.slider { /* The slider */
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    -webkit-transition: .4s;
-    transition: .4s;
-}
-
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 13px;
-    width: 13px;
-    left: 2px;
-    bottom: 2px;
-    background-color: white;
-    -webkit-transition: .4s;
-    transition: .4s;
-}
-
-input:checked + .slider {
-    background-color: #2196F3;
-}
-
-input:focus + .slider {
-    box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked + .slider:before {
-    -webkit-transform: translateX(13px);
-    -ms-transform: translateX(13px);
-    transform: translateX(13px);
-}
-
-.slider.round { /* Rounded sliders */
-    border-radius: 34px;
-}
-
-.slider.round:before {
-    border-radius: 50%;
-}
 
 body{
     font-family: 'Montserrat', sans-serif;
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    background-color: #F8F9FA ;
 }
 
-.login-side{
-    background-color: #38435F;
-    height: 100vh;
-    color: white;
+@media screen and (max-width: 767.98px) { 
+    .banner{
+        height: 50vh;
+        background-image: url('../img/banner.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
+
+    .item{
+        height: 40vh;
+        width: 100%;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
+
+} 
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .banner{
+        height: 50vh;
+        background-image: url('../img/banner.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
+
+    .item{
+        height: 20vh;
+        width: 100%;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
 }
 
-.registrasi-side{
-    background-color: #38435F;
-    color: white;
-    height: 100vh;
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .banner{
+        height: 80vh;
+        background-image: url('../img/banner.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
+
+    .item{
+        height: 25vh;
+        width: 100%;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
 }
 
+@media screen and (min-width: 1200px) {
+    .banner{
+        height: 80vh;
+        background-image: url('../img/banner.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
 
-.login-side-header .h1, .login-side-header .h2,
-.registrasi-side-header .h1, .registrasi-side-header .h2 {
+    .item{
+        height: 28vh;
+        width: 100%;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
+}
+
+.nama-event{
+    color: #D4AF37;
     font-weight: 700;
 }
 
-.login-side-header .h3 {
-    font-weight: 400;
-}
-
-#show_hide_password a{
-    color:#333;
-    margin-left: -50%;
-}
-
-.btn-submit, .btn-registrasi {
-    background-color: #6F778A;
-    color: #fff;
-    font-size: large;
-    border: 1px solid #fff;
-}
-
-.btn-registrasi[disabled] {
-    border: none;
-    background-color: #6F778A;
-    color: #fff;
-    font-size: large;
+.tanggal{
+    color: #ffffff;
+    font-weight: 700;
 }
 
 .btn-checkout {
-    border: none;
+    border: none; 
     background-color: #D4AF37;
     font-weight: 500;
     letter-spacing: 1px;
@@ -122,34 +100,14 @@ body{
 }
 
 .btn-checkout[disabled] {
-    border: none;
+    border: none; 
     background-color: #6F778A;
     font-weight: 500;
     letter-spacing: 1px;
     color: #fff;
 }
 
-.login-side-bottom{
-    left: 0;
-    right: 0;
-    bottom: 0;
-    text-align: center;
-}
 
-.registrasi-side-bottom{
-    left: 0;
-    right: 0;
-    bottom: 0;
-    text-align: center;
-}
-
-.banner{
-    height: 100vh;
-    background-image: url('../img/banner.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-}
 
 .container-bannner-text{
     color: white;
@@ -161,14 +119,9 @@ body{
     -webkit-text-stroke: 1px #000000;
 }
 
-.container-banner-text .h3{
+.container-banner-text .h4{
     font-weight: 700;
     color: white;
-}
-
-header{
-    border: 1px solid black;
-    height: 50px;
 }
 
 .container-nav{
@@ -177,176 +130,30 @@ header{
     margin-top: -30px;
 }
 
-.container-event{
-    height: 100vh;
-}
-
-.item{
-    height: 200px;
-    width: 100%;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-}
-.item1{
-    background-image: url('../img/event1.jpg');
-}
-
-.item2{
-    background-image: url('../img/event2.jpg');
-}
-
-.item3{
-    background-image: url('../img/event3.jpg');
-}
-
-.nama-event{
-    color: #D4AF37;
-    font-weight: 700;
-}
-.tanggal{
-    color: #ffffff;
-    font-weight: 700;
-}
-.btn-more, .btn-buy{
-    background-color: #D4AF37;
-    color: #ffffff;
-}
-
-.banner-event{
-    position: relative;
-    height: 80vh;
-    background-image: url('../img/event1.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-}
-
-/* .opacity{
-    position: absolute;
-    background-color: black;
-    opacity: 0.8;
-    z-index: 1;
-} */
-
-.deskripsi{
-    background: rgba(0,0,0,0.5);
-    z-index: 2;
-    border-radius: 5%;
-}
-
-.title-event{
-    color: #38435F;
-    text-decoration: underline;
-}
-
-.tanggal-event{
-    color: black;
-}
-
-.header-carousel .owl-carousel .item{
-    width: 100%;
-    height:60px;
-}
-
-.border-carousel-item{
-    border-bottom: 1px solid black;
-}
-
-.border-carousel-item.active{
-    border-bottom: 1px solid red;
-}
-
-.date-session{
-    width: 40%;
-    font-size: small;
-}
-
-.title-session{
-    width: 60%;
-    font-size: small;
-}
-
-.btn-circle {
-    width: 50px;
-    height: 50px;
+.btn-more {
     background-color: #D4AF37;
 }
 
-.modal-content {
-    background-color: #38435F;
-    border: none;
-    color: white;
-    font-size: 14px;
+
+
+
+.owl-carousel .owl-stage{
+	display: flex;
+}
+.owl-item {
+	display: flex;
+	flex: 1 0 auto;
 }
 
-.modal-header{
-    border-bottom: 1px solid #D4AF37;
-}
-.modal-title .h3{
-    font-weight: bold;
-    color: #D4AF37;
-}
-
-.peserta h5{
-    color: #D4AF37;
-    text-align: center;
-    text-decoration: underline;
-}
-.form-text{
-    color: #D4AF37;
-}
-
-input#voucher {
-    visibility: hidden;
-}
-
-.form-group{
-
-}
-
-.details-pageStatus {
-    background: rgba(0,0,0,0.5);
-    z-index: 2;
-}
-
-.banner-status {
-    height: 400px;
-    background-image: url('../img/event1.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-}
-
-.title-status{
-    color: #D4AF37;
-    font-weight: 700;
-}
 .checkout {
-    border: 0px;
+    border: 0px; 
     background-color: #D4AF37;
     font-weight: 500;
     letter-spacing: 1px;
     color: #38435F;
 }
 
-.container-invitation{
-    height: 100vh;
-    width: 40%;
-    background-color: #38435f;
-}
-
-
-.btn-accept{
-    background-color: #D4AF37;
-}
-
-.footer-accept{
-    z-index: 5;
-    bottom: 0;
-    left: 0;
-}
-
 .input-status{
     border: none;
 }
+

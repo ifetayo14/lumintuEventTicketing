@@ -2,7 +2,7 @@
     $host = "localhost";
     $user = "root";
     $pass = "";
-    $name = "ticketing";
+    $name = "lumintu-ticket";
 
     $conn = mysqli_connect($host, $user, $pass, $name);
 
