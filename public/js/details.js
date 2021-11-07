@@ -1,109 +1,117 @@
-const ip = "192.168.18.226:8001"
+const IP = "192.168.0.125:8001"
+const CAROUSEL = $('.owl-carousel')
+const TABLE = $('.table')
+const BUTTON_PLUS = $(".btn-plus")
 let arrayOfSession = []
 
-const idEvent = 2;
 
-$(document).ready(function(){
-    // AJAX Day
+const ID_EVENT = 2;
+
+$(document).ready(() => {
+    // Mengambil Jadwal Hari di sebuah event
     $.ajax({
-        url: `http://${ip}/items/day`,
+        url: `http://${IP}/items/day`,
         type: "GET",
         dataType: "json",
-        success: function (data, textStatus, xhr) {
-            data.data.map((item, index) => {
-                if(index == 0){
-                    $('.owl-carousel').append(
+        success: (data, textStatus, xhr) => {
+            const items = data.data
+            items.map((item, index) => {
+                let day_name = item.day_name
+                let day_date = item.day_date
+                if (index == 0) {
+                    CAROUSEL.append(
                         `
-            <div class="item border-carousel-item active">
-              <a href="#" onclick="getSession(${index})">
-                <p class="h5">${item.day_name}</p>
-                <p class="tanggal-event">${convertDate(item.day_date)}</p>
-              </a>
-            </div>
-            `
+                        <div class="item border-carousel-item active">
+                            <a href="#" onclick="getSession(${index})">
+                                <p class="h5">${day_name}</p>
+                                <p class="tanggal-event">${convertDate(day_date)}</p>
+                            </a>
+                        </div>
+                    `
                     )
                 } else {
-                    $('.owl-carousel').append(
+                    CAROUSEL.append(
                         `
-            <div class="item border-carousel-item">
-              <a href="#" onclick="getSession(${index})">
-                <p class="h5">${item.day_name}</p>
-                <p class="tanggal-event">${convertDate(item.day_date)}</p>
-              </a>
-            </div>
-            `
+                        <div class="item border-carousel-item">
+                            <a href="#" onclick="getSession(${index})">
+                                <p class="h5">${day_name}</p>
+                                <p class="tanggal-event">${convertDate(day_date)}</p>
+                            </a>
+                        </div>
+                    `
                     )
                 }
             })
         },
-        complete: function(){
+        complete: () => {
             initializeCarousel()
             sesi()
         },
-        error: function (xhr, textStatus, errorThrown) {
+        error: (xhr, textStatus, errorThrown) => {
             console.log("Error in Database");
         },
     });
 
-    // AJAX Event
+    // Mengambil Informasi sebuah event
     $.ajax({
-        url: `http://${ip}/items/event/${idEvent}`,
+        url: `http://${IP}/items/event/${ID_EVENT}`,
         type: "GET",
         dataType: "json",
-        beforeSend: function () {
+        beforeSend: () => {
             $("#loader").removeClass('d-none');
         },
-        success: function (data, textStatus, xhr) {
+        success: (data, textStatus, xhr) => {
             const event = data.data;
-            console.log(event.event_name);
             $(".nama-event").text(event.event_name);
             $(".eventClient").text("By " + event.event_client);
             $(".eventAddress").text(event.event_address);
             $(".eventDesc").text(event.event_desc);
         },
-        complete: function () {
+        complete: () => {
             $("#loader").addClass('d-none');
         },
-        error: function (xhr, textStatus, errorThrown) {
+        error: (xhr, textStatus, errorThrown) => {
             console.log("Error in Database");
         },
     });
 
 })
 
-
-function sesi(){ // AJAX Session
+// Mengambil Semua Informasi Session 
+let sesi = () => {
     $.ajax({
-        url: `http://${ip}/items/ticket?fields=ticket_id,ticket_type,ticket_x_session.session_id.*,ticket_x_day.day_id.*`,
+        url: `http://${IP}/items/ticket?fields=ticket_id,ticket_type,ticket_x_session.session_id.*,ticket_x_day.day_id.*`,
         type: "GET",
         dataType: "json",
-        beforeSend: function () {
+        beforeSend: () => {
             $(".spinner-event").removeClass('d-none');
         },
-        success: function (data, textStatus, xhr) {
-            console.log(data.data)
-            data.data.map((item, index) => {
-                if (item.ticket_type.includes("Only")){
+        success: (data, textStatus, xhr) => {
+            const items = data.data
+            items.map((item, index) => {
+                let ticket_type = item.ticket_type
+                let ticket_x_session = item.ticket_x_session
+                if (ticket_type.includes("Only")) {
                     arrayOfSession.push(new Array())
-                    item.ticket_x_session.map((item, keys) => {
+                    ticket_x_session.map((item, keys) => {
                         arrayOfSession[index].push(item)
                     })
                 }
             })
-
         },
-        complete: function () {
+        complete: () => {
             $(".spinner-event").addClass('d-none');
             getSession(0)
         },
-        error: function (xhr, textStatus, errorThrown) {
+        error: (xhr, textStatus, errorThrown) => {
             console.log("Error in Database");
         },
     });
 }
 
-function initializeCarousel(){
-    $(".owl-carousel").owlCarousel({
+// Function untuk Inisialisasi Ulang Carousel
+let initializeCarousel = () => {
+    CAROUSEL.owlCarousel({
         margin: 5,
         nav: true,
         responsive: {
@@ -120,36 +128,44 @@ function initializeCarousel(){
     });
 }
 
-function getSession(day) {
-    $('.table').html("")
+// Mengambil Sesi Sesuai Day
+let getSession = (day) => {
+    TABLE.html("")
     arrayOfSession[day].map(item => {
-        let data = item.session_id
+        let session = item.session_id
+        let start_time = session.start_time
+        let finish_time = session.finish_time
+        let session_type = session.session_type
+        let session_desc = session.session_desc
         let isiTabel =
             `
-    <tr>
-      <td class="date-session">${convertTime(data.start_time)} - ${convertTime(data.finish_time)}</td>
-      <td class="title-session font-weight-bold">${data.session_type}<br>
-        <span class="detail-session font-weight-normal">${data.session_desc}</span>
-      </td>
-    </tr>
-    `
-        $('.table').append(isiTabel)
+            <tr>
+                <td class="date-session">${convertTime(start_time)} - ${convertTime(finish_time)}</td>
+                <td class="title-session font-weight-bold">${session_type}<br>
+                    <span class="detail-session font-weight-normal">${session_desc}</span>
+                </td>
+            </tr>
+        `
+        TABLE.append(isiTabel)
     })
 }
 
-function convertDate(dateString) {
+// Mengubah String menjadi Tipe Data Date
+let convertDate = (dateString) => {
     var momentObj = moment(dateString, "YYYY-DD-MM");
     var momentString = momentObj.format("D MMM yy");
     return momentString;
 }
 
-function convertTime(time) {
+// Mengubah String menjadi Tipe Data Time
+let convertTime = (time) => {
     var momentObj = moment(time, "YYYY-MM-DDTHH:mm:ss");
     var momentString = momentObj.format("hh.mm A");
     return momentString;
 }
 
-function tambahkan() {
+// Function untuk memperbanyak field untuk mengisi email invitation
+let addInputFieldInvitation = () => {
     let quantity = document.querySelectorAll(".peserta").length;
     let elem = document.getElementById("peserta1");
     let cln = elem.cloneNode(true);
@@ -159,14 +175,35 @@ function tambahkan() {
     document.querySelector;
     $(`#peserta${quantity} .special`).remove();
     $(`#peserta${quantity} p`).text(`Peserta ${quantity}`);
-    $(`#peserta${quantity} .form-group input`).attr("name", `peserta${quantity}`);
-    $(`#peserta${quantity} .form-group input`).attr("id", `peserta${quantity}`);
-    $(`#peserta${quantity} .form-group input`).val("");
+    $(`#peserta${quantity} .form-group input`).attr({
+        name: `peserta${quantity}`,
+        id: `peserta${quantity}`,
+        value: ""
+    })
     $(`#peserta${quantity} #emailHelpBlock`).removeClass('d-none')
 }
 
+// Function Validate Email dengan REGEX
+let validateEmail = (email) => {
+    const re =
+        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+}
+
+// Function untuk melakukan validasi dari sebuah input
+let validate = (email) => {
+    const RESULT = $(`#${email} #emailHelpBlock`);
+    if (validateEmail($(`[name=${email}]`).val())) {
+        RESULT.text("Your email is valid");
+        RESULT.addClass('d-none')
+    } else {
+        RESULT.text("Your email is not valid");
+    }
+    return false;
+}
+
 // Show Voucher Code Field
-$(document).on("change", ".switchMe", function () {
+$(document).on("change", ".switchMe", () => {
     if (this.checked) {
         $("input#voucher").css("visibility", "visible");
     } else {
@@ -174,28 +211,12 @@ $(document).on("change", ".switchMe", function () {
     }
 });
 
-$("input#voucher").on("input", function () {
+$("input#voucher").on("input", () => {
     if ($(this).val() != "") {
-        $(".btn-plus").addClass("d-none");
+        BUTTON_PLUS.addClass("d-none");
     } else {
-        $(".btn-plus").removeClass("d-none");
+        BUTTON_PLUS.removeClass("d-none");
     }
-    console.log($(this).val());
 });
 
-function validateEmail(email) {
-    const re =
-        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
-}
 
-function validate(email) {
-    const result = $(`#${email} #emailHelpBlock`);
-    if (validateEmail($(`[name=${email}]`).val())) {
-        result.text("Your email is valid");
-        result.addClass('d-none')
-    } else {
-        result.text("Your email is not valid");
-    }
-    return false;
-}
