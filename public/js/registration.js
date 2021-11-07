@@ -1,120 +1,127 @@
-let check = [false, false, false];
+const INPUT_PHONE = document.querySelector("#phone");
+const RESULT = $("#emailHelpBlock");
+const NAME_HELPBLOCK = $('#nameHelpBlock')
+const PHONE_HELPBLOCK = $('#phoneHelpBlock')
+const NAME_INPUT = $(".name-input")
+const PHONE_INPUT = $(".phone-input")
+const REGEX_LETTER = /^[a-zA-Z\s]*$/;
+const REGEX_NUMBER = /^[0-9]*$/;
+const REGEX_EMAIL = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-var input = document.querySelector("#phone");
-var iti = intlTelInput(input, {
-  utilsScript:
-    "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput.min.js",
-});
+let check = [false, false, false]
 
-$(document).ready(function () {
-  iti.setCountry("id");
-  getDialCode();
-});
-
-input.addEventListener("countrychange", function () {
-  getDialCode();
-});
-
-function getDialCode() {
+let getDialCode = () => {
   $("#phone").val(`${iti.getSelectedCountryData().dialCode}`);
 }
 
-function validateEmail(email) {
-  const re =
-    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(email);
-}
-
-function validate() {
-  const result = $("#emailHelpBlock");
-  const email = $("#email").val();
-
-  if (validateEmail(email)) {
-    result.text("Your email is valid");
-    check[0] = true;
-    checkStatus();
+let validate = () => {
+  const EMAIL_VALUE = $("#email").val();
+  if (validateEmail(EMAIL_VALUE)) {
+    RESULT.text("Your email is valid")
+    check[0] = true
+    checkStatus()
   } else {
-    result.text("Your email is not valid");
-    check[0] = false;
-    checkStatus();
+    RESULT.text("Your email is not valid")
+    check[0] = false
+    checkStatus()
   }
   return false;
 }
 
-function showPopUpSuccess() {
+let validateEmail = (email) => {
+  return REGEX_EMAIL.test(email);
+}
+
+let showPopUp = () => {
   Swal.fire({
-    icon: "success",
-    title: "Registration Success!",
+    icon: 'success',
+    title: 'Registration Success!',
     showConfirmButton: true,
-    confirmButtonColor: "#3085d6",
+    confirmButtonColor: '#3085d6',
     text: "Make sure to check your email to verify your account.",
-  });
+  })
 }
 
-function showPopUpFailed() {
+let showMailExist = () => {
   Swal.fire({
-    icon: "error",
-    title: "Registration Failde!",
+    icon: 'success',
+    title: 'Registration Failed!',
     showConfirmButton: true,
-    confirmButtonColor: "#3085d6",
-    text: `Email "${$("#email").val()}" already exists!"`,
-  });
+    confirmButtonColor: '#3085d6',
+    text: `Your Email "${EMAIL_VALUE}" already exists!"`,
+  })
 }
 
-//  REGEX NUMBER
-
-function allLetter(inputtxt) {
-  var letters = /^[a-zA-Z\s]*$/;
-  if (inputtxt.value.match(letters)) {
-    $("#nameHelpBlock").text = "Numbers Not Allowed";
-    $("#nameHelpBlock").addClass("d-none");
-    check[1] = true;
-    checkStatus();
-    return true;
-  } else {
-    let str = $(".name-input").val();
-    $("#nameHelpBlock").text = "Numbers Not Allowed";
-    $("#nameHelpBlock").removeClass("d-none");
+let allLetter = (inputtxt) => {
+  if (inputtxt.value.match(REGEX_LETTER)) {
+    NAME_HELPBLOCK.text = "Numbers Not Allowed"
+    NAME_HELPBLOCK.addClass('d-none')
+    check[1] = true
+    checkStatus()
+    return true
+  }
+  else {
+    NAME_HELPBLOCK.text = "Numbers Not Allowed"
+    NAME_HELPBLOCK.removeClass('d-none')
     Swal.fire({
-      icon: "error",
-      title: "Numbers Not Allowed!",
+      icon: 'error',
+      title: 'Numbers Not Allowed!',
       showConfirmButton: true,
-      confirmButtonColor: "#3085d6",
+      confirmButtonColor: '#3085d6',
       text: " Please Check Your Input!",
-    });
-    $(".name-input").val("");
+    })
+    NAME_INPUT.val("")
+    check[1] = false
+    checkStatus()
     return false;
   }
+
 }
 
-function allNumber(inputnbr) {
-  var numbers = /^[0-9]*$/;
-  if (inputnbr.value.match(numbers)) {
-    $("#phoneHelpBlock").text = "Numbers Not Allowed";
-    $("#phoneHelpBlock").addClass("d-none");
-    check[2] = true;
-    checkStatus();
-  } else {
-    let str = $(".phone-input").val();
-    $("#phoneHelpBlock").text = "Numbers Not Allowed";
-    $("#phoneHelpBlock").removeClass("d-none");
+let allNumber = (inputnbr) => {
+  if (inputnbr.value.match(REGEX_NUMBER)) {
+    PHONE_HELPBLOCK.text = "Numbers Not Allowed"
+    $('#phoneHelpBlock').addClass('d-none')
+    check[2] = true
+  }
+  else {
+    PHONE_HELPBLOCK.text = "Numbers Not Allowed"
+    PHONE_HELPBLOCK.removeClass('d-none')
     Swal.fire({
-      icon: "error",
-      title: "Letter Not Allowed!",
+      icon: 'error',
+      title: 'Letter Not Allowed!',
       showConfirmButton: true,
-      confirmButtonColor: "#3085d6",
+      confirmButtonColor: '#3085d6',
       text: " Please Check Your Input!",
-    });
-    $(".phone-input").val("");
-    getDialCode();
+    })
+    PHONE_INPUT.val("")
+    check[2] = false
     return false;
   }
+  checkStatus()
 }
 
-function checkStatus() {
+let checkStatus = () => {
   if (check.indexOf(false) == -1) {
-    $(".btn-registrasi").prop("disabled", false);
+    $('.btn-registrasi').prop('disabled', false)
   } else {
-    $(".btn-registrasi").prop("disabled", true);
+    $('.btn-registrasi').prop('disabled', true)
   }
+
 }
+
+let iti = intlTelInput(INPUT_PHONE, {
+  utilsScript:
+    "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput.min.js",
+});
+
+$(document).ready(() => {
+  iti.setCountry("id");
+  getDialCode();
+});
+
+INPUT_PHONE.addEventListener("countrychange", function () {
+  getDialCode();
+});
+
+
