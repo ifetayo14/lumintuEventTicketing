@@ -48,26 +48,27 @@
 
         <table class="table display table-responsive-lg table-status">
             <thead>
-            <tr>
-                <th class="email-td">Email</th>
-                <th class="name-td">Nama</th>
-                <th class="no-sort ticket-td">Ticket</th>
-                <th class="no-sort price-td">Price</th>
-                <th class="no-sort status-td">Status</th>
-            </tr>
+                <tr>
+                    <th class="email-td">Email</th>
+                    <th class="name-td">Nama</th>
+                    <th class="no-sort ticket-td">Ticket</th>
+                    <th class="no-sort price-td">Price</th>
+                    <th class="no-sort status-td">Status</th>
+                    <th class="no-sort button-td">Action</th>
+                </tr>
             </thead>
             <tbody></tbody>
             <tfoot>
-            <tr>
-                <th colspan="4" class="text-right">Total Invoice :</th>
-                <td>
-                    <input type="email" class="input-status" id="total-harga" name="total-harga" value="0" readonly />
-                </td>
-            </tr>
+                <tr class="text-center">
+                    <th colspan="5" class="text-right">Total Invoice :</th>
+                    <td>
+                    <input type="email" class="input-status w-100" id="total-harga" name="total-harga" value="0" readonly />
+                    </td>
+                </tr>
             </tfoot>
         </table>
         <div class="text-center py-4">
-            <button class="rounded py-2 px-5 btn-checkout" disabled>
+            <button class="rounded py-2 px-5 btn-checkout" disabled type="submit">
                 Checkout
             </button>
         </div>

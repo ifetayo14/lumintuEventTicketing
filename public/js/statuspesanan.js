@@ -1,8 +1,11 @@
-let optionTicket = [{ nama: "No Selected Ticket", harga: 0 , capacity: 0 }]; //Array Jenis Ticket
+let optionTicket = [{ nama: "No Selected Ticket", harga: 0, capacity: 0 }]; //Array Jenis Ticket
 let sumTicket = [0]; // Array Jumlah Data Penjualan per Ticket
 let statusPemesanan = []; // Array Status Invitation
 let pembelian = []; // Array menampung harga tiket pilihan
-let ip = "192.168.18.226:8001"; // IP API
+let ip = "192.168.0.125:8001"; // IP API
+let link = window.location.href;
+const url = new URL(link);
+let params = url.searchParams.get("m");
 
 // AJAX untuk mengambil Jumlah Data Penjualan per Ticket
 $.ajax({
@@ -18,6 +21,14 @@ $.ajax({
         console.log("Error in Database");
     },
 });
+
+// Deklarasi
+function inisialisi() {
+    optionTicket = [{ nama: "No Selected Ticket", harga: 0, capacity: 0 }]; //Array Jenis Ticket
+    sumTicket = [0]; // Array Jumlah Data Penjualan per Ticket
+    statusPemesanan = []; // Array Status Invitation
+    pembelian = []; // Array menampung harga tiket pilihan
+}
 
 // Memunculkan Harga
 function priceShow(idClass, value) {
@@ -52,17 +63,67 @@ function checkStatus() {
     }
 }
 
-$(document).ready(function () {
-    let link = window.location.href;
-    const url = new URL(link);
+function hapus(invit, customer) {
+    swal.fire({
+        title: "Are you sure?",
+        text: "You will not be able to use this data again!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, I am Sure',
+        cancelButtonText: 'No, cancel it!',
+        dangerMode: true,
+    }).then(function (isConfirm) {
+        if (isConfirm) {
+            $.ajax({
+                url: `http://${ip}/items/invitation/${invit}`,
+                type: "PATCH",
+                contentType: 'application/json',
+                data: JSON.stringify(
+                    { "invitation_status": 2 }
+                )
+            }).done(function () {
+                console.log('SUCCESS')
+                $.ajax({
+                    url: `http://${ip}/items/customer/${customer}`,
+                    type: "PATCH",
+                    contentType: 'application/json',
+                    data: JSON.stringify(
+                        { "customer_status": 2 }
+                    )
+                }).done(function () {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Data has been deletd',
+                        showConfirmButton: true,
+                    })
+                }).fail(function (msg) {
+                    console.log('FAIL')
+                })
+            }).fail(function (msg) {
+                console.log('FAIL')
+            }).always(function () {
+                $(".table-status").DataTable().clear().destroy();
+                inisialisi()
+                getData()
+            })
+        } else {
+            swal.fire("Cancelled", "Make your better choice!", "error");
+        }
+    })
 
-    let params = url.searchParams.get("m");
 
-    // AJAX jenis Tiket
+}
+
+function getData() {
     $.ajax({
         url: `http://${ip}/items/ticket/`,
         type: "GET",
         dataType: "json",
+        beforeSend: function () {
+            $("#loader").removeClass('d-none');
+        },
         success: function (data, textStatus, xhr) {
             data.data.map((item) => { //Menyimpan Jenis Tiket ke Array
                 if (item.ticket_seat != null) {
@@ -93,55 +154,67 @@ $(document).ready(function () {
                 }
             }
 
+
             $.ajax({
-                url: `http://${ip}/items/invitation?fields=invitation_id,customer_id.customer_email,customer_id.customer_name,customer_inviter_id.customer_email,invitation_status&filter[customer_inviter_id][customer_code]="${params}"`,
+                url: `http://${ip}/items/invitation?fields=invitation_id,customer_id.customer_id,customer_id.customer_email,customer_id.customer_name,customer_id.customer_status,customer_inviter_id.customer_id,customer_inviter_id.customer_email,invitation_status&filter[customer_inviter_id][customer_code]="${params}"`,
                 type: "GET",
                 dataType: "json",
+                beforeSend: function () {
+                    $("#loader").removeClass('d-none');
+                },
                 success: function (data, textStatus, xhr) {
                     console.log(data.data.length);
 
                     data.data.map((item, index) => {
-                        pembelian.push(0);
-                        tableRow = `
-                    <tr>
-                        <td>
-                            ${item.customer_id.customer_email}
-                        </td>
-                        <td>${
-                            item.customer_id.customer_name == null
-                                ? "Belum Mengisi"
-                                : `${item.customer_id.customer_name}`
-                        }
-                        </td>
-                        ${
-                            item.invitation_status == 1?
-                                `<td>
-                            <select class="custom-select" id="${index + 1}" name="tiket-peserta-${index}" onchange="priceShow(this.id, this.value)"></select>
-                          </td>
-                          <td class= "price${index + 1}">${0}</td>
+                        if (item.invitation_status != 2) {
+                            pembelian.push(0);
+                            tableRow = `
+                      <tr>
                           <td>
-                              <div class="card shadow" style="width: 32px; height: 32px;">
-                              <img src="../public/img/true.svg" alt=""></div>
-                          </td>`
-                                :
-                                `<td>
-                            <select class="custom-select" id="${index + 1}" onchange="priceShow(this.id, this.value)" disabled></select></td>
-                          <td class= "price${index + 1}">${0}</td>
-                          <td>
-                              <div class="card shadow" style="width: 32px; height: 32px;">
-                              <img src="../public/img/false.svg" alt=""></div>
+                              ${item.customer_id.customer_email}
                           </td>
-                          `
+                          <td>${item.customer_id.customer_name == null
+                                    ? "Belum Mengisi"
+                                    : `${item.customer_id.customer_name}`
+                                }
+                          </td>
+                          ${item.invitation_status == 1 ?
+                                    `<td>
+                              <select class="custom-select" id="${index + 1}" name="tiket-peserta" onchange="priceShow(this.id, this.value)"></select>
+                            </td>
+                            <td class= "price${index + 1}">${0}</td>
+                            <td>
+                                <div class="card shadow" style="width: 32px; height: 32px; margin: 0 auto;">
+                                <img src="../public/img/true.svg" alt=""></div>
+                            </td>
+                            <td>
+                              Completed
+                            </td>
+                            `
+                                    :
+                                    `<td>
+                              <select class="custom-select" id="${index + 1}" onchange="priceShow(this.id, this.value)" disabled></select></td>
+                            <td class= "price${index + 1}">${0}</td>
+                            <td>
+                                <div class="card shadow" style="width: 32px; height: 32px; margin: 0 auto;">
+                                <img src="../public/img/false.svg" alt=""></div>
+                            </td>
+                            <td>
+                              <button class="btn btn-danger" onclick="hapus(${item.invitation_id}, ${item.customer_id.customer_id})" type="button">Hapus</button>
+                            </td>
+                            `
+                                }
+                          
+                      </tr>    
+                      `;
+                            $("tbody").append(tableRow);
+                            if (item.invitation_status == 1) {
+                                statusPemesanan.push(true);
+                            } else {
+                                statusPemesanan.push(false);
+                            }
+                            console.log(statusPemesanan);
                         }
-                    </tr>    
-                    `;
-                        $("tbody").append(tableRow);
-                        if (item.invitation_status == 1) {
-                            statusPemesanan.push(true);
-                        } else {
-                            statusPemesanan.push(false);
-                        }
-                        console.log(statusPemesanan);
                     });
 
                     optionTicket.map((item, index) => {
@@ -152,8 +225,7 @@ $(document).ready(function () {
                                 );
                             } else {
                                 $(".custom-select").append(
-                                    `<option value="${index}">${item.nama} (${
-                                        item.capacity - sumTicket[index]
+                                    `<option value="${index}">${item.nama} (${item.capacity - sumTicket[index]
                                     })</option>`
                                 );
                             }
@@ -162,7 +234,7 @@ $(document).ready(function () {
 
                     checkStatus();
 
-                    if (data.data.length == 1) {
+                    if (pembelian.length <= 1) {
                         $(".voucher").removeClass("d-none");
                         $(".table-status").DataTable({
                             paging: false,
@@ -186,36 +258,26 @@ $(document).ready(function () {
                     }
 
                 },
-                complete: function (data) {
-                    // Hide image container
-                    $("#loader").addClass("d-none");
-                },
                 error: function (xhr, textStatus, errorThrown) {
                     console.log("Error in Database");
                 },
             });
         },
+        complete: function (data) {
+            // Hide image container
+            $("#loader").addClass("d-none");
+        },
         error: function (xhr, textStatus, errorThrown) {
-            console.log("Error in Database");
+            $("#loader").addClass("d-none");
+            $("tbody").html(`<td colspan="6" class="text-center">Failed to Load Data</td>`);
         },
     });
+}
 
-    // AJAX data Table
-
+$(document).ready(function () {
+    getData()
 });
 
-// function confirmOrder(){
-//   swal.fire({
-//     title: "Are you sure?",
-//     text: "You will not be able to recover this imaginary file!",
-//     icon: "warning",
-//     buttons: [
-//       'No, cancel it!',
-//       'Yes, I am sure!'
-//     ],
-//     dangerMode: true,
-//   })
-// }
 
 
 const swalWithBootstrapButtons = Swal.mixin({
@@ -227,7 +289,7 @@ const swalWithBootstrapButtons = Swal.mixin({
 })
 
 
-document.querySelector('#formPesanan').addEventListener('submit', function(e) {
+document.querySelector('#formPesanan').addEventListener('submit', function (e) {
     var form = this;
 
     e.preventDefault(); // <--- prevent form from submitting
@@ -242,13 +304,13 @@ document.querySelector('#formPesanan').addEventListener('submit', function(e) {
         confirmButtonText: 'Yes, I am Sure',
         cancelButtonText: 'No, cancel it!',
         dangerMode: true,
-    }).then(function(isConfirm) {
+    }).then(function (isConfirm) {
         if (isConfirm) {
             swal.fire({
                 title: 'Success',
                 text: 'Your Order is Completed!',
                 icon: 'success'
-            }).then(function() {
+            }).then(function () {
                 form.submit();
             });
         } else {
