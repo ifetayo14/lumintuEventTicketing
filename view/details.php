@@ -48,7 +48,7 @@
                 <h1 class="h3 nama-event"></h1>
                 <h4 class="h5 tanggal eventClient mb-4"></h4>
                 <p class="text-white eventAddress"></p>
-                <button class="btn btn-buy" data-toggle="modal" data-target="#exampleModalScrollable">Buy
+                <button class="btn btn-buy" data-toggle="modal" data-target="#exampleModalScrollable" type="button">Buy
                     Ticket</button>
             </div>
         </div>
@@ -115,7 +115,8 @@
                                 </div>
                                 <div class="modal-footer border-0">
                                     <div class="container text-center">
-                                        <button class="btn btn-buy w-50">Buy Ticket</button>
+                                        <button class="btn btn-buy w-50 btn-invite" type="submit"
+                                            disabled>Invite</button>
                                     </div>
                                 </div>
 
