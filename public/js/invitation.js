@@ -1,4 +1,4 @@
-let check = [false, false, false];
+let check = [false, false, false, false];
 
 var input = document.querySelector("#phone");
 var iti = intlTelInput(input, {
@@ -16,7 +16,7 @@ input.addEventListener("countrychange", function () {
 });
 
 function getDialCode() {
-    $("#phone").val(`+${iti.getSelectedCountryData().dialCode}`);
+    $("#phone").val(`${iti.getSelectedCountryData().dialCode}`);
 }
 
 function validateEmail(email) {
@@ -25,21 +25,21 @@ function validateEmail(email) {
     return re.test(email);
 }
 
-// function validate() {
-//     const result = $("#emailHelpBlock");
-//     const email = $("#email").val();
-//
-//     if (validateEmail(email)) {
-//         result.text("Your email is valid");
-//         check[0] = true;
-//         checkStatus();
-//     } else {
-//         result.text("Your email is not valid");
-//         check[0] = false;
-//         checkStatus();
-//     }
-//     return false;
-// }
+function validate() {
+    const result = $("#emailHelpBlock");
+    const email = $("#email").val();
+
+    if (validateEmail(email)) {
+        result.text("Your email is valid");
+        check[0] = true;
+        checkStatus();
+    } else {
+        result.text("Your email is not valid");
+        check[0] = false;
+        checkStatus();
+    }
+    return false;
+}
 
 function showPopUp() {
     Swal.fire({
@@ -58,7 +58,7 @@ function allLetter(inputtxt) {
     if (inputtxt.value.match(letters)) {
         $("#nameHelpBlock").text = "Numbers Not Allowed";
         $("#nameHelpBlock").addClass("d-none");
-        check[0] = true;
+        check[1] = true;
         checkStatus();
         return true;
     } else {
@@ -75,14 +75,14 @@ function allLetter(inputtxt) {
         $(".name-input").val("");
         return false;
     }
-}s
+}
 
 function allNumber(inputnbr) {
     var numbers = /^[0-9]*$/;
     if (inputnbr.value.match(numbers)) {
         $("#phoneHelpBlock").text = "Numbers Not Allowed";
         $("#phoneHelpBlock").addClass("d-none");
-        check[1] = true;
+        check[2] = true;
         checkStatus();
     } else {
         let str = $(".phone-input").val();
@@ -102,11 +102,11 @@ function allNumber(inputnbr) {
 
 $("#selectAgree").change(function () {
     if (this.checked) {
-        check[2] = true;
+        check[3] = true;
     } else {
-        check[2] = false;
+        check[3] = false;
     }
-    checkStatus();
+    validate()
 });
 
 function checkStatus() {

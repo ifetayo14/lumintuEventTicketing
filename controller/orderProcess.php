@@ -18,13 +18,17 @@
 
     $urlIP = '192.168.18.226:8001';
 
+    $imagedata = file_get_contents("https://raw.githubusercontent.com/ifetayo14/lumintuEventTicketing/master/public/img/kraton.png");
+    // alternatively specify an URL, if PHP settings allow
+    $base64 = base64_encode($imagedata);
+
     $url = 'http://' . $urlIP . '/items/invitation?fields=invitation_id,customer_id.customer_id,customer_id.customer_email,customer_id.customer_name,customer_inviter_id.customer_email,invitation_status&filter[customer_inviter_id][customer_code]=' . $_SESSION['cred'];
     $invoiceURL = 'http://' . $urlIP . '/items/invoice';
     $customerURL = 'http://' . $urlIP . '/items/customer';
     $orderURL = 'http://' . $urlIP . '/items/order';
     $voucherURL = 'http://' . $urlIP . '/items/voucher';
 
-    $document = new DOMPDF();
+    $document = new DOMPDF('P', 'A4', 'en', false, 'UTF-8');
 
     $price = $_POST['total-harga'];
     $curl = curl_init();
@@ -730,104 +734,107 @@
         curl_close($curl);
 
         //ToPDF
-        $output = '
-                        <html>
-    
-    <style>
-        .imgEvent {
-            margin-bottom: 32px;
-        }
-    
-        .imgEvent img {
-            height: 300px;
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center center;
-            margin: 10px 0;
-        }
-    
-        .imgEvent p,
-        h4 {
-            margin: 8px;
-        }
-    
-        #detail {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-    
-        #detail td {
-            border-bottom: 1pt solid grey;
-            padding: 10px;
-        }
-    
-        .leftSide {
-            text-align: left;
-        }
-    
-        .rightSide {
-            text-align: end;
-        }
-    
-        .textCenter {
-            text-align: center;
-        }
-    
-        .bank {
-            padding: 10px 24px;
-            margin: 10px 0;
-        }
-    
-        /* .bank table {
-            margin: 0 auto;
-        } */
-    </style>
-    
-    <body style="margin:0;padding:0;">
-        <table role="presentation"
-            style="width:100%;border-collapse:collapse;border:0;border-spacing:0;background:#ffffff;">
-            <tr>
-                <td align="center" style="padding:0;">
-                    <table role="presentation"
-                        style="width:602px;border-collapse:collapse;border:1px solid #cccccc;border-spacing:0;text-align:left;">
-                        <tr>
-                            <td align="center" style="padding:20px 0 0 0;background:#38435F;">
-                                <img src="../public/img/kraton.jpg" alt="" width="20%" height="20%"
-                                    style="height:auto;display:block;" />
-                                <h2 style="color: #D4AF37;">Welcome to Symposium</h2>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding:20px 40px;">
-                                <table role="presentation"
-                                    style="width:100%;border-collapse:collapse;border:0;border-spacing:0;">
-                                    <tr>
-                                        <td style="color:#153643;">
-                                            <div class="invoice">
-                                                <div class="">
-                                                    <h2 class="textCenter">
-                                                        Thanks For You Order!
-                                                    </h2>
-                                                    <div>
-                                                        <h3 class="textCenter" style=" margin:0;line-height:24px;">
-                                                            <u>Your Order</u>
-                                                        </h3>
-                                                        <p class="textCenter" style=" font-size: small; margin-bottom: 32px">Monday, Oct 20 2021
-                                                            at 03.00pm</p>
-                                                        <!-- <div class="imgEvent" alt="" align="center">
-                                                            <img src="./assets/event1.jpg" alt="">
-                                                            <h4 style="color: #D4AF37;">Dream World Wide in Jogja</h4>
-                                                            <p style="color: #38435F;">By Lumintu Logic</p>
-                                                        </div> -->
-                                                    </div>
-                                                    <table id="detail" align="center">
-                                                        <tr>
-                                                            <td class="leftSide"><b>Name</b></td>
-                                                            <td><b>Ticket</b></td>
-                                                            <td class="rightSide"><b>Price</b></td>
-                                                        </tr>
+        $output = '  
+            <html>
+            <style>
+                .imgEvent {
+                    margin-bottom: 32px;
+                }
+            
+                .imgEvent img {
+                    height: 300px;
+                    background-size: cover;
+                    background-repeat: no-repeat;
+                    background-position: center center;
+                    margin: 10px 0;
+                }
+            
+                .imgEvent p,
+                h4 {
+                    margin: 8px;
+                }
+            
+                #detail {
+                    width: 100%;
+                    border-collapse: collapse;
+                    text-align: center;
+                    margin-bottom: 20px;
+                }
+            
+                #detail td {
+                    border-bottom: 1pt solid grey;
+                    padding: 10px;
+                }
+            
+                .leftSide {
+                    text-align: left;
+                }
+            
+                .rightSide {
+                    text-align: end;
+                }
+            
+                .textCenter {
+                    text-align: center;
+                }
+            
+                .bank {
+                    padding: 10px 24px;
+                    margin: 10px 0;
+                }
+            
+                @page { margin: 0 100px 0 100px; }
+            body { margin: 0px; }
+            </style>
+            
+            <body style="margin:0;padding:0;">
+                <table role="presentation"
+                    style="width:100%;border-collapse:collapse;border:0;border-spacing:0;background:#ffffff;">
+                    <tr>
+                        <td align="center" style="padding:0;">
+                            <table role="presentation"
+                                style="width:602px;border-collapse:collapse;border:1px solid #cccccc;border-spacing:0;text-align:left;">
+                                <!--<tr>
+                                    <td align="center" style="padding:20px 0 0 0;background:#38435F;">
+                                        <img src="data:image/png;base64, <?php echo $base64; ?>" alt="" width="20%" height="20%"
+                                            style="height:auto;display:block; padding-top: 30px;" />
+                                        <h2 style="color: #D4AF37; margin: 0 0 20px 0">Welcome to Symposium</h2>
+                                    </td>
+                                </tr>-->
+                                <tr>
+                                    <td style="padding:20px 40px;">
+                                        <table role="presentation"
+                                            style="width:100%;border-collapse:collapse;border:0;border-spacing:0;">
+                                            <tr>
+                                                <td style="color:#153643;">
+                                                    <div class="invoice">
+                                                        <div align="center" style="padding:20px 0 10px 0;background:#38435F;">
+                                                            <img src="data:image/png;base64, <?php echo $base64; ?>" alt="" width="20%" height="20%"
+                                                                style="height:auto;display:block; padding-top: 30px;" />
+                                                            <h2 style="color: #D4AF37; margin: 0 0 20px 0">Welcome to Symposium</h2>
+                                                        </div>
+                                                        <div class="">
+                                                            <h2 class="textCenter">
+                                                                Thanks For You Order!
+                                                            </h2>
+                                                            <div>
+                                                                <h3 class="textCenter" style=" margin:0;line-height:24px;">
+                                                                    <u>Your Order</u>
+                                                                </h3>
+                                                                <p class="textCenter" style=" font-size: small; margin-bottom: 32px">Monday, Oct 20 2021
+                                                                    at 03.00pm</p>
+                                                                <!-- <div class="imgEvent" alt="" align="center">
+                                                                    <img src="./assets/event1.jpg" alt="">
+                                                                    <h4 style="color: #D4AF37;">Dream World Wide in Jogja</h4>
+                                                                    <p style="color: #38435F;">By Lumintu Logic</p>
+                                                                </div> -->
+                                                            </div>
+                                                            <table id="detail" align="center">
+                                                                <tr>
+                                                                    <td class="leftSide"><b>Name</b></td>
+                                                                    <td><b>Ticket</b></td>
+                                                                    <td class="rightSide"><b>Price</b></td>
+                                                                </tr>
                     ';
 
         for ($i = 0; $i < sizeof($length); $i++){
@@ -850,16 +857,42 @@
 
         $output .= '
                                                     </table>
-                                                </div>
                                                 <div>
-                                                    <h3 style="margin:20px 0;line-height:24px;">
-                                                        Account Info
-                                                    </h3>
                                                     <div class="bank" style="color: white; background-color: #38435F;">
-                                                        <p style="font-size: 24px; margin: 10px 0 20px 0;"><b>BRI</b></p>
-                                                        <table style="text-align: center;">
+                                                        <p class="textCenter" style="font-size: 24px; margin: 0 0 20px 0;"><b>BRI</b>
+                                                        </p>
+                                                        <table align="center" class="textCenter" style="color: white;">
                                                             <tr>
-                                                                <td style="padding-bottom: 10px;">Mohammad Arafat Maku</td>
+                                                                <td style="padding-bottom: 10px; font-weight: 600;">Mohammad Arafat Maku
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>720222190601002</td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+
+                                                    <div class="bank"
+                                                        style="color: #38435F; background-color: #D4AF37;">
+                                                        <p class="textCenter" style="font-size: 24px; margin: 0 0 20px 0;"><b>BNI</b>
+                                                        </p>
+                                                        <table align="center" class="textCenter">
+                                                            <tr>
+                                                                <td style="padding-bottom: 10px; font-weight: 600;">Mohammad Arafat Maku
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>720222190601002</td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                    <div class="bank" style="color: white; background-color: #38435F;">
+                                                        <p class="textCenter" style="font-size: 24px; margin: 0 0 20px 0;"><b>BCA</b>
+                                                        </p>
+                                                        <table align="center" class="textCenter" style="color: white;">
+                                                            <tr>
+                                                                <td style="padding-bottom: 10px; font-weight: 600;">Mohammad Arafat Maku
+                                                                </td>
                                                             </tr>
                                                             <tr>
                                                                 <td>720222190601002</td>
@@ -867,42 +900,31 @@
                                                         </table>
                                                     </div>
                                                 </div>
-                                                <p style="font-size:16px;line-height:24px; margin: 20px 0;">
-                                                    Choose one for your payment, and upload payment receipt by click this button below</p>
-                                                <!-- <p style="margin:0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;"><a href="http://www.example.com" style="color:#ee4c50;text-decoration:underline;">In tempus felis blandit</a></p> -->
-                                                <br>
-                                                <div class="buttonDiv" ><a class="btnVerif" href="%link%">Send Payment Receipt</a></div>
-                                                <br>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding:20px 40px;background:#38435F;">
-                                    <table role="presentation"
-                                        style="width:100%;border-collapse:collapse;border:0;border-spacing:0;font-size:9px;font-family:Arial,sans-serif;">
-                                        <tr>
-                                            <td style="padding:0;width:50%;" align="center">
-                                                <p
-                                                    style="margin:0;font-size:14px;line-height:16px;font-family:Arial,sans-serif;color:#ffffff;">
-                                                    &copy; Lumintu Events<br />
-                                                </p>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </body>
-    
-        </html>';
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="textCenter" style="padding:20px 40px; background-color: #38435F;">
+                            <p
+                                style="margin:0;font-size:14px;line-height:16px;font-family:Arial,sans-serif;color:#ffffff;">
+                                &reg; Send by Lumintu Events<br />
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+
+
+</html>';
 
         $document->loadHtml($output);
-        $document->setPaper('A4', 'portrait');
         $document->render();
         $invoiceOutput = $document->output();
         file_put_contents('../public/invoiceFile/Invoice-' . $customerID . '.pdf', $invoiceOutput);
