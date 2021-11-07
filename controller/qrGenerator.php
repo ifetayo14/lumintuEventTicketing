@@ -1,11 +1,24 @@
 <?php
+
+    use PHPMailer\PHPMailer\PHPMailer;
+    use Dompdf\Dompdf;
+
     require "../vendor/autoload.php";
+    require '../vendor/phpmailer/phpmailer/src/Exception.php';
+    require '../vendor/phpmailer/phpmailer/src/OAuth.php';
+    require '../vendor/phpmailer/phpmailer/src/PHPMailer.php';
+    require '../vendor/phpmailer/phpmailer/src/POP3.php';
+    require '../vendor/phpmailer/phpmailer/src/SMTP.php';
+    require "../vendor/autoload.php";
+
+    require_once '../vendor/dompdf/dompdf/src/Autoloader.php';
 
     use Endroid\QrCode\QrCode;
 
     $urlIP = '192.168.0.125:8001';
+    $document = new DOMPDF('P', 'A4', 'en', false, 'UTF-8');
 
-    $ticketDataURL ="http://192.168.0.125:8001/items/order?fields=invoice_id,customer_id.customer_id,customer_id.customer_name,ticket_id.ticket_type,ticket_id.ticket_x_day.day_id.day_date,ticket_id.event_id.event_name,ticket_id.event_id.event_address&filter[invoice_id][invoice_status]=1";
+    $ticketDataURL ="http://192.168.0.125:8001/items/order?fields=invoice_id,customer_id.customer_id,customer_id.customer_name,customer_id.customer_email,ticket_id.ticket_type,ticket_id.ticket_x_day.day_id.day_date,ticket_id.event_id.event_name,ticket_id.event_id.event_address&filter[invoice_id][invoice_status]=1";
     $fileURL = 'http://192.168.0.125:8001/files';
     $qrCodeURL = 'http://192.168.0.125:8001/items/qrcode';
 
@@ -27,6 +40,7 @@
         $ticketDay = $data[$i]["ticket_id"];
         $eventName = $data[$i]["ticket_id"]["event_id"]["event_name"];
         $eventAddress = $data[$i]["ticket_id"]["event_id"]["event_address"];
+        $customerEmail = $data[$i]["customer_id"]["customer_email"];
 
         if(sizeof($data) == 1) {
             $length = sizeof($ticketDay["ticket_x_day"]);
@@ -55,16 +69,8 @@
             $detailDay .= "<td class='detailType'>". $data[$i]["ticket_id"]["ticket_x_day"][$j]['day_id']['day_date'] ."</td>";
         }
 
-        echo '
-            <!DOCTYPE html>
-                <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
-                
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width,initial-scale=1">
-                    <meta name="x-apple-disable-message-reformatting">
-                
-                    <title>Email Ticket</title>
+        $mailMessage = '
+                <html>
                     <style>
                         @import url(' . 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap' . ');
                 
@@ -190,7 +196,6 @@
                             margin-top: 160px;
                         }
                     </style>
-                </head>
                 
                 <body style="margin:0;padding:0;">
                     <table role="presentation"
@@ -201,7 +206,7 @@
                                     style="width:602px;border-collapse:collapse;border:1px solid #cccccc;border-spacing:0;text-align:left;">
                                     <tr>
                                         <td align="center" style="padding:40px 0 30px 0;background:#38435F;">
-                                            <img src="./assets/kraton.png" alt="" width="20%" height="20%"
+                                            <img src="https://raw.githubusercontent.com/ifetayo14/lumintuEventTicketing/master/public/img/kraton.jpg" alt="" width="20%" height="20%"
                                                 style="height:auto;display:block;" />
                                             <h2 style="color: #D4AF37;">Welcome to Symposium</h2>
                                         </td>
@@ -235,7 +240,7 @@
                                                                                                     <div class="bgTicket">
                                                                                                         <!-- <img src="../public/img/kraton.png" alt="">
                                                                                                         <p>KRATON <br>NGAYOGYAKRTA <br>HADININGRAT</p> -->
-                                                                                                        <img src="./assets/header.png" alt="">
+                                                                                                        <img src="https://raw.githubusercontent.com/ifetayo14/lumintuEventTicketing/master/public/img/header.png" alt="">
                                                                                                     </div>
                                                                                                     <div class="headerTicket">
                                                                                                         <h3 id="eventName">
@@ -326,86 +331,34 @@
         </html>
     ';
 
+        echo $mailMessage;
         $detailType = '';
         $detailDay = '';
 
-        $curl = curl_init();
+        $document->loadHtml($mailMessage);
+        $document->render();
+        $qrOutput = $document->output();
+        file_put_contents('../public/pdfFile/QR-' . $customerId . '-' . $data[$i]['ticket_id']['ticket_type'] . '.pdf', $qrOutput);
 
-        $fileLocation = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . '/public/temporaryImg/' . $fileName);
+        $mail = new PHPMailer();
+        $mail->SMTPDebug = 0;
+        $mail->isSMTP();
+        $mail->SMTPSecure = 'tls';
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'mintuticketing@gmail.com';
+        $mail->Password = 'Mintu123';
+        $mail->Port = 587;
 
-        // post to directus_file first before to payment
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => $fileURL,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => array('filename_download'=> new CURLFILE($fileLocation, 'image/png', $fileName)),
-            CURLOPT_HTTPHEADER => array(
-                'Content-Type: multipart/form-data'
-            ),
-        ));
+        $mail->setFrom('mintuticketing@gmail.com', 'Lumintu Events');
+        $mail->addAddress($customerEmail);
+        $mail->Subject = "[Lumintu Events] Ticket for Event";
+        $mail->isHTML(true);
+        $mail->Body = $mailMessage;
 
-        $uploadPayment = curl_exec($curl);
-        $postResponse = json_decode($uploadPayment, true);
+        $mail->addAttachment('../public/pdfFile/QR-' . $customerId . '-' . $data[$i]['ticket_id']['ticket_type'] . '.pdf', $qrOutput);
 
-        curl_close($curl);
-
-        if (isset($postResponse['errors'][0]['extensions']['code'])) {
-            echo 'errPostFile';
-            echo $postResponse['errors'][0]['extensions']['code'];
-        }else{
-            $curl = curl_init();
-
-            //      get fileID
-            curl_setopt($curl, CURLOPT_URL, $fileURL . '?fields=id&filter[filename_download]=' . $fileName);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-            $responseFile = curl_exec($curl);
-            $resultFile = json_decode($responseFile, true);
-            $fileID = $resultFile['data'][0]['id'];
-
-            echo $i . '<br>';
-            echo 'QRcode_' . $customerId . '_' . $data[$i]['ticket_id']['ticket_type'] . '.png' . '<br>';
-            echo $fileID . '<br>';
-
-
-            curl_close($curl);
-
-            $curl = curl_init();
-
-            //post to payment
-            curl_setopt_array($curl, array(
-                CURLOPT_URL => $qrCodeURL,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => '',
-                CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 0,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_POSTFIELDS =>'{
-                            "customer_id": "' . $customerId . '",
-                            "qrcode_files": "' . $fileID . '"
-                        }',
-                CURLOPT_HTTPHEADER => array(
-                    'Content-Type: application/json'
-                ),
-            ));
-
-            $uploadPayment = curl_exec($curl);
-            $postResponse = json_decode($uploadPayment, true);
-
-            curl_close($curl);
-
-            if (isset($postResponse['errors'][0]['extensions']['code'])) {
-                echo $postResponse['errors'][0]['extensions']['code'];
-            }else{
-                echo 'scsAll';
-            }
-        }
+        $mail->send();
     }
 
 ?>

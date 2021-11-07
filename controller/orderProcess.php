@@ -2,10 +2,7 @@
     session_start();
 
     use PHPMailer\PHPMailer\PHPMailer;
-    use PHPMailer\PHPMailer\SMTP;
-    use Dompdf\Adapter\CPDF;
     use Dompdf\Dompdf;
-    use Dompdf\Exception;
 
     require '../vendor/phpmailer/phpmailer/src/Exception.php';
     require '../vendor/phpmailer/phpmailer/src/OAuth.php';
@@ -927,7 +924,7 @@
         $document->loadHtml($output);
         $document->render();
         $invoiceOutput = $document->output();
-        file_put_contents('../public/invoiceFile/Invoice-' . $customerID . '.pdf', $invoiceOutput);
+        file_put_contents('../public/pdfFile/Invoice-' . $customerID . '.pdf', $invoiceOutput);
     //                $document->stream('Invoice', array("Attachment"=>0));
 
         $mail = new PHPMailer();
@@ -950,7 +947,7 @@
         $message = str_replace('%name%', $resultID['data'][0]['customer_name'], $message);
 
         $mail->msgHTML($message);
-        $mail->addAttachment('../public/invoiceFile/Invoice-' . $customerID . '.pdf');
+        $mail->addAttachment('../public/pdfFile/Invoice-' . $customerID . '.pdf');
 
         $mail->send();
     }
