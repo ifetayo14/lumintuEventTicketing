@@ -3,6 +3,9 @@ const CAROUSEL = $('.owl-carousel')
 const TABLE = $('.table')
 const BUTTON_PLUS = $(".btn-plus")
 let arrayOfSession = []
+let statusOfInput = [
+    { name: `peserta1`, status: false }
+]
 
 
 const ID_EVENT = 2;
@@ -172,14 +175,16 @@ let addInputFieldInvitation = () => {
     cln.id = "peserta" + ++quantity;
 
     $(".body-popup").append(cln);
+    statusOfInput.push({ name: `peserta${quantity}`, status: false })
     document.querySelector;
     $(`#peserta${quantity} .special`).remove();
     $(`#peserta${quantity} p`).text(`Peserta ${quantity}`);
     $(`#peserta${quantity} .form-group input`).attr({
         name: `peserta${quantity}`,
         id: `peserta${quantity}`,
-        value: ""
     })
+    $(`#peserta${quantity} .form-group input`).val("")
+    validate(`peserta${quantity}`)
     $(`#peserta${quantity} #emailHelpBlock`).removeClass('d-none')
 }
 
@@ -196,8 +201,21 @@ let validate = (email) => {
     if (validateEmail($(`[name=${email}]`).val())) {
         RESULT.text("Your email is valid");
         RESULT.addClass('d-none')
+        statusOfInput.find((item, index) => {
+            if (item.name === `${email}`) {
+                let oldData = statusOfInput[index]
+                statusOfInput[index] = { ...oldData, status: true }
+                return true
+            }
+        })
     } else {
         RESULT.text("Your email is not valid");
+    }
+
+    if (statusOfInput.find(element => element.status === false) === undefined) {
+        $(".btn-invite").prop("disabled", false);
+    } else {
+        $(".btn-invite").prop("disabled", true);
     }
     return false;
 }
@@ -217,6 +235,36 @@ $("input#voucher").on("input", () => {
     } else {
         BUTTON_PLUS.removeClass("d-none");
     }
+});
+
+document.querySelector('.body-form').addEventListener('submit', function (e) {
+    var form = this;
+
+    e.preventDefault(); // <--- prevent form from submitting
+
+    swal.fire({
+        title: "Are you sure?",
+        text: "You will not be able to change your invitation!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, I am Sure',
+        cancelButtonText: 'No, cancel it!',
+        dangerMode: true,
+    }).then(function (isConfirm) {
+        if (isConfirm) {
+            swal.fire({
+                title: 'Success',
+                text: `Your Invitation is Completed! Please check the invitee's email`,
+                icon: 'success'
+            }).then(function () {
+                form.submit();
+            });
+        } else {
+            swal.fire("Cancelled", "Make sure your invitation email!", "error");
+        }
+    })
 });
 
 
