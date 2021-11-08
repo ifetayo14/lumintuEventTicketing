@@ -1,65 +1,68 @@
-const dropArea = $(".drag-area")
-const dragText = $(".h5")
+const DROP_AREA = $(".drag-area")
+const DRAG_TEXT = $(".h5")
+const BUTTON_CHECKOUT = $('.btn-checkout')
+const BUTTON_DELETE = $('.btn-hapus')
+const IMAGE = $('.img-tag')
+const VALID_EXTENSIONS = ["image/jpeg", "image/jpg", "image/png"]
 
-dropArea.on("dragover", (event) => {
+// Event saat drag di dalam dropArea
+DROP_AREA.on("dragover", (event) => {
   event.preventDefault()
-  dropArea.addClass("active")
-  dragText.text("Release to Upload File")
+  DROP_AREA.addClass("active")
+  DRAG_TEXT.text("Release to Upload File")
 })
 
 // Event saat drag di luar dropArea
-dropArea.on("dragleave", () => {
-  dropArea.removeClass("active")
-  dragText.text("Drag & Drop to Upload File")
+DROP_AREA.on("dragleave", () => {
+  DROP_AREA.removeClass("active")
+  DRAG_TEXT.text("Drag & Drop to Upload File")
 })
 
 // Event saat telah drop file/image di dropArea
-dropArea.on("drop", (event) => {
+DROP_AREA.on("drop", (event) => {
   event.preventDefault()
   file = event.originalEvent.dataTransfer.files[0]
   showFile()
 })
 
-$('#inputGroupFile01').on("change", function(){
+
+$('#inputGroupFile').on("change", function () {
   file = this.files[0];
   showFile()
-  dropArea.addClass("active")
+  DROP_AREA.addClass("active")
 })
 
-function hapus(){
-  let imgTag = 
-  `
+let deleteImage = () => {
+  let imgTag =
+    `
     <div class="container-petunjuk">
       <i class="fa fa-cloud-upload icon"></i>
       <p class="h5">Drag & Drop to Upload File</p>
     </div>
   `
-  dropArea.html(imgTag)
+  DROP_AREA.html(imgTag)
+  DROP_AREA.removeClass("active")
 }
 
 // Function untuk menampilkan file di dropArea
 let showFile = () => {
   let fileType = file.type
-
-  let validExtensions = ["image/jpeg", "image/jpg", "image/png"]
-  if(validExtensions.includes(fileType)){
+  if (VALID_EXTENSIONS.includes(fileType)) {
     let fileReader = new FileReader()
     fileReader.onload = () => {
-        let fileURL = fileReader.result
-        if($('.img-tag').length == 0){
-          let imgTag = `
-            <img src="${fileURL}" alt="" class="img-tag">`
-        
-          dropArea.html(imgTag)
-        } else {
-          $('.img-tag').attr('src', fileURL)
-        }
+      let fileURL = fileReader.result
+      if (IMAGE.length == 0) {
+        let imgTag = `<img src="${fileURL}" alt="" class="img-tag">`
+        DROP_AREA.html(imgTag)
+      } else {
+        IMAGE.attr('src', fileURL)
+      }
     }
-    $('.btn-checkout').attr('disabled', false)
-    $('.btn-hapus').attr('disabled', false)
+    BUTTON_CHECKOUT.attr('disabled', false)
+    BUTTON_DELETE.attr('disabled', false)
     fileReader.readAsDataURL(file)
   } else {
     alert("This is not an Image File")
-    dropArea.classList.remove("active")
+    DROP_AREA.classList.remove("active")
   }
 }
