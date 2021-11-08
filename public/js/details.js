@@ -1,4 +1,4 @@
-const IP = "192.168.0.125:8001"
+const IP = "192.168.18.76:8001"
 const CAROUSEL = $('.owl-carousel')
 const TABLE = $('.table')
 const BUTTON_PLUS = $(".btn-plus")
@@ -252,8 +252,8 @@ document.querySelector('.body-form').addEventListener('submit', function (e) {
         confirmButtonText: 'Yes, I am Sure',
         cancelButtonText: 'No, cancel it!',
         dangerMode: true,
-    }).then(function (isConfirm) {
-        if (isConfirm) {
+    }).then((result) => {
+        if (result.isConfirmed) {
             swal.fire({
                 title: 'Success',
                 text: `Your Invitation is Completed! Please check the invitee's email`,
@@ -261,7 +261,7 @@ document.querySelector('.body-form').addEventListener('submit', function (e) {
             }).then(function () {
                 form.submit();
             });
-        } else {
+        } else if (result.isDenied) {
             swal.fire("Cancelled", "Make sure your invitation email!", "error");
         }
     })

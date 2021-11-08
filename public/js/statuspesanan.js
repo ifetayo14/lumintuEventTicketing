@@ -1,20 +1,32 @@
-let optionTicket = [{ nama: "No Selected Ticket", harga: 0, capacity: 0 }]; //Array Jenis Ticket
+const IP = "192.168.0.125:8001"; // IP API
+const LINK = window.location.href;
+const URL = new URL(LINK);
+const PARAMS = URL.searchParams.get("m");
+const TOTAL_HARGA = $("#total-harga")
+const CUSTOM_SELECT = $(".custom-select")
+const BUTTON_CHECKOUT = $(".btn-checkout")
+const TABLE = $(".table-status")
+const VOUCHER = $(".voucher")
+const TABLE_BODY = $("tbody")
+
+let optionTicket = [
+    { nama: "No Selected Ticket", harga: 0, capacity: 0 }
+];  //Array Jenis Ticket
 let sumTicket = [0]; // Array Jumlah Data Penjualan per Ticket
 let statusPemesanan = []; // Array Status Invitation
 let pembelian = []; // Array menampung harga tiket pilihan
-let ip = "192.168.0.125:8001"; // IP API
-let link = window.location.href;
-const url = new URL(link);
-let params = url.searchParams.get("m");
+
 
 // AJAX untuk mengambil Jumlah Data Penjualan per Ticket
 $.ajax({
-    url: `http://${ip}/items/order?aggregate[sum]=order_quantity&groupBy[]=ticket_id`,
+    url: `http://${IP}/items/order?aggregate[sum]=order_quantity&groupBy[]=ticket_id`,
     type: "GET",
     dataType: "json",
     success: function (data, textStatus, xhr) {
-        data.data.map((item) => {
-            sumTicket.push(item.sum.order_quantity);
+        const items = data.data
+        items.map((item) => {
+            let sumOrder = item.sum.order_quantity
+            sumTicket.push(sumOrder);
         });
     },
     error: function (xhr, textStatus, errorThrown) {
@@ -23,15 +35,17 @@ $.ajax({
 });
 
 // Deklarasi
-function inisialisi() {
-    optionTicket = [{ nama: "No Selected Ticket", harga: 0, capacity: 0 }]; //Array Jenis Ticket
+let inisialisi = () => {
+    optionTicket = [
+        { nama: "No Selected Ticket", harga: 0, capacity: 0 }
+    ]; //Array Jenis Ticket
     sumTicket = [0]; // Array Jumlah Data Penjualan per Ticket
     statusPemesanan = []; // Array Status Invitation
     pembelian = []; // Array menampung harga tiket pilihan
 }
 
 // Memunculkan Harga
-function priceShow(idClass, value) {
+let priceShow = (idClass, value) => {
     $(`.price${idClass}`).html(optionTicket[value].harga);
     checkStatus();
     pembelian[idClass - 1] = optionTicket[value].harga;
@@ -39,31 +53,31 @@ function priceShow(idClass, value) {
 }
 
 // Mencari Total Pembelian
-function total() {
+let total = () => {
     let total = 0;
     pembelian.map((item) => {
         total += item;
     });
-    $("#total-harga").val(total);
+    TOTAL_HARGA.val(total);
 }
 
 // Switch untuk Button berdasarkan input
-function checkStatus() {
+let checkStatus = () => {
     if (statusPemesanan.indexOf(false) == -1) {
-        for (i = 1; i <= $(".custom-select").length; i++) {
+        for (i = 1; i <= CUSTOM_SELECT.length; i++) {
             if ($(`#${i}`).val() == 0) {
-                $(".btn-checkout").prop("disabled", true);
+                BUTTON_CHECKOUT.prop("disabled", true);
                 break;
             } else {
-                $(".btn-checkout").prop("disabled", false);
+                BUTTON_CHECKOUT.prop("disabled", false);
             }
         }
     } else {
-        $(".btn-checkout").prop("disabled", true);
+        BUTTON_CHECKOUT.prop("disabled", true);
     }
 }
 
-function hapus(invit, customer) {
+let deleteData = (invit, customer) => {
     swal.fire({
         title: "Are you sure?",
         text: "You will not be able to use this data again!",
@@ -74,19 +88,18 @@ function hapus(invit, customer) {
         confirmButtonText: 'Yes, I am Sure',
         cancelButtonText: 'No, cancel it!',
         dangerMode: true,
-    }).then(function (isConfirm) {
-        if (isConfirm) {
+    }).then((result) => {
+        if (result.isConfirmed) {
             $.ajax({
-                url: `http://${ip}/items/invitation/${invit}`,
+                url: `http://${IP}/items/invitation/${invit}`,
                 type: "PATCH",
                 contentType: 'application/json',
                 data: JSON.stringify(
                     { "invitation_status": 2 }
                 )
             }).done(function () {
-                console.log('SUCCESS')
                 $.ajax({
-                    url: `http://${ip}/items/customer/${customer}`,
+                    url: `http://${IP}/items/customer/${customer}`,
                     type: "PATCH",
                     contentType: 'application/json',
                     data: JSON.stringify(
@@ -95,38 +108,43 @@ function hapus(invit, customer) {
                 }).done(function () {
                     Swal.fire({
                         icon: 'success',
-                        title: 'Data has been deletd',
+                        title: 'Data has been deleted',
                         showConfirmButton: true,
                     })
                 }).fail(function (msg) {
-                    console.log('FAIL')
+
                 })
             }).fail(function (msg) {
-                console.log('FAIL')
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Data not deleted',
+                    showConfirmButton: true,
+                })
             }).always(function () {
-                $(".table-status").DataTable().clear().destroy();
+                TABLE.DataTable().clear().destroy();
                 inisialisi()
                 getData()
             })
-        } else {
+        } else if (result.isDenied) {
             swal.fire("Cancelled", "Make your better choice!", "error");
         }
     })
-
-
 }
 
-function getData() {
+// Mengambil Data Ticket, Data Order, 
+let getData = () => {
     $.ajax({
-        url: `http://${ip}/items/ticket/`,
+        url: `http://${IP}/items/ticket/`,
         type: "GET",
         dataType: "json",
         beforeSend: function () {
             $("#loader").removeClass('d-none');
         },
         success: function (data, textStatus, xhr) {
-            data.data.map((item) => { //Menyimpan Jenis Tiket ke Array
-                if (item.ticket_seat != null) {
+            const items = data.data
+            items.map((item) => { //Menyimpan Jenis Tiket ke Array
+                let ticket_seat = item.ticket_seat
+                if (ticket_seat != null) {
                     optionTicket.push({
                         nama: item.ticket_type,
                         harga: item.ticket_price,
@@ -150,81 +168,80 @@ function getData() {
 
                     sumTicket.splice(penunjuk, 0, Math.max(sumTicket[i], sumTicket[j]));
                     penunjuk++;
-                    console.log(`${optionTicket[i].nama} ${optionTicket[j].nama}`);
                 }
             }
 
 
             $.ajax({
-                url: `http://${ip}/items/invitation?fields=invitation_id,customer_id.customer_id,customer_id.customer_email,customer_id.customer_name,customer_id.customer_status,customer_inviter_id.customer_id,customer_inviter_id.customer_email,invitation_status&filter[customer_inviter_id][customer_code]="${params}"`,
+                url: `http://${IP}/items/invitation?fields=invitation_id,customer_id.customer_id,customer_id.customer_email,customer_id.customer_name,customer_id.customer_status,customer_inviter_id.customer_id,customer_inviter_id.customer_email,invitation_status&filter[customer_inviter_id][customer_code]="${PARAMS}"`,
                 type: "GET",
                 dataType: "json",
                 beforeSend: function () {
                     $("#loader").removeClass('d-none');
                 },
                 success: function (data, textStatus, xhr) {
-                    console.log(data.data.length);
+                    const items = data.data
 
-                    data.data.map((item, index) => {
-                        if (item.invitation_status != 2) {
+                    items.map((item, index) => {
+                        let status = item.invitation_status
+                        let customer_id = item.customer_id.customer_id
+                        let customer_email = item.customer_id.customer_email
+                        let customer_name = item.customer_id.customer_name
+                        if (status != 2) {
                             pembelian.push(0);
                             tableRow = `
-                      <tr>
-                          <td>
-                              ${item.customer_id.customer_email}
-                          </td>
-                          <td>${item.customer_id.customer_name == null
+                            <tr>
+                                <td>
+                                    ${customer_email}
+                                </td>
+                                <td>${customer_name == null
                                     ? "Belum Mengisi"
-                                    : `${item.customer_id.customer_name}`
+                                    : `${customer_name}`
                                 }
-                          </td>
-                          ${item.invitation_status == 1 ?
+                                </td>
+                                ${status == 1 ?
                                     `<td>
-                              <select class="custom-select" id="${index + 1}" name="tiket-peserta" onchange="priceShow(this.id, this.value)"></select>
-                            </td>
-                            <td class= "price${index + 1}">${0}</td>
-                            <td>
-                                <div class="card shadow" style="width: 32px; height: 32px; margin: 0 auto;">
-                                <img src="../public/img/true.svg" alt=""></div>
-                            </td>
-                            <td>
-                              Completed
-                            </td>
-                            `
+                                    <select class="custom-select" id="${index + 1}" name="tiket-peserta" onchange="priceShow(this.id, this.value)"></select>
+                                </td>
+                                <td class= "price${index + 1}">${0}</td>
+                                <td>
+                                    <div class="card shadow" style="width: 32px; height: 32px; margin: 0 auto;">
+                                    <img src="../public/img/true.svg" alt=""></div>
+                                </td>
+                                <td>Completed</td>
+                                `
                                     :
                                     `<td>
-                              <select class="custom-select" id="${index + 1}" onchange="priceShow(this.id, this.value)" disabled></select></td>
-                            <td class= "price${index + 1}">${0}</td>
-                            <td>
-                                <div class="card shadow" style="width: 32px; height: 32px; margin: 0 auto;">
-                                <img src="../public/img/false.svg" alt=""></div>
-                            </td>
-                            <td>
-                              <button class="btn btn-danger" onclick="hapus(${item.invitation_id}, ${item.customer_id.customer_id})" type="button">Hapus</button>
-                            </td>
-                            `
+                                    <select class="custom-select" id="${index + 1}" onchange="priceShow(this.id, this.value)" disabled></select>
+                                </td>
+                                <td class= "price${index + 1}">${0}</td>
+                                <td>
+                                    <div class="card shadow" style="width: 32px; height: 32px; margin: 0 auto;">
+                                    <img src="../public/img/false.svg" alt=""></div>
+                                </td>
+                                <td>
+                                    <button class="btn btn-danger" onclick="deleteData(${item.invitation_id}, ${customer_id})" type="button">Hapus</button>
+                                </td>
+                                `
                                 }
-                          
-                      </tr>    
-                      `;
-                            $("tbody").append(tableRow);
-                            if (item.invitation_status == 1) {
+                            </tr>`;
+                            TABLE_BODY.append(tableRow);
+                            if (status == 1) {
                                 statusPemesanan.push(true);
                             } else {
                                 statusPemesanan.push(false);
                             }
-                            console.log(statusPemesanan);
                         }
                     });
 
                     optionTicket.map((item, index) => {
                         if (optionTicket[index].capacity != null) {
                             if (optionTicket[index].capacity == 0) {
-                                $(".custom-select").append(
+                                CUSTOM_SELECT.append(
                                     `<option value="${index}">${item.nama}</option>`
                                 );
                             } else {
-                                $(".custom-select").append(
+                                CUSTOM_SELECT.append(
                                     `<option value="${index}">${item.nama} (${item.capacity - sumTicket[index]
                                     })</option>`
                                 );
@@ -235,8 +252,8 @@ function getData() {
                     checkStatus();
 
                     if (pembelian.length <= 1) {
-                        $(".voucher").removeClass("d-none");
-                        $(".table-status").DataTable({
+                        VOUCHER.removeClass("d-none");
+                        TABLE.DataTable({
                             paging: false,
                             searching: false,
                             info: false,
@@ -247,8 +264,8 @@ function getData() {
                             }]
                         });
                     } else {
-                        $(".voucher").addClass("d-none");
-                        $(".table-status").DataTable({
+                        VOUCHER.addClass("d-none");
+                        TABLE.DataTable({
                             ordering: true,
                             columnDefs: [{
                                 orderable: false,
@@ -269,7 +286,7 @@ function getData() {
         },
         error: function (xhr, textStatus, errorThrown) {
             $("#loader").addClass("d-none");
-            $("tbody").html(`<td colspan="6" class="text-center">Failed to Load Data</td>`);
+            TABLE_BODY.html(`<td colspan="6" class="text-center">Failed to Load Data</td>`);
         },
     });
 }
@@ -304,8 +321,8 @@ document.querySelector('#formPesanan').addEventListener('submit', function (e) {
         confirmButtonText: 'Yes, I am Sure',
         cancelButtonText: 'No, cancel it!',
         dangerMode: true,
-    }).then(function (isConfirm) {
-        if (isConfirm) {
+    }).then((result) => {
+        if (result.isConfirmed) {
             swal.fire({
                 title: 'Success',
                 text: 'Your Order is Completed!',
@@ -313,7 +330,7 @@ document.querySelector('#formPesanan').addEventListener('submit', function (e) {
             }).then(function () {
                 form.submit();
             });
-        } else {
+        } else if (result.isDenied) {
             swal.fire("Cancelled", "Make your better choice!", "error");
         }
     })
