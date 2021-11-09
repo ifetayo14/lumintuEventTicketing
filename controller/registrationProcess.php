@@ -11,7 +11,7 @@
 
     include('../config.php');
 
-    $customerURL = 'http://192.168.18.226:8001/items/customer';
+    $customerURL = 'http://192.168.18.76:8001/items/customer';
 
     $name = $_POST['name'];
     $email = $_POST['email'];
@@ -19,8 +19,8 @@
     $cusCode = hash('sha512', $email.$phoneNum);
     $loginLink = 'http://localhost/intern/ticketing/controller/verificationProcess.php?m=' . $cusCode;
 
-    $query = "INSERT INTO `customer`(`customer_email`, `customer_name`, `customer_phone`)
-                SELECT '$email', '$name', '$phoneNum'
+    $query = "INSERT INTO `customer`(`customer_email`, `customer_name`, `customer_phone`, `customer_code`)
+                SELECT '$email', '$name', '$phoneNum', '$cusCode'
                 FROM (SELECT 1)a WHERE NOT EXISTS (SELECT `customer_id` FROM `customer` WHERE `customer_email` = '$email')";
     $runQuery = mysqli_query($conn, $query) or die(mysqli_error($conn));
     $affRow = $conn->affected_rows;

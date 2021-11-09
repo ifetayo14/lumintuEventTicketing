@@ -1,7 +1,7 @@
 <?php
-    $host = "localhost";
-    $user = "root";
-    $pass = "";
+    $host = "192.168.18.11";
+    $user = "pintar_dev";
+    $pass = "pintar123";
     $name = "lumintu-ticket";
 
     $conn = mysqli_connect($host, $user, $pass, $name);

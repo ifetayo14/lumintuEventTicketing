@@ -32,26 +32,6 @@ let validateEmail = (email) => {
   return REGEX_EMAIL.test(email);
 }
 
-let showPopUp = () => {
-  Swal.fire({
-    icon: 'success',
-    title: 'Registration Success!',
-    showConfirmButton: true,
-    confirmButtonColor: '#3085d6',
-    text: "Make sure to check your email to verify your account.",
-  })
-}
-
-let showMailExist = () => {
-  Swal.fire({
-    icon: 'success',
-    title: 'Registration Failed!',
-    showConfirmButton: true,
-    confirmButtonColor: '#3085d6',
-    text: `Your Email "${EMAIL_VALUE}" already exists!"`,
-  })
-}
-
 let allLetter = (inputtxt) => {
   if (inputtxt.value.match(REGEX_LETTER)) {
     NAME_HELPBLOCK.text = "Numbers Not Allowed"

@@ -221,14 +221,19 @@ let validate = (email) => {
 }
 
 // Show Voucher Code Field
-$(document).on("change", ".switchMe", () => {
+$(document).on('change', '.switchMe', function () {
+    let oldData = statusOfInput[0]
     if (this.checked) {
-        $("input#voucher").css("visibility", "visible");
+        $("#peserta1 #emailHelpBlock").addClass("d-none")
+        statusOfInput[0] = { ...oldData, status: true }
+        validate("peserta1")
     } else {
-        $("input#voucher").css("visibility", "hidden");
+        $("#peserta1 #emailHelpBlock").removeClass("d-none")
+        statusOfInput[0] = { ...oldData, status: false }
+        validate("peserta1")
+
     }
 });
-
 $("input#voucher").on("input", () => {
     if ($(this).val() != "") {
         BUTTON_PLUS.addClass("d-none");

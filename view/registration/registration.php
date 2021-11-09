@@ -19,15 +19,52 @@
     <link rel="stylesheet" href="../../public/css/registration.css">
 
     <title>Registration | Lumintu Event</title>
+
+    <!-- Jquery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <!-- Bootstrap CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+            crossorigin="anonymous"></script>
+
+    <!-- SweetAlert2 CDN -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        let showPopUp = () => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Registration Success!',
+                showConfirmButton: true,
+                confirmButtonColor: '#3085d6',
+                text: "Make sure to check your email to verify your account.",
+            })
+        }
+
+        let showMailExist = () => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Registration Failed!',
+                showConfirmButton: true,
+                confirmButtonColor: '#3085d6',
+                text: `Your Email already exists!"`,
+            })
+        }
+    </script>
+
 </head>
 
 <body>
     <?php
-if (isset($_GET['success'])){
-    echo '<script>showPopUp()</script>';
-}elseif(isset($_GET['mailExist'])){
-    echo '<script>showMailExist()</script>';
-}
+        if (isset($_GET['scs'])){
+            echo '<script type="text/javascript">
+                    showPopUp();
+                </script>';
+        }elseif(isset($_GET['mailExist'])){
+            echo '<script type="text/javascript">showMailExist();</script>';
+    }
 ?>
 
     <div class="container-fluid">
@@ -74,7 +111,7 @@ if (isset($_GET['success'])){
                             </small>
                         </div>
 
-                        <button disabled class="btn btn-registrasi w-100 mt-2">Registrasi</button>
+                        <button disabled class="btn btn-registrasi w-100 mt-2" onclick="">Registrasi</button>
                     </form>
                 </div>
 
@@ -88,28 +125,17 @@ if (isset($_GET['success'])){
         </div>
     </div>
 
-    <!-- Jquery CDN -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-
-    <!-- Bootstrap CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
-        crossorigin="anonymous"></script>
-
     <!-- Font Awesome CDN -->
     <script src="https://use.fontawesome.com/7a7a4d3981.js"></script>
 
-    <!-- SweetAlert2 CDN -->
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <!-- intl-tel-input -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput.min.js"
-        integrity="sha512-QMUqEPmhXq1f3DnAVdXvu40C8nbTgxvBGvNruP6RFacy3zWKbNTmx7rdQVVM2gkd2auCWhlPYtcW2tHwzso4SA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            integrity="sha512-QMUqEPmhXq1f3DnAVdXvu40C8nbTgxvBGvNruP6RFacy3zWKbNTmx7rdQVVM2gkd2auCWhlPYtcW2tHwzso4SA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <!-- Independent Javascript -->
     <script src="../../public/js/registration.js"></script>
+
 </body>
 
 </html>

@@ -8,7 +8,7 @@ const REGEX_LETTER = /^[a-zA-Z\s]*$/;
 const REGEX_NUMBER = /^[0-9]*$/;
 const REGEX_EMAIL = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-let check = [false, false, false, false]
+let check = [true, false, false, false]
 
 let getDialCode = () => {
     $("#phone").val(`${iti.getSelectedCountryData().dialCode}`);

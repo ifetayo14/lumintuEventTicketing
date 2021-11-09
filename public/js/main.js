@@ -1,4 +1,4 @@
-let ip = "192.168.0.125:8001"
+let ip = "192.168.18.76:8001"
 
 $(document).ready(function(){
     $.ajax({
@@ -20,7 +20,7 @@ $(document).ready(function(){
                         <p class="h5 nama-event text-center" onclick="tes(this)">${item.event_name}</p>
                         <p class="tanggal text-center">${moment(new Date(item.event_date_start)).format('D MMMM YYYY')} - ${moment(new Date(item.event_date_finished)).format('D MMMM YYYY')}</p>
                         <div class="mt-3 text-center more">
-                            <button class="btn btn-more w-75 text-white">Click More</button>
+                            <a href="details.php" class="btn btn-more w-75 text-white">Click More</a>
                         </div>
                     </div>
                     

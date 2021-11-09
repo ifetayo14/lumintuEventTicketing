@@ -1,6 +1,6 @@
 <?php
-    $customerURL = 'http://192.168.18.226:8001/items/customer';
-    $invitationURL = 'http://192.168.18.226:8001/items/invitation';
+    $customerURL = 'http://192.168.18.76:8001/items/customer';
+    $invitationURL = 'http://192.168.18.76:8001/items/invitation';
 
     if (isset($_GET['invm'])){
         $myEmail = base64_decode($_GET['invm']);
@@ -91,7 +91,7 @@
                                 <label class="form-check-label text-white" for="select1">I have accepted</label>
                             </div>
                             <div class="container text-center mt-2">
-                                <button disabled class="btn btn-accept rounded">Accept Invitation</button>
+                                <button class="btn btn-accept rounded">Accept Invitation</button>
                             </div>
                         </div>
 

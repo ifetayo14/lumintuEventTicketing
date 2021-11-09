@@ -3,7 +3,7 @@
     session_start();
     $cred = $_SESSION['cred'];
 
-    $customerURL = 'http://192.168.0.125:8001/items/customer';
+    $customerURL = 'http://192.168.18.76:8001/items/customer';
 
     $curl = curl_init();
 
@@ -196,9 +196,16 @@
         console.log(cred);
 
         $(document).on('change', '.switchMe', function () {
+            let oldData = statusOfInput[0]
             if (this.checked) {
                 $("input#inputPeserta1").val(cred);
+                $("#peserta1 #emailHelpBlock").addClass("d-none")
+                statusOfInput[0] = { ...oldData, status: true }
+                validate("peserta1")
             } else {
+                $("#peserta1 #emailHelpBlock").removeClass("d-none")
+                statusOfInput[0] = { ...oldData, status: false }
+                validate("peserta1")
                 $("input#inputPeserta1").val('');
             }
         });
