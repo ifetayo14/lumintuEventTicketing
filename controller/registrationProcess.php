@@ -11,7 +11,7 @@
 
     include('../config.php');
 
-    $customerURL = 'http://192.168.18.76:8001/items/customer';
+    $customerURL = 'http://192.168.18.226:8001/items/customer';
 
     $name = $_POST['name'];
     $email = $_POST['email'];
@@ -57,6 +57,7 @@
             header('Location: ../view/registration/registration.php?scs');
         }
         else{
+//            echo $mail->ErrorInfo;
             header('Location: ../view/registration/registration.php?mailErr');
         }
     }
