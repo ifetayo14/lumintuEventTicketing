@@ -1,8 +1,8 @@
 <?php
     include('../config.php');
 
-    $customerURL = 'http://192.168.18.76:8001/items/customer';
-    $invitationURL = 'http://192.168.18.76:8001/items/invitation';
+    $customerURL = 'http://192.168.18.226:8001/items/customer';
+    $invitationURL = 'http://192.168.18.226:8001/items/invitation';
 
     $custID = $_POST['custID'];
     $email = $_POST['email'];
