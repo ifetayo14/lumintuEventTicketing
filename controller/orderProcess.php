@@ -13,7 +13,11 @@
 
     require_once '../vendor/dompdf/dompdf/src/Autoloader.php';
 
+<<<<<<< HEAD
     $urlIP = '192.168.18.67:8001';
+=======
+    $urlIP = '192.168.18.226:8001';
+>>>>>>> 93fdc7abb89033734fac807530554533366cdc92
 
     $imagedata = file_get_contents("https://raw.githubusercontent.com/ifetayo14/lumintuEventTicketing/master/public/img/kraton.png");
     // alternatively specify an URL, if PHP settings allow

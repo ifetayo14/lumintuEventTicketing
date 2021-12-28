@@ -72,6 +72,9 @@
                                 <p class="h3 text-center">Dream World Wide in Jogja</p>
                                 <p class="organizer text-center">By Lumintu Logic</p>
                             </div>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
                         <div class="modal-body">
                             <form class="body-form" name="bodyForm" method="post"
@@ -85,24 +88,36 @@
                                                         <input type="checkbox" class="switchMe">
                                                         <span class="slider round"></span>
                                                     </label>
-                                                    <small class="mr-1 my-auto">Buy For Me</small>
+                                                    <small class="mr-1 my-auto">Use Voucher</small>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row my-auto input-section">
-                                            <div class="col-lg-4 col-md-4 col-sm-12 my-auto">
-                                                <p>Peserta 1</p>
+                                        <div class="row input-section mb-1">
+                                            <div class="col-12 col-lg-3 col-md-3 col-sm-12 my-auto">
+                                                <p class="m-0 p-0">Peserta 1</p>
                                             </div>
-                                            <div class="col-lg-8 col-md-8 col-sm-12">
-                                                <div class="form-group my-auto">
-                                                    <input type="email" name="peserta1" class="form-control"
-                                                        id="inputPeserta1" aria-describedby="emailHelp"
-                                                        placeholder="example : ex@gmail.com"
-                                                        oninput="validate(this.name)">
-                                                    <small id="emailHelpBlock" class="form-text text-danger">
-                                                        Your email is not valid!
-                                                    </small>
-                                                </div>
+                                            <div class="col-10 col-lg-7 col-md-7 col-sm-10 my-auto">
+
+                                                <input type="email" name="peserta1" class="form-control"
+                                                    id="inputPeserta1" aria-describedby="emailHelp"
+                                                    placeholder="example : ex@gmail.com" oninput="validate(this.name)">
+                                                <small id="emailHelpBlock" class="form-text text-danger">
+                                                    Your email is not valid!
+                                                </small>
+
+                                            </div>
+                                            <div class="col-2 col-lg-2 col-md-2 col-sm-2 my-auto">
+                                                <button class="btn btn-danger btn-delete btn-sm rounded-0" type="button"
+                                                    data-toggle="tooltip" data-placement="top" title="Delete"
+                                                    disabled><i class="fa fa-trash"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="row input-voucher d-none">
+                                            <div class="col-10 col-lg-6 col-md-7 col-sm-10 my-auto ">
+                                                <input type="text" name="voucher" class="form-control text-center"
+                                                    id="inputVoucherCode" aria-describedby="voucherHelp"
+                                                    placeholder="Voucher Code">
+
                                             </div>
                                         </div>
                                     </div>

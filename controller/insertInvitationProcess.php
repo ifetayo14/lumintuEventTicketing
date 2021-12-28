@@ -4,8 +4,13 @@
     $cred = $_SESSION['cred'];
     $buyTicketLink = 'http://localhost/intern/ticketing/view/statuspesanan.php';
     $bioLink = 'http://localhost/intern/ticketing/view/invitation.php';
+<<<<<<< HEAD
     $customerURL = 'http://192.168.18.67:8001/items/customer';
     $invitationURL = 'http://192.168.18.67:8001/items/invitation';
+=======
+    $customerURL = 'http://192.168.18.226:8001/items/customer';
+    $invitationURL = 'http://192.168.18.226:8001/items/invitation';
+>>>>>>> 93fdc7abb89033734fac807530554533366cdc92
 
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\SMTP;

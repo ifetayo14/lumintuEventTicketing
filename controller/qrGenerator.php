@@ -17,11 +17,15 @@
 
     use Endroid\QrCode\QrCode;
 
+<<<<<<< HEAD
     $urlIP = '192.168.18.67:8001';
+=======
+    $urlIP = '192.168.18.226:8001';
+>>>>>>> 93fdc7abb89033734fac807530554533366cdc92
     $html2pdf = new Html2Pdf('P','A4','en', false, 'UTF-8', array(25,15,30,0));
 
-    $ticketDataURL ="http://192.168.18.76:8001/items/order?fields=invoice_id,customer_id.customer_id,customer_id.customer_name,customer_id.customer_email,ticket_id.ticket_type,ticket_id.ticket_x_day.day_id.day_date,ticket_id.event_id.event_name,ticket_id.event_id.event_address&filter[invoice_id][invoice_status]=1&filter[customer_id][customer_id]=2";
-    $qrCodeURL = 'http://192.168.18.76:8001/items/qrcode';
+    $ticketDataURL ="http://192.168.18.226:8001/items/order?fields=invoice_id,customer_id.customer_id,customer_id.customer_name,customer_id.customer_email,ticket_id.ticket_type,ticket_id.ticket_x_day.day_id.day_date,ticket_id.event_id.event_name,ticket_id.event_id.event_address&filter[invoice_id][invoice_status]=1&filter[customer_id][customer_id]=2";
+    $qrCodeURL = 'http://192.168.18.226:8001/items/qrcode';
 
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_URL, $ticketDataURL);

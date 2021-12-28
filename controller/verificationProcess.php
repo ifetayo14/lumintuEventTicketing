@@ -5,7 +5,11 @@
 
     $_SESSION['cred'] = $_GET['m'];
 
+<<<<<<< HEAD
     $customerURL = 'http://192.168.18.67:8001/items/customer';
+=======
+    $customerURL = 'http://192.168.18.226:8001/items/customer';
+>>>>>>> 93fdc7abb89033734fac807530554533366cdc92
 
     $curl = curl_init();
 
