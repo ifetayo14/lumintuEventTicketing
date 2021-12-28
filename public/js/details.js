@@ -1,4 +1,4 @@
-const IP = '192.168.18.226:8001';
+const IP = '192.168.0.117:8001';
 const CAROUSEL = $('.owl-carousel');
 const TABLE = $('.table');
 const BUTTON_PLUS = $('.btn-plus');
@@ -21,24 +21,24 @@ $(document).ready(() => {
         if (index == 0) {
           CAROUSEL.append(
             `
-                        <div class="item border-carousel-item active">
-                            <a href="#" onclick="getSession(${index})">
-                                <p class="h5">${day_name}</p>
-                                <p class="tanggal-event">${convertDate(day_date)}</p>
-                            </a>
-                        </div>
-                    `
+            <div class="item border-carousel-item active">
+                <a href="#" onclick="getSession(${index})">
+                    <p class="h5">${day_name}</p>
+                    <p class="tanggal-event">${convertDate(day_date)}</p>
+                </a>
+            </div>
+            `
           );
         } else {
           CAROUSEL.append(
             `
-                        <div class="item border-carousel-item">
-                            <a href="#" onclick="getSession(${index})">
-                                <p class="h5">${day_name}</p>
-                                <p class="tanggal-event">${convertDate(day_date)}</p>
-                            </a>
-                        </div>
-                    `
+              <div class="item border-carousel-item">
+                  <a href="#" onclick="getSession(${index})">
+                      <p class="h5">${day_name}</p>
+                      <p class="tanggal-event">${convertDate(day_date)}</p>
+                  </a>
+              </div>
+            `
           );
         }
       });
@@ -162,6 +162,16 @@ let convertTime = (time) => {
   return momentString;
 };
 
+let toggleButtonTrash = () => {
+  let quantity = document.querySelectorAll('.peserta').length;
+  if (quantity > 1) {
+    $('.btn-delete').prop("disabled", false)
+    $('.btn-delete').first().prop("disabled", true)
+  } else {
+    $('.btn-delete').prop("disabled", true)
+  }
+}
+
 // Function untuk memperbanyak field untuk mengisi email invitation
 let addInputFieldInvitation = () => {
   let quantity = document.querySelectorAll('.peserta').length;
@@ -170,6 +180,7 @@ let addInputFieldInvitation = () => {
   cln.id = 'peserta' + ++quantity;
 
   $('.body-popup').append(cln);
+  toggleButtonTrash()
   statusOfInput.push({ name: `peserta${quantity}`, status: false });
   document.querySelector;
   $(`#peserta${quantity} .special`).remove();
@@ -181,7 +192,16 @@ let addInputFieldInvitation = () => {
   $(`#peserta${quantity} .form-group input`).val('');
   validate(`peserta${quantity}`);
   $(`#peserta${quantity} #emailHelpBlock`).removeClass('d-none');
+
+  $('.btn-delete').click(function () {
+    $(this).parent().parent().parent().remove();
+    toggleButtonTrash()
+    return false;
+  });
 };
+
+
+
 
 // Function Validate Email dengan REGEX
 let validateEmail = (email) => {
@@ -219,10 +239,14 @@ $(document).on('change', '.switchMe', function () {
   let oldData = statusOfInput[0];
   if (this.checked) {
     $('#peserta1 #emailHelpBlock').addClass('d-none');
+    BUTTON_PLUS.addClass('d-none')
+    $(".input-voucher").removeClass("d-none")
     statusOfInput[0] = { ...oldData, status: true };
     validate('peserta1');
   } else {
     $('#peserta1 #emailHelpBlock').removeClass('d-none');
+    BUTTON_PLUS.removeClass('d-none')
+    $(".input-voucher").addClass("d-none")
     statusOfInput[0] = { ...oldData, status: false };
     validate('peserta1');
   }
