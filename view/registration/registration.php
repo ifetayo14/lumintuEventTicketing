@@ -22,12 +22,12 @@
 
     <!-- Jquery CDN -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
     <!-- Bootstrap CDN -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
-            crossorigin="anonymous"></script>
+        integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+        crossorigin="anonymous"></script>
 
     <!-- SweetAlert2 CDN -->
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -107,18 +107,12 @@
                             <input id="phone" name="phoneNum" type="tel" class="form-control phone-input"
                                 oninput="allNumber(document.formReg.phoneNum)">
                             <small id="phoneHelpBlock" class="form-text text-danger d-none">
-                                Letters Not Allowed!
+                                Numbers Not Allowed!
                             </small>
                         </div>
 
                         <button disabled class="btn btn-registrasi w-100 mt-2" onclick="">Registrasi</button>
                     </form>
-                </div>
-
-                <div class="registrasi-side-bottom position-absolute mt-5">
-                    <p class="text-center text-white">Already have an account?
-                        <a href="../login.php" class="gold">Sign-In</a>
-                    </p>
                 </div>
 
             </div>
@@ -130,8 +124,8 @@
 
     <!-- intl-tel-input -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput.min.js"
-            integrity="sha512-QMUqEPmhXq1f3DnAVdXvu40C8nbTgxvBGvNruP6RFacy3zWKbNTmx7rdQVVM2gkd2auCWhlPYtcW2tHwzso4SA=="
-            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        integrity="sha512-QMUqEPmhXq1f3DnAVdXvu40C8nbTgxvBGvNruP6RFacy3zWKbNTmx7rdQVVM2gkd2auCWhlPYtcW2tHwzso4SA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <!-- Independent Javascript -->
     <script src="../../public/js/registration.js"></script>
