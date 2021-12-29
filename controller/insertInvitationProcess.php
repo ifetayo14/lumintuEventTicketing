@@ -39,6 +39,7 @@
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
             $response = curl_exec($curl);
             $result = json_decode($response, true);
+
             $voucherID = $result['data'][0]['voucher_id'];
 
             curl_close($curl);
@@ -90,7 +91,7 @@
             $mail->Subject = "[Lumintu Events] Link Pemesanan Tiket";
             $mail->isHTML(true);
             $mail->Body = 'Hai ' . $resultID['data'][0]['customer_name'] . ', silahkan klik link berikut untuk melakukan pemesanan tiket<br/><br/>
-                            <a href="' . $buyTicketLink . '?m=' . $resultID['data'][0]['customer_code'] . '">Pesan Tiket</a>';
+                            <a href="' . $buyTicketLink . '?m=' . $resultID['data'][0]['customer_code'] . '&voucher_id=' . $voucherID . '">Pesan Tiket</a>';
 
             if ($mail->send()) {
                 header('Location: ../view/details.php?scs');

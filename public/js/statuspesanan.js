@@ -57,10 +57,10 @@ $(document).ready(function () {
   const url = new URL(link);
 
   let params = url.searchParams.get('m');
+  let voucherParams = url.searchParams.get('voucher_id');
 
   // AJAX jenis Tiket
   $.ajax({
-    url: `http://${ip}/items/ticket/`,
     type: 'GET',
     dataType: 'json',
     success: function (data, textStatus, xhr) {
