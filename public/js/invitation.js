@@ -10,10 +10,12 @@ const REGEX_EMAIL = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+
 
 let check = [true, false, false, false]
 
+// Function for Change Dial Code By Selection Flag
 let getDialCode = () => {
     $("#phone").val(`${iti.getSelectedCountryData().dialCode}`);
 }
 
+// Function for Validate Email
 let validate = () => {
     const EMAIL_VALUE = $("#email").val();
     if (validateEmail(EMAIL_VALUE)) {
@@ -28,29 +30,25 @@ let validate = () => {
     return false;
 }
 
-let validateEmail = (email) => {
-    return REGEX_EMAIL.test(email);
-}
+// let showPopUp = () => {
+//     Swal.fire({
+//         icon: 'success',
+//         title: 'Registration Success!',
+//         showConfirmButton: true,
+//         confirmButtonColor: '#3085d6',
+//         text: "Make sure to check your email to verify your account.",
+//     })
+// }
 
-let showPopUp = () => {
-    Swal.fire({
-        icon: 'success',
-        title: 'Registration Success!',
-        showConfirmButton: true,
-        confirmButtonColor: '#3085d6',
-        text: "Make sure to check your email to verify your account.",
-    })
-}
-
-let showMailExist = () => {
-    Swal.fire({
-        icon: 'success',
-        title: 'Registration Failed!',
-        showConfirmButton: true,
-        confirmButtonColor: '#3085d6',
-        text: `Your Email "${EMAIL_VALUE}" already exists!"`,
-    })
-}
+// let showMailExist = () => {
+//     Swal.fire({
+//         icon: 'success',
+//         title: 'Registration Failed!',
+//         showConfirmButton: true,
+//         confirmButtonColor: '#3085d6',
+//         text: `Your Email "${EMAIL_VALUE}" already exists!"`,
+//     })
+// }
 
 let allLetter = (inputtxt) => {
     if (inputtxt.value.match(REGEX_LETTER)) {
@@ -75,37 +73,47 @@ let allLetter = (inputtxt) => {
         checkStatus()
         return false;
     }
-
 }
 
-let allNumber = (inputnbr) => {
-    if (inputnbr.value.match(REGEX_NUMBER)) {
-        PHONE_HELPBLOCK.text = "Numbers Not Allowed"
-        $('#phoneHelpBlock').addClass('d-none')
-        check[2] = true
-    }
-    else {
-        PHONE_HELPBLOCK.text = "Numbers Not Allowed"
-        PHONE_HELPBLOCK.removeClass('d-none')
-        Swal.fire({
-            icon: 'error',
-            title: 'Letter Not Allowed!',
-            showConfirmButton: true,
-            confirmButtonColor: '#3085d6',
-            text: " Please Check Your Input!",
-        })
-        PHONE_INPUT.val("")
+let allNumber = (inputNumber) => {
+    let length = INPUT_PHONE.value.length
+    if (inputNumber.value.match(REGEX_NUMBER)) {
+      PHONE_HELPBLOCK.addClass("d-none");
+      if (length < 9) {
+        PHONE_HELPBLOCK.html("Minimum Phone Number Allowed 9 digit");
+        PHONE_HELPBLOCK.removeClass("d-none");
         check[2] = false
-        return false;
+      } else {
+        PHONE_HELPBLOCK.addClass("d-none");
+        check[2] = true;
+      }
+      checkStatus();
+      return true
+  
+    } else {
+      PHONE_HELPBLOCK.text = "Letter Not Allowed";
+      PHONE_HELPBLOCK.removeClass("d-none");
+      Swal.fire({
+        icon: "error",
+        title: "Letter Not Allowed!",
+        showConfirmButton: true,
+        confirmButtonColor: "#3085d6",
+        text: " Please Check Your Input!",
+      });
+      getDialCode();
+      check[2] = false;
+      checkStatus();
+      return false;
     }
-    checkStatus()
-}
+    
+  
+};
 
 let checkStatus = () => {
     if (check.indexOf(false) == -1) {
-        $('.btn-registrasi').prop('disabled', false)
+        $('.btn-accept').prop('disabled', false)
     } else {
-        $('.btn-registrasi').prop('disabled', true)
+        $('.btn-accept').prop('disabled', true)
     }
 
 }
@@ -133,5 +141,15 @@ $("#selectAgree").change(function () {
     } else {
         check[3] = false;
     }
-    validate()
+    checkStatus()
+});
+
+$( ".btn-accept" ).click(function() {
+    Swal.fire({
+        icon: 'success',
+        title: 'Data saved successfully!',
+        showConfirmButton: true,
+        confirmButtonColor: '#3085d6',
+        text: "Thank you for filling out this form",
+    })
 });
