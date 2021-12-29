@@ -1,4 +1,4 @@
-const IP = '192.168.0.117:8001';
+const IP = '192.168.18.67:8001';
 const CAROUSEL = $('.owl-carousel');
 const TABLE = $('.table');
 const BUTTON_PLUS = $('.btn-plus');
@@ -137,13 +137,13 @@ let getSession = (day) => {
     let session_type = session.session_type;
     let session_desc = session.session_desc;
     let isiTabel = `
-            <tr>
-                <td class="date-session">${convertTime(start_time)} - ${convertTime(finish_time)}</td>
-                <td class="title-session font-weight-bold">${session_type}<br>
-                    <span class="detail-session font-weight-normal">${session_desc}</span>
-                </td>
-            </tr>
-        `;
+      <tr>
+          <td class="date-session">${convertTime(start_time)} - ${convertTime(finish_time)}</td>
+          <td class="title-session font-weight-bold">${session_type}<br>
+              <span class="detail-session font-weight-normal">${session_desc}</span>
+          </td>
+      </tr>
+    `;
     TABLE.append(isiTabel);
   });
 };
@@ -185,11 +185,11 @@ let addInputFieldInvitation = () => {
   document.querySelector;
   $(`#peserta${quantity} .special`).remove();
   $(`#peserta${quantity} p`).text(`Peserta ${quantity}`);
-  $(`#peserta${quantity} .form-group input`).attr({
+  $(`#peserta${quantity} input`).attr({
     name: `peserta${quantity}`,
     id: `peserta${quantity}`,
   });
-  $(`#peserta${quantity} .form-group input`).val('');
+  $(`#peserta${quantity} input`).val('');
   validate(`peserta${quantity}`);
   $(`#peserta${quantity} #emailHelpBlock`).removeClass('d-none');
 
@@ -211,6 +211,10 @@ let validateEmail = (email) => {
 
 // Function untuk melakukan validasi dari sebuah input
 let validate = (email) => {
+  // console.log(validateEmail(email))
+  // if (validateEmail(email)){
+
+  // }
   const RESULT = $(`#${email} #emailHelpBlock`);
   if (validateEmail($(`[name=${email}]`).val())) {
     RESULT.text('Your email is valid');
@@ -243,6 +247,7 @@ $(document).on('change', '.switchMe', function () {
     $(".input-voucher").removeClass("d-none")
     statusOfInput[0] = { ...oldData, status: true };
     validate('peserta1');
+    $(".peserta").not(':first').remove();
   } else {
     $('#peserta1 #emailHelpBlock').removeClass('d-none');
     BUTTON_PLUS.removeClass('d-none')
