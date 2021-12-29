@@ -2,7 +2,7 @@ let optionTicket = [{ nama: 'No Selected Ticket', harga: 0, capacity: 0 }]; //Ar
 let sumTicket = [0]; // Array Jumlah Data Penjualan per Ticket
 let statusPemesanan = []; // Array Status Invitation
 let pembelian = []; // Array menampung harga tiket pilihan
-let ip = "192.168.18.67:8001"; // IP API
+let ip = "192.168.0.117:8001"; // IP API
 
 // AJAX untuk mengambil Jumlah Data Penjualan per Ticket
 $.ajax({
@@ -92,7 +92,7 @@ $(document).ready(function () {
       }
 
       $.ajax({
-        url: `http://${ip}/items/invitation?fields=invitation_id,customer_id.customer_email,customer_id.customer_name,customer_inviter_id.customer_email,invitation_status&filter[customer_inviter_id][customer_code]="${params}"`,
+        url: `http://${ip}/items/invitation?fields=invitation_id,customer_id.customer_email,customer_id.customer_name,customer_inviter_id.customer_email,invitation_status,voucher_id&filter[customer_inviter_id][customer_code]="${params}"`,
         type: 'GET',
         dataType: 'json',
         success: function (data, textStatus, xhr) {

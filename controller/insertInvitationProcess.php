@@ -4,13 +4,9 @@
     $cred = $_SESSION['cred'];
     $buyTicketLink = 'http://localhost/intern/ticketing/view/statuspesanan.php';
     $bioLink = 'http://localhost/intern/ticketing/view/invitation.php';
-<<<<<<< HEAD
-    $customerURL = 'http://192.168.18.67:8001/items/customer';
-    $invitationURL = 'http://192.168.18.67:8001/items/invitation';
-=======
-    $customerURL = 'http://192.168.18.226:8001/items/customer';
-    $invitationURL = 'http://192.168.18.226:8001/items/invitation';
->>>>>>> 93fdc7abb89033734fac807530554533366cdc92
+    $customerURL = 'http://192.168.0.117:8001/items/customer';
+    $invitationURL = 'http://192.168.0.117:8001/items/invitation';
+    $voucherURL = 'http://192.168.0.117:8001/items/voucher';
 
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\SMTP;
@@ -36,6 +32,20 @@
     curl_close($curl);
 
     if ($numberOfPost == 1) {
+        if (!empty($_POST['voucher'])){
+            $curl = curl_init();
+
+            curl_setopt($curl, CURLOPT_URL, $voucherURL . '?fields=voucher_id&filter[voucher_code]=' . $_POST['voucher']);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            $response = curl_exec($curl);
+            $result = json_decode($response, true);
+            $voucherID = $result['data'][0]['voucher_id'];
+
+            curl_close($curl);
+        }
+        else{
+            $voucherID = '';
+        }
         if ($inviterEmail == $_POST['peserta1']) {
             $curl = curl_init();
 
@@ -51,7 +61,8 @@
                 CURLOPT_POSTFIELDS =>'{
                         "customer_id": "' . $inviterID . '",
                         "customer_inviter_id": " '. $inviterID .' ",
-                        "invitation_status": "1"
+                        "invitation_status": "1",
+                        "voucher_id": "' . $voucherID . '",
                     }',
                 CURLOPT_HTTPHEADER => array(
                     'Content-Type: application/json'

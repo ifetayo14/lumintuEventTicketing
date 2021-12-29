@@ -1,15 +1,11 @@
 <?php
     session_start();
 
-    include 'sendPaidCustomer.php';
+//    include 'sendPaidCustomer.php';
 
     $_SESSION['cred'] = $_GET['m'];
 
-<<<<<<< HEAD
-    $customerURL = 'http://192.168.18.67:8001/items/customer';
-=======
-    $customerURL = 'http://192.168.18.226:8001/items/customer';
->>>>>>> 93fdc7abb89033734fac807530554533366cdc92
+    $customerURL = 'http://192.168.0.117:8001/items/customer';
 
     $curl = curl_init();
 

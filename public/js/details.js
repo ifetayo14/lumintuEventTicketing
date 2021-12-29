@@ -1,4 +1,4 @@
-const IP = "192.168.18.67:8001"
+const IP = "192.168.0.117:8001"
 const CAROUSEL = $('.owl-carousel')
 const TABLE = $('.table')
 const BUTTON_PLUS = $(".btn-plus")

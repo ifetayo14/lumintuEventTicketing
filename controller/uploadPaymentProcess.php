@@ -2,11 +2,7 @@
     session_start();
     $cred = $_SESSION['cred'];
 
-<<<<<<< HEAD
-    $urlIP = '192.168.18.67:8001';
-=======
-    $urlIP = '192.168.18.226:8001';
->>>>>>> 93fdc7abb89033734fac807530554533366cdc92
+    $urlIP = '192.168.0.117:8001';
     $invoiceURL = 'http://' . $urlIP . '/items/invoice';
     $paymentURL = 'http://' . $urlIP . '/items/payment';
     $fileURL = 'http://' . $urlIP . '/files';
