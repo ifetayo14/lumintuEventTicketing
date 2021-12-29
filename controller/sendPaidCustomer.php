@@ -2,7 +2,7 @@
 //    $url = 'http://192.168.43.162:8001/items/ticket?fields=ticket_x_session.session_id';
     $curl = curl_init();
 
-    curl_setopt($curl, CURLOPT_URL, "http://192.168.18.226:8001/items/order?fields=customer_id,invoice_id.invoice_status,ticket_id.ticket_x_session.session_id&filter[invoice_id][invoice_status]=1");
+    curl_setopt($curl, CURLOPT_URL, "http://192.168.0.117:8001/items/order?fields=customer_id,invoice_id.invoice_status,ticket_id.ticket_x_session.session_id&filter[invoice_id][invoice_status]=1");
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
     $responseID = curl_exec($curl);
     $resultID = json_decode($responseID, true);
@@ -18,7 +18,7 @@
 
             $curl = curl_init();
             curl_setopt_array($curl, array(
-                CURLOPT_URL => "192.168.18.226:8002/items/registration?&filter[id_participant][_nin]=" . $resultID['data'][$x]['customer_id'],
+                CURLOPT_URL => "192.168.0.117:8002/items/registration?&filter[id_participant][_nin]=" . $resultID['data'][$x]['customer_id'],
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => '',
                 CURLOPT_MAXREDIRS => 10,
