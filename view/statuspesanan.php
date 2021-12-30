@@ -59,14 +59,53 @@
             </thead>
             <tbody></tbody>
             <tfoot>
-                <tr class="text-center">
+                <!-- <tr class="text-center">
                     <th colspan="5" class="text-right">Total Invoice :</th>
                     <td>
                     <input type="email" class="input-status w-100" id="total-harga" name="total-harga" value="0" readonly />
                     </td>
                 </tr>
+                <tr class="text-center">
+                    <th colspan="4" class="text-right">Total Invoice :</th>
+                    <td>
+                    <input type="email" class="input-status w-100" id="total-harga" name="total-harga" value="0" readonly />
+                    </td>
+                </tr> -->
+
+                <!-- <tr class="">
+                    <th colspan="4" class=""></th>
+                    <td colspan="2">
+                        <div class="container-fluid row">
+                            <div class="col-8">Total Invoice : </div>
+                            <div class="col-4"><input type="text" class="input-status " id="total-harga" name="total-harga" value="0" readonly />
+                        </div>
+                        <div class="container-fluid row">
+                            <div class="col-8">Total Discount : </div>
+                            <div class="col-4"><input type="text" class="input-status" id="total-harga" name="total-discount" value="0" readonly />
+                        </div>
+                    </td>
+                </tr> -->
             </tfoot>
         </table>
+
+        <div class="container-fluid clearfix text-right">
+            <div class="w-50 float-right">
+                <div class="container-fluid row">
+                    <div class="col-8">Sub Total : </div>
+                    <input type="text" class="input-status col-4" id="sub-total" name="sub-total" value="0" readonly />
+                </div>
+                <div class="container-fluid row">
+                    <div class="col-8">Discount : </div>
+                    <input type="text" class="input-status col-4" id="discount" name="discount" value="0" readonly />
+                </div>
+                <div class="container-fluid row">
+                    <div class="col-8 font-weight-bold">Total : </div>
+                    <input type="text" class="input-status col-4 font-weight-bold" id="total-harga" name="total-harga" value="0" readonly />
+                </div>
+            </div>
+        </div>
+
+
         <div class="text-center py-4">
             <button class="rounded py-2 px-5 btn-checkout" disabled type="submit">
                 Checkout
