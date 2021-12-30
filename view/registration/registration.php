@@ -57,7 +57,7 @@
 </head>
 
 <body>
-    <?php
+    <!-- <?php
         if (isset($_GET['scs'])){
             echo '<script type="text/javascript">
                     showPopUp();
@@ -65,7 +65,7 @@
         }elseif(isset($_GET['mailExist'])){
             echo '<script type="text/javascript">showMailExist();</script>';
     }
-?>
+?> -->
 
     <div class="container-fluid">
         <div class="row">

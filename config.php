@@ -1,5 +1,5 @@
 <?php
-    $host = "192.168.0.117";
+    $host = "192.168.18.11";
     $user = "pintar_dev";
     $pass = "pintar123";
     $name = "lumintu-ticket";

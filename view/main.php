@@ -1,7 +1,3 @@
-<?php
-    session_start();
-    echo($_SESSION['cred']);
-?>
 <!DOCTYPE html>
 <html lang="en">
 

@@ -3,7 +3,7 @@
     session_start();
     $cred = $_SESSION['cred'];
 
-    $customerURL = 'http://192.168.0.117:8001/items/customer';
+    $customerURL = 'http://192.168.18.226:8001/items/customer';
 
     $curl = curl_init();
 
@@ -112,14 +112,7 @@
                                                     disabled><i class="fa fa-trash"></i></button>
                                             </div>
                                         </div>
-                                        <div class="row input-voucher d-none">
-                                            <div class="col-10 col-lg-6 col-md-7 col-sm-10 my-auto ">
-                                                <input type="text" name="voucher" class="form-control text-center"
-                                                    id="inputVoucherCode" aria-describedby="voucherHelp"
-                                                    placeholder="Voucher Code">
-
-                                            </div>
-                                        </div>
+                                        
                                     </div>
                                 </div>
                                 <div class="text-right mt-2 mx-4 btn-plus">
@@ -129,6 +122,11 @@
                                     </button>
                                 </div>
                                 <div class="modal-footer border-0">
+                                    <div class="container mb-2 mt-5 d-none input-voucher">
+                                        <input type="text" name="voucher" class="form-control text-center"
+                                                    id="inputVoucherCode" aria-describedby="voucherHelp"
+                                                    placeholder="Voucher Code">
+                                    </div>
                                     <div class="container text-center">
                                         <button class="btn btn-buy w-50 btn-invite" type="submit"
                                             disabled>Invite</button>

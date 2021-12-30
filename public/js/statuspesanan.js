@@ -2,7 +2,8 @@ let optionTicket = [{ nama: 'No Selected Ticket', harga: 0, capacity: 0 }]; //Ar
 let sumTicket = [0]; // Array Jumlah Data Penjualan per Ticket
 let statusPemesanan = []; // Array Status Invitation
 let pembelian = []; // Array menampung harga tiket pilihan
-let ip = "192.168.0.117:8001"; // IP API
+let ip = '192.168.18.67:8001'; // IP API
+let potonganHarga = 0;
 
 // AJAX untuk mengambil Jumlah Data Penjualan per Ticket
 $.ajax({
@@ -19,6 +20,21 @@ $.ajax({
   },
 });
 
+let getDiscount = (voucher) => {
+  $.ajax({
+    url: `http://${ip}/items/voucher/?filter[voucher_id]=${voucher}`,
+    type: 'GET',
+    dataType: 'json',
+    success: function (data, textStatus, xhr) {
+      potonganHarga = data.data[0].voucher_discount
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      console.log('Error in Database');
+    },
+  });
+}
+
+
 // Memunculkan Harga
 function priceShow(idClass, value) {
   $(`.price${idClass}`).html(optionTicket[value].harga);
@@ -33,7 +49,9 @@ function total() {
   pembelian.map((item) => {
     total += item;
   });
-  $('#total-harga').val(total);
+  $('#sub-total').val(total);
+  $('#discount').val(`-${potonganHarga}`);
+  $('#total-harga').val(total - potonganHarga);
 }
 
 // Switch untuk Button berdasarkan input
@@ -57,10 +75,11 @@ $(document).ready(function () {
   const url = new URL(link);
 
   let params = url.searchParams.get('m');
-
+  let paramsVoucher = url.searchParams.get('voucher_id')
+  getDiscount(paramsVoucher)
   // AJAX jenis Tiket
   $.ajax({
-    url: `http://${ip}/items/ticket/`,
+    url: getTicket(paramsVoucher),
     type: 'GET',
     dataType: 'json',
     success: function (data, textStatus, xhr) {
@@ -92,7 +111,7 @@ $(document).ready(function () {
       }
 
       $.ajax({
-        url: `http://${ip}/items/invitation?fields=invitation_id,customer_id.customer_email,customer_id.customer_name,customer_inviter_id.customer_email,invitation_status,voucher_id&filter[customer_inviter_id][customer_code]="${params}"`,
+        url: `http://${ip}/items/invitation?fields=invitation_id,customer_id.customer_email,customer_id.customer_name,customer_inviter_id.customer_email,invitation_status&filter[customer_inviter_id][customer_code]="${params}"`,
         type: 'GET',
         dataType: 'json',
         success: function (data, textStatus, xhr) {
@@ -184,6 +203,8 @@ $(document).ready(function () {
           console.log('Error in Database');
         },
       });
+
+
     },
     error: function (xhr, textStatus, errorThrown) {
       console.log('Error in Database');
@@ -192,6 +213,14 @@ $(document).ready(function () {
 
   // AJAX data Table
 });
+
+let getTicket = (voucher) => {
+  if(voucher === null) {
+    return `http://${ip}/items/ticket/`
+  } else {
+    return `http://${ip}/items/ticket/?filter[voucher_id]=${voucher}`
+  }
+}
 
 // function confirmOrder(){
 //   swal.fire({

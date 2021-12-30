@@ -45,6 +45,43 @@
     <link rel="stylesheet" href="../public/css/invitation.css">
 
     <title>Invitation | Lumintu Event</title>
+
+    <!-- Jquery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <!-- Bootstrap CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+    crossorigin="anonymous"></script>
+
+    <!-- Font Awesome CDN -->
+    <script src="https://use.fontawesome.com/7a7a4d3981.js"></script>
+
+    <!-- SweetAlert2 CDN -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        let showPopUp = () => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Data saved successfully!',
+                showConfirmButton: true,
+                confirmButtonColor: '#3085d6',
+                text: "Thank you for filling out this form",
+            })
+        }
+
+        let showPopUpError = () => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Data saved successfully!',
+                showConfirmButton: true,
+                confirmButtonColor: '#3085d6',
+                text: `Please try again later or check your remaining time"`,
+            })
+        }
+    </script>
 </head>
 
 <body>
@@ -57,7 +94,7 @@
             </div>
             <div class="content">
                 <div class="invitation-form">
-                    <form name="formReg" method="post" action="../controller/biodataProcess.php">
+                    <form name="formReg" id="formInvite" method="post" action="../controller/biodataProcess.php">
                         <input hidden type="text" name="custID" value="<?php echo $customerID; ?>">
                         <div class="form-group email-form">
                             <label for="email" class="text-white">Email</label>
@@ -79,9 +116,10 @@
 
                         <div class="form-group">
                             <label for="phone" class="text-white">No. Hp</label>
-                            <input id="phone" name="phoneNum" type="tel" class="form-control phone-input" oninput="allNumber(document.formReg.phoneNum)">
+                            <input id="phone" name="phoneNum" type="tel" class="form-control phone-input"
+                                oninput="allNumber(document.formReg.phoneNum)">
                             <small id="phoneHelpBlock" class="form-text text-danger d-none">
-                                Letters Not Allowed!
+                                Numbers Not Allowed!
                             </small>
                         </div>
 
@@ -91,7 +129,7 @@
                                 <label class="form-check-label text-white" for="select1">I have accepted</label>
                             </div>
                             <div class="container text-center mt-2">
-                                <button class="btn btn-accept rounded">Accept Invitation</button>
+                                <button class="btn btn-accept rounded" disabled>Accept Invitation</button>
                             </div>
                         </div>
 
@@ -102,27 +140,10 @@
     </div>
 </div>
 
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<!-- Jquery CDN -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-
-<!-- Bootstrap CDN -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
-        crossorigin="anonymous"></script>
-
-<!-- Font Awesome CDN -->
-<script src="https://use.fontawesome.com/7a7a4d3981.js"></script>
-
-<!-- SweetAlert2 CDN -->
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 <!-- intl-tel-input -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput.min.js"
-        integrity="sha512-QMUqEPmhXq1f3DnAVdXvu40C8nbTgxvBGvNruP6RFacy3zWKbNTmx7rdQVVM2gkd2auCWhlPYtcW2tHwzso4SA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+integrity="sha512-QMUqEPmhXq1f3DnAVdXvu40C8nbTgxvBGvNruP6RFacy3zWKbNTmx7rdQVVM2gkd2auCWhlPYtcW2tHwzso4SA=="
+crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <!-- Independent Javascript -->
 <script src="../public/js/invitation.js"></script>
