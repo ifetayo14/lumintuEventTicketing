@@ -75,11 +75,18 @@ $(document).ready(function () {
   const url = new URL(link);
 
   let params = url.searchParams.get('m');
+<<<<<<< HEAD
   let paramsVoucher = url.searchParams.get('voucher_id')
   getDiscount(paramsVoucher)
   // AJAX jenis Tiket
   $.ajax({
     url: getTicket(paramsVoucher),
+=======
+  let voucherParams = url.searchParams.get('voucher_id');
+
+  // AJAX jenis Tiket
+  $.ajax({
+>>>>>>> b2aa37a9560ee92d650e533d854c4b704a9b5b3d
     type: 'GET',
     dataType: 'json',
     success: function (data, textStatus, xhr) {
