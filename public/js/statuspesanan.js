@@ -2,7 +2,7 @@ let optionTicket = [{ nama: 'No Selected Ticket', harga: 0, capacity: 0 }]; //Ar
 let sumTicket = [0]; // Array Jumlah Data Penjualan per Ticket
 let statusPemesanan = []; // Array Status Invitation
 let pembelian = []; // Array menampung harga tiket pilihan
-let ip = '192.168.18.67:8001'; // IP API
+let ip = '192.168.18.62:8001'; // IP API
 let potonganHarga = 0;
 
 // AJAX untuk mengambil Jumlah Data Penjualan per Ticket
@@ -94,7 +94,8 @@ $(document).ready(function () {
         }
       });
 
-      let panjangOpsi = optionTicket.length - 1; //Mencari Length dari Array Jenis Ticket
+      let panjangOpsi = paramsVoucher != null? optionTicket.length : optionTicket.length - 1; //Mencari Length dari Array Jenis Ticket
+      console.log(panjangOpsi)
       let penunjuk = panjangOpsi;
       for (i = 1; i < panjangOpsi; i++) {
         for (j = i + 1; j < panjangOpsi; j++) {
