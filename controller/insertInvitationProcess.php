@@ -4,9 +4,9 @@
     $cred = $_SESSION['cred'];
     $buyTicketLink = 'http://localhost/intern/ticketing/view/statuspesanan.php';
     $bioLink = 'http://localhost/intern/ticketing/view/invitation.php';
-    $customerURL = 'http://192.168.0.117:8001/items/customer';
-    $invitationURL = 'http://192.168.0.117:8001/items/invitation';
-    $voucherURL = 'http://192.168.0.117:8001/items/voucher';
+    $customerURL = 'http://192.168.18.67:8001/items/customer';
+    $invitationURL = 'http://192.168.18.67:8001/items/invitation';
+    $voucherURL = 'http://192.168.18.67:8001/items/voucher';
 
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\SMTP;
@@ -31,21 +31,73 @@
 
     curl_close($curl);
 
-    if ($numberOfPost == 1) {
-        if (!empty($_POST['voucher'])){
-            $curl = curl_init();
+    $voucherID = 0;
 
-            curl_setopt($curl, CURLOPT_URL, $voucherURL . '?fields=voucher_id&filter[voucher_code]=' . $_POST['voucher']);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-            $response = curl_exec($curl);
-            $result = json_decode($response, true);
-            $voucherID = $result['data'][0]['voucher_id'];
+    if (!empty($_POST['voucher'])) {
+        $curl = curl_init();
 
-            curl_close($curl);
+        curl_setopt($curl, CURLOPT_URL, $voucherURL . '?fields=voucher_id&filter[voucher_code]=' . $_POST['voucher']);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $response = curl_exec($curl);
+        $result = json_decode($response, true);
+        $voucherID = $result['data'][0]['voucher_id'];
+
+        curl_close($curl);
+
+        $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => $invitationURL,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS =>'{
+                        "customer_id": "' . $inviterID . '",
+                        "customer_inviter_id": " '. $inviterID .' ",
+                        "invitation_status": "1",
+                        "voucher_id": "' . $voucherID . '"
+                    }',
+                CURLOPT_HTTPHEADER => array(
+                    'Content-Type: application/json'
+                ),
+            ));
+
+        $getResponse = curl_exec($curl);
+        $onCreateResponseInvitation = json_decode($getResponse, true);
+
+        curl_close($curl);
+
+        $mail = new PHPMailer();
+        $mail->SMTPDebug = 0;
+        $mail->isSMTP();
+        $mail->SMTPSecure = 'tls';
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'mintuticketing@gmail.com';
+        $mail->Password = 'Mintu123';
+        $mail->Port = 587;
+
+        $mail->setFrom('mintuticketing@gmail.com', 'Lumintu Events');
+
+        $mail->addAddress($inviterEmail);
+        $mail->Subject = "[Lumintu Events] Link Pemesanan Tiket";
+        $mail->isHTML(true);
+        $mail->Body = 'Hai ' . $resultID['data'][0]['customer_name'] . ', silahkan klik link berikut untuk melakukan pemesanan tiket<br/><br/>
+                        <a href="' . $buyTicketLink . '?m=' . $resultID['data'][0]['customer_code'] . '&voucher_id=' . $voucherID . '">Pesan Tiket</a>';
+
+        if ($mail->send()) {
+            header('Location: ../view/details.php?scs');
         }
-        else{
-            $voucherID = '';
+        else {
+            header('Location: ../view/details.php?mailErrSolo');
         }
+    }
+
+    elseif ($numberOfPost == 2) {
         if ($inviterEmail == $_POST['peserta1']) {
             $curl = curl_init();
 
@@ -62,7 +114,7 @@
                         "customer_id": "' . $inviterID . '",
                         "customer_inviter_id": " '. $inviterID .' ",
                         "invitation_status": "1",
-                        "voucher_id": "' . $voucherID . '",
+                        "voucher_id": "' . $voucherID . '"
                     }',
                 CURLOPT_HTTPHEADER => array(
                     'Content-Type: application/json'
@@ -90,7 +142,7 @@
             $mail->Subject = "[Lumintu Events] Link Pemesanan Tiket";
             $mail->isHTML(true);
             $mail->Body = 'Hai ' . $resultID['data'][0]['customer_name'] . ', silahkan klik link berikut untuk melakukan pemesanan tiket<br/><br/>
-                            <a href="' . $buyTicketLink . '?m=' . $resultID['data'][0]['customer_code'] . '">Pesan Tiket</a>';
+                            <a href="' . $buyTicketLink . '?m=' . $resultID['data'][0]['customer_code'] . '&voucher_id=' . $voucherID . '">Pesan Tiket</a>';
 
             if ($mail->send()) {
                 header('Location: ../view/details.php?scs');
