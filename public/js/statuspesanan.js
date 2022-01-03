@@ -2,7 +2,7 @@ let optionTicket = [{ nama: 'No Selected Ticket', harga: 0, capacity: 0 }]; //Ar
 let sumTicket = [0]; // Array Jumlah Data Penjualan per Ticket
 let statusPemesanan = []; // Array Status Invitation
 let pembelian = []; // Array menampung harga tiket pilihan
-let ip = '192.168.18.62:8001'; // IP API
+let ip = 'lumintu-tiket.tamiaindah.xyz:8055'; // IP API
 let potonganHarga = 0;
 
 // AJAX untuk mengambil Jumlah Data Penjualan per Ticket
@@ -75,18 +75,11 @@ $(document).ready(function () {
   const url = new URL(link);
 
   let params = url.searchParams.get('m');
-<<<<<<< HEAD
   let paramsVoucher = url.searchParams.get('voucher_id')
   getDiscount(paramsVoucher)
   // AJAX jenis Tiket
   $.ajax({
     url: getTicket(paramsVoucher),
-=======
-  let voucherParams = url.searchParams.get('voucher_id');
-
-  // AJAX jenis Tiket
-  $.ajax({
->>>>>>> b2aa37a9560ee92d650e533d854c4b704a9b5b3d
     type: 'GET',
     dataType: 'json',
     success: function (data, textStatus, xhr) {
@@ -119,7 +112,7 @@ $(document).ready(function () {
       }
 
       $.ajax({
-        url: `http://${ip}/items/invitation?fields=invitation_id,customer_id.customer_email,customer_id.customer_name,customer_inviter_id.customer_email,invitation_status&filter[customer_inviter_id][customer_code]="${params}"`,
+        url: `http://${ip}/items/invitation?fields=invitation_id,customer_id.customer_email,customer_id.customer_name,customer_inviter_id.customer_email,invitation_status&filter[customer_inviter_id][customer_code]=${params}`,
         type: 'GET',
         dataType: 'json',
         success: function (data, textStatus, xhr) {

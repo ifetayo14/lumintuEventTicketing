@@ -1,8 +1,8 @@
 <?php
-    $host = "192.168.18.11";
-    $user = "pintar_dev";
-    $pass = "pintar123";
-    $name = "lumintu-ticket";
+    $host = "20.120.0.22";
+    $user = "root";
+    $pass = "Mia060600.";
+    $name = "lumintu_tiket";
 
     $conn = mysqli_connect($host, $user, $pass, $name);
 

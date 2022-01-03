@@ -9,9 +9,9 @@
     require '../vendor/phpmailer/phpmailer/src/POP3.php';
     require '../vendor/phpmailer/phpmailer/src/SMTP.php';
 
-    include('../config.php');
+//    include('../config.php');
 
-    $customerURL = 'http://192.168.18.67:8001/items/customer';
+    $customerURL = 'http://lumintu-tiket.tamiaindah.xyz:8055/items/customer';
 
     $name = $_POST['name'];
     $email = $_POST['email'];
@@ -19,16 +19,42 @@
     $cusCode = hash('sha512', $email.$phoneNum);
     $loginLink = 'http://localhost/intern/ticketing/controller/verificationProcess.php?m=' . $cusCode;
 
-    $query = "INSERT INTO `customer`(`customer_email`, `customer_name`, `customer_phone`, `customer_code`)
-                SELECT '$email', '$name', '$phoneNum', '$cusCode'
-                FROM (SELECT 1)a WHERE NOT EXISTS (SELECT `customer_id` FROM `customer` WHERE `customer_email` = '$email')";
-    $runQuery = mysqli_query($conn, $query) or die(mysqli_error($conn));
-    $affRow = $conn->affected_rows;
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => $customerURL,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS =>'{
+                    "customer_email": "' . $email . '",
+                    "customer_name": "' . $name . '",
+                    "customer_phone": "' . $phoneNum . '",
+                    "customer_code": "' . $cusCode . '"
+                }',
+        CURLOPT_HTTPHEADER => array(
+            'Content-Type: application/json'
+        ),
+    ));
 
-    if ($affRow == 0){
-        header('Location: ../view/registration/registration.php?mailExist');
-    }
-    else{
+    $execCurl = curl_exec($curl);
+    $getResponse = json_decode($execCurl, true);
+
+    curl_close($curl);
+
+    if (isset($getResponse['errors'][0]['extensions']['code'])){
+        echo $getResponse['errors'][0]['extensions']['code'];
+    }else {
+
+//    $query = "INSERT INTO `customer`(`customer_email`, `customer_name`, `customer_phone`, `customer_code`)
+//                SELECT '$email', '$name', '$phoneNum', '$cusCode'
+//                FROM (SELECT 1)a WHERE NOT EXISTS (SELECT `customer_id` FROM `customer` WHERE `customer_email` = '$email')";
+//    $runQuery = mysqli_query($conn, $query) or die(mysqli_error($conn));
+//    $affRow = $conn->affected_rows;
+
         $mail = new PHPMailer();
         $mail->SMTPDebug = 0;
         $mail->isSMTP();
@@ -53,10 +79,9 @@
 
         $mail->msgHTML($message);
 
-        if ($mail->send()){
+        if ($mail->send()) {
             header('Location: ../view/registration/registration.php?scs');
-        }
-        else{
+        } else {
 //            echo $mail->ErrorInfo;
             header('Location: ../view/registration/registration.php?mailErr');
         }

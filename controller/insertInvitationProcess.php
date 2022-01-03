@@ -4,9 +4,9 @@
     $cred = $_SESSION['cred'];
     $buyTicketLink = 'http://localhost/intern/ticketing/view/statuspesanan.php';
     $bioLink = 'http://localhost/intern/ticketing/view/invitation.php';
-    $customerURL = 'http://192.168.0.114:8001/items/customer';
-    $invitationURL = 'http://192.168.0.114:8001/items/invitation';
-    $voucherURL = 'http://192.168.0.114:8001/items/voucher';
+    $customerURL = 'http://lumintu-tiket.tamiaindah.xyz:8055/items/customer';
+    $invitationURL = 'http://lumintu-tiket.tamiaindah.xyz:8055/items/invitation';
+    $voucherURL = 'http://lumintu-tiket.tamiaindah.xyz:8055/items/voucher';
 
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\SMTP;
