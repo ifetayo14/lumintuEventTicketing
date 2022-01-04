@@ -40,10 +40,8 @@
             </div>
         </div>
 
-        <div class="container mb-3 d-none voucher text-right">
-            <div class="d-flex justify-content-end">
-                <input type="text" name="voucher" class="form-control kode-input w-25" placeholder="Voucher Code" />
-            </div>
+        <div class="remaining-time text-right font-italic font-weight-bold">
+            Sisa Waktu : 00 Jam 00 Menit
         </div>
 
         <table class="table display table-responsive-lg table-status">
@@ -149,6 +147,9 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+
+<!-- Moment JS CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
 <!-- Independent JS -->
 <script src="../public/js/statuspesanan.js"></script>
