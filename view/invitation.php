@@ -1,6 +1,6 @@
 <?php
-    $customerURL = 'http://192.168.18.226:8001/items/customer';
-    $invitationURL = 'http://192.168.18.226:8001/items/invitation';
+    $customerURL = 'http://lumintu-tiket.tamiaindah.xyz:8055/items/customer';
+    $invitationURL = 'http://lumintu-tiket.tamiaindah.xyz:8055/items/invitation';
 
     if (isset($_GET['invm'])){
         $myEmail = base64_decode($_GET['invm']);
