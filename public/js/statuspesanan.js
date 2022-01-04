@@ -122,8 +122,8 @@ const getData = () => {
       data.data.map((item) => {
         
         if(item.ticket_seat != null){ //Jika seat tidak samadengan null
-          if(paramsVoucher == null){ //Jika paramsVoucher adalah null maka akan menampilkan tiket yang tidak memilih voucher_id
-            if(item.voucher_id === null && item.ticket_seat != null){
+          if(paramsVoucher == 0){ //Jika paramsVoucher adalah null maka akan menampilkan tiket yang tidak memilih voucher_id
+            if(item.voucher_id === 0 && item.ticket_seat != null){
               optionTicket.push({
                 id: item.ticket_id,
                 nama: item.ticket_type,
@@ -132,7 +132,7 @@ const getData = () => {
               });
             }
           } else {
-            if(item.voucher_id != null && item.ticket_seat != null){
+            if(item.voucher_id != 0 && item.ticket_seat != null){
               optionTicket.push({
                 id: item.ticket_id,
                 nama: item.ticket_type,
@@ -150,7 +150,7 @@ const getData = () => {
 
       console.log(panjangOpsi)
       
-      if(paramsVoucher == null){
+      if(paramsVoucher == 0){
         let penunjuk = panjangOpsi;
         for (i = 1; i < panjangOpsi; i++) {
           for (j = i + 1; j < panjangOpsi; j++) {
@@ -296,7 +296,7 @@ $(document).ready(function () {
 });
 
 const getTicket = (voucher) => {
-  if(voucher === null) {
+  if(voucher === 0) {
     return `http://${ip}/items/ticket`
   } else {
     return `http://${ip}/items/ticket/?filter[voucher_id]=${voucher}`
