@@ -41,6 +41,7 @@
     $inviterEmail = $resultID['data'][0]['customer_email'];
 
     curl_close($curl);
+
     $curl = curl_init();
 
     //get customer-invitation-data
@@ -53,18 +54,26 @@
 
     curl_close($curl);
 
-    $curl = curl_init();
-    curl_setopt($curl, CURLOPT_URL, $tiketURL . '?&filter[voucher_id]=' . $voucherID);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-    $response = curl_exec($curl);
-    $result = json_decode($response, true);
-    $tiketLength = $result["data"];
+    if ($voucherID != 0) {
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $tiketURL . '?&filter[voucher_id]=' . $voucherID);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $response = curl_exec($curl);
+        $result = json_decode($response, true);
+        $tiketLength = $result["data"];
 
-    curl_close($curl);
+        curl_close($curl);
+    }
 
     $totalPrice = $_POST['total-harga'];
 
 //    echo sizeof($tiketLength);
+
+    if ($voucherID == 0){
+        echo 'gak ada tiket';
+    }else{
+        echo $voucherID;
+    }
 
     if (sizeof($tiketLength) > 1){
         for ($x = 1; $x <= sizeof($tiketLength); $x++){
