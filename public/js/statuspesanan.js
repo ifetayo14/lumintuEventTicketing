@@ -122,8 +122,8 @@ const getData = () => {
       data.data.map((item) => {
         
         if(item.ticket_seat != null){ //Jika seat tidak samadengan null
-          if(paramsVoucher == 0){ //Jika paramsVoucher adalah null maka akan menampilkan tiket yang tidak memilih voucher_id
-            if(item.voucher_id === 0 && item.ticket_seat != null){
+          if(paramsVoucher == null){ //Jika paramsVoucher adalah null maka akan menampilkan tiket yang tidak memilih voucher_id
+            if(item.voucher_id === null && item.ticket_seat != null){
               optionTicket.push({
                 id: item.ticket_id,
                 nama: item.ticket_type,
@@ -132,7 +132,7 @@ const getData = () => {
               });
             }
           } else {
-            if(item.voucher_id != 0 && item.ticket_seat != null){
+            if(item.voucher_id != null && item.ticket_seat != null){
               optionTicket.push({
                 id: item.ticket_id,
                 nama: item.ticket_type,
@@ -150,14 +150,16 @@ const getData = () => {
 
       console.log(panjangOpsi)
       
-      if(paramsVoucher == 0){
+      if(paramsVoucher == null){
         let penunjuk = panjangOpsi;
+        let next = 1; //Untuk Value Tiket Gabungan, setiap menambahkan tiket gabungan next + 1, value untuk tiket gabungan adalah banyak tiket yang didapat ditambah next
         for (i = 1; i < panjangOpsi; i++) {
           for (j = i + 1; j < panjangOpsi; j++) {
             if((optionTicket[i].nama).includes("Only") == true &&
             (optionTicket[j].nama).includes("Only") == true
             ){ //Melakukan Penggabungan Jenis jika mengandung kata "Only"
               optionTicket.splice(penunjuk, 0, {
+                id: panjangOpsi + next,
                 nama: `${optionTicket[i].nama} & ${optionTicket[j].nama}`,
                 harga: optionTicket[i].harga + optionTicket[j].harga,
                 capacity: Math.min(optionTicket[i].capacity, optionTicket[j].capacity),
@@ -165,6 +167,7 @@ const getData = () => {
 
               sumTicket.splice(penunjuk, 0, Math.max(sumTicket[i], sumTicket[j]));
               penunjuk++;
+              next++;
             }
             
           }
@@ -296,7 +299,7 @@ $(document).ready(function () {
 });
 
 const getTicket = (voucher) => {
-  if(voucher === 0) {
+  if(voucher === null) {
     return `http://${ip}/items/ticket`
   } else {
     return `http://${ip}/items/ticket/?filter[voucher_id]=${voucher}`
