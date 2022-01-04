@@ -29,6 +29,8 @@
     $document = new DOMPDF('P', 'A4', 'en', false, 'UTF-8');
 
     $price = $_POST['total-harga'];
+    $totalPrice = $_POST['total-harga'];
+
     $curl = curl_init();
 
     //get customer ID
@@ -54,7 +56,8 @@
 
     curl_close($curl);
 
-    if ($voucherID != 0) {
+    if ($voucherID != null) {
+        echo 'voucher if1';
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $tiketURL . '?&filter[voucher_id]=' . $voucherID);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -63,9 +66,100 @@
         $tiketLength = $result["data"];
 
         curl_close($curl);
+
+        //post to invoice
+        if (!insertInvoice($invoiceURL, $customerID, $totalPrice)) {
+//            echo $postResponse['errors'][0]['extensions']['code'];
+            header('Location: ../view/statuspesanan.php?errInv');
+        }else{
+
+            $invoiceData = getInvoice($invoiceURL, $customerID);
+            $invID = $invoiceData['data'][0]['invoice_id'];
+
+            if (insertOrder($orderURL, $invID, $customerID)){
+                header('Location: ../view/statuspesanan.php?scsAll');
+            }else{
+                header('Location: ../view/statuspesanan.php?errOrder');
+            }
+        }
     }
 
-    $totalPrice = $_POST['total-harga'];
+    function getInvoice($link, $customerID){
+        $curl = curl_init();
+        //      get invoice
+        curl_setopt($curl, CURLOPT_URL, $link . '?&filter[customer_id]=' . $customerID);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $responseInvID = curl_exec($curl);
+        $resultInvID = json_decode($responseInvID, true);
+        $invID = $resultInvID['data'][0]['invoice_id'];
+
+        curl_close($curl);
+
+        return $resultInvID;
+    }
+
+    function insertInvoice($link, $customerID, $price){
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $link,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => '{
+            "customer_id": "' . $customerID . '",
+            "invoice_total": "' . $price . '",
+            "invoice_status": 0
+        }',
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json'
+            ),
+        ));
+
+        $server_response = curl_exec($curl);
+        $postResponse = json_decode($server_response, true);
+        curl_close($curl);
+
+        return $postResponse;
+    }
+
+    function insertOrder($link, $invoiceID, $customerID){
+        //post to order
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $link,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => '{
+                "invoice_id": "' . $invoiceID . '",
+                "customer_id": "' . $customerID . '",
+                "ticket_id": "1",
+                "order_quantity": "1"
+        }',
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json'
+            ),
+        ));
+
+        $exec = curl_exec($curl);
+        $postResponse = json_decode($exec, true);
+
+        curl_close($curl);
+
+        return $postResponse;
+    }
+
+
 
 //    echo sizeof($tiketLength);
 
