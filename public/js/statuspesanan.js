@@ -50,9 +50,11 @@ const getDiscount = (voucher) => {
 
 // Memunculkan Harga berdasarkan Pilihan
 const priceShow = (idClass, value) => {
-  $(`.price${idClass}`).html(optionTicket[value].harga);
+  console.log(idClass, value)
+  let hasil = optionTicket.find(o => o.id == value);
+  $(`.price${idClass}`).html(hasil.harga);
   checkStatus();
-  pembelian[idClass - 1] = optionTicket[value].harga;
+  pembelian[idClass - 1] = hasil.harga;
   
   total(); // Memanggil Function Harga
 }
