@@ -152,12 +152,14 @@ const getData = () => {
       
       if(paramsVoucher == null){
         let penunjuk = panjangOpsi;
+        let next = 1; //Untuk Value Tiket Gabungan, setiap menambahkan tiket gabungan next + 1, value untuk tiket gabungan adalah banyak tiket yang didapat ditambah next
         for (i = 1; i < panjangOpsi; i++) {
           for (j = i + 1; j < panjangOpsi; j++) {
             if((optionTicket[i].nama).includes("Only") == true &&
             (optionTicket[j].nama).includes("Only") == true
             ){ //Melakukan Penggabungan Jenis jika mengandung kata "Only"
               optionTicket.splice(penunjuk, 0, {
+                id: panjangOpsi + next,
                 nama: `${optionTicket[i].nama} & ${optionTicket[j].nama}`,
                 harga: optionTicket[i].harga + optionTicket[j].harga,
                 capacity: Math.min(optionTicket[i].capacity, optionTicket[j].capacity),
@@ -165,6 +167,7 @@ const getData = () => {
 
               sumTicket.splice(penunjuk, 0, Math.max(sumTicket[i], sumTicket[j]));
               penunjuk++;
+              next++;
             }
             
           }
