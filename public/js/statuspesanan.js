@@ -203,7 +203,7 @@ const getData = () => {
                             </td>
                             ${item.invitation_status == 1 ?
                     `<td>
-                                <select class="custom-select" id="${index + 1}" name="tiket-peserta" onchange="priceShow(this.id, this.value)"></select>
+                                <select class="custom-select" id="${index + 1}" name="tiket-peserta-${index + 1}" onchange="priceShow(this.id, this.value)"></select>
                               </td>
                               <td class= "price${index + 1}">${0}</td>
                               <td>

@@ -1,9 +1,12 @@
-let IP = '192.168.18.67:8001';
+let IP = 'lumintu-tiket.tamiaindah.xyz:8055';
+let link = window.location.href;
+const url = new URL(link);
+let params = url.searchParams.get('m');
 
 
 //ambil data cust
 $.ajax({
-  url: `http://${ip}/items/invoice?fields=invoice_id,customer_id.customer_name,customer_id.customer_email,customer_id.customer_phone="${params}"`,
+  url: `http://${ip}/items/invoice?fields=invoice_id,customer_id.customer_name,customer_id.customer_email,customer_id.customer_phone&filter[customer_id][customer_code]"${params}"`,
   type: 'GET',
   dataType: 'json',
   success: function (data, textStatus, xhr) {
@@ -23,7 +26,7 @@ $.ajax({
 
 //ambil data orderannya
 $.ajax({
-  url: `http://${ip}/items/order?fields=order_id,order_quantity,ticket_id.ticket_type,ticket_id.ticket_price="${params}"`,
+  url: `http://${ip}/items/order?fields=order_id,order_quantity,ticket_id.ticket_type,ticket_id.ticket_price&filter[customer_id][customer_code]"${params}"`,
   type: 'GET',
   dataType: 'json',
   success: function (data, textStatus, xhr) {
@@ -59,7 +62,7 @@ $.ajax({
 
 //ambil data totalnya
 $.ajax({
-  url: `http://${ip}/items/invoice?fields=invoice_id,invoice_total="${params}"`,
+  url: `http://${ip}/items/invoice?fields=invoice_id,invoice_total&filter[customer_id][customer_code]"${params}"`,
   type: 'GET',
   dataType: 'json',
   success: function (data, textStatus, xhr) {
