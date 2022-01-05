@@ -108,6 +108,7 @@
             <button class="rounded py-2 px-5 btn-checkout" disabled type="submit">
                 Checkout
             </button>
+            <p class="text-danger d-none expired-text">Sudah Expired Mas Mbak, Lain Kali Cepet Ya</p>
         </div>
     </form>
 </div>
