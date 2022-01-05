@@ -1,4 +1,4 @@
-let optionTicket = [{ id: 0, nama: 'No Selected Ticket', harga: 0, capacity: 0 }]; //Array Jenis Ticket
+let optionTicket = [{ id: 0, nama: 'No Selected Ticket', harga: 0, capacity: 0, sisa: 0 }]; //Array Jenis Ticket
 let sumTicket = [0]; // Array Jumlah Data Penjualan per Ticket
 let statusPemesanan = []; // Array Status Invitation
 let pembelian = []; // Array menampung harga tiket pilihan
@@ -6,10 +6,11 @@ let ip = 'lumintu-tiket.tamiaindah.xyz:8055'; // IP API
 let potonganHarga = 0;
 let waktu = ""
 let batas = ""
+let expire = false;
 
 // Reset Variable
 const inisialisi = () => {
-  optionTicket = [{ nama: "No Selected Ticket", harga: 0, capacity: 0 }]; //Array Jenis Ticket
+  optionTicket = [{ id: 0, nama: 'No Selected Ticket', harga: 0, capacity: 0, sisa: 0 }]; //Array Jenis Ticket
   sumTicket = [0]; // Array Jumlah Data Penjualan per Ticket
   statusPemesanan = []; // Array Status Invitation
   pembelian = []; // Array menampung harga tiket pilihan
@@ -122,7 +123,7 @@ const getData = () => {
     },
     success: function (data, textStatus, xhr) {0
       data.data.map((item) => {
-        
+        console.log(item)
         if(item.ticket_seat != null){ //Jika seat tidak samadengan null
           if(paramsVoucher == null){ //Jika paramsVoucher adalah null maka akan menampilkan tiket yang tidak memilih voucher_id
             if(item.voucher_id === null && item.ticket_seat != null){
@@ -131,6 +132,7 @@ const getData = () => {
                 nama: item.ticket_type,
                 harga: item.ticket_price,
                 capacity: item.ticket_seat,
+                sisa: item.current_seat
               });
             }
           } else {
@@ -140,6 +142,7 @@ const getData = () => {
                 nama: item.ticket_type,
                 harga: item.ticket_price,
                 capacity: item.ticket_seat,
+                sisa: item.current_seat
               });
             }
           }
@@ -165,9 +168,10 @@ const getData = () => {
                 nama: `${optionTicket[i].nama} & ${optionTicket[j].nama}`,
                 harga: optionTicket[i].harga + optionTicket[j].harga,
                 capacity: Math.min(optionTicket[i].capacity, optionTicket[j].capacity),
+                sisa: Math.min(optionTicket[i].sisa, optionTicket[j].sisa)
               });
 
-              sumTicket.splice(penunjuk, 0, Math.max(sumTicket[i], sumTicket[j]));
+              // sumTicket.splice(penunjuk, 0, Math.max(sumTicket[i], sumTicket[j]));
               penunjuk++;
               next++;
             }
@@ -186,7 +190,9 @@ const getData = () => {
         success: function (data, textStatus, xhr) {
 
           showAndExpire(data)
-          data.data.map((item, index) => {
+          let dataPeserta = data.data
+
+          dataPeserta.map((item, index) => {
             // console.log(item)
             if(item.invitation_status != 2) {
               pembelian.push(0);
@@ -203,7 +209,7 @@ const getData = () => {
                             </td>
                             ${item.invitation_status == 1 ?
                     `<td>
-                                <select class="custom-select" id="${index + 1}" name="tiket-peserta" onchange="priceShow(this.id, this.value)"></select>
+                                <select class="custom-select" id="${index + 1}" name="tiket-peserta-${index + 1}" onchange="priceShow(this.id, this.value)"></select>
                               </td>
                               <td class= "price${index + 1}">${0}</td>
                               <td>
@@ -245,8 +251,10 @@ const getData = () => {
               if (optionTicket[index].capacity == 0) {
                 $('.custom-select').append(`<option value="${item.id}">${item.nama}</option>`);
               } else {
-                $('.custom-select').append(`<option value="${item.id}">${item.nama} (${item.capacity - sumTicket[index]})</option>`);
+                // $('.custom-select').append(`<option value="${item.id}">${item.nama} (${item.capacity - sumTicket[index]})</option>`);
+                $('.custom-select').append(`<option value="${item.id}">${item.nama} (${item.sisa})</option>`);
               }
+              console.log(item)
             }
           });
 
