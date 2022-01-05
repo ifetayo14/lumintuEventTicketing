@@ -18,6 +18,7 @@ body{
     }
 
     .item{
+        border: 1px solid black;
         height: 40vh;
         width: 100%;
         background-size: cover;
@@ -37,6 +38,7 @@ body{
     }
 
     .item{
+        border: 1px solid black;
         height: 20vh;
         width: 100%;
         background-size: cover;
@@ -55,6 +57,7 @@ body{
     }
 
     .item{
+        border: 1px solid black;
         height: 25vh;
         width: 100%;
         background-size: cover;
@@ -73,6 +76,7 @@ body{
     }
 
     .item{
+        border: 1px solid black;
         height: 28vh;
         width: 100%;
         background-size: cover;
