@@ -37,26 +37,9 @@
   <div class="container">
   <div class="row">
     <div class="col-sm-7">
-      <div class="card data-cust">
+      <div class="card data-cust p-3">
 
-        <div class="card-body">
-        <h5 class="card-title"><b>Data Peserta</b></h5>
-          <hr>
-          <!-- ini peserta yang pertama -->
-          <h5 class="card-title peserta-brp urutan-cust"><b>CUSTOMER 1 :</b></h5>
-          <div class="row">
-            <div class="col-sm-6">
-              <p class="card-text nama"><b>Nama</b></p>
-              <p class="card-text email"><b>Email</b></p>
-              <p class="card-text nohp"><b>No. Hp</b></p>
-            </div>
-            <div class="col-sm-6 isinya-cust">
-<!--              <p class="card-text isi-nama">Tamia Indah Imanika</p>-->
-<!--              <p class="card-text isi-email">tamiaindah66000@gmail.com</p>-->
-<!--              <p class="card-text isi-nohp">085601787850</p> -->
-            </div>
-          </div>  
-        </div>
+        <h5 class=""><b>Data Peserta</b></h5>
         
       </div>
     </div>
