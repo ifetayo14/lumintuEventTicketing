@@ -7,6 +7,8 @@ let potonganHarga = 0;
 let waktu = ""
 let batas = ""
 let expire = false;
+let panjangOpsi = 0;
+let voucherCode = ""
 
 // Reset Variable
 const inisialisi = () => {
@@ -52,10 +54,38 @@ const getDiscount = (voucher) => {
 // Memunculkan Harga berdasarkan Pilihan
 const priceShow = (idClass, value) => {
   let hasil = optionTicket.find(o => o.id == value);
-  $(`.price${idClass}`).html(hasil.harga);
+  let sisaTiket = hasil.sisa - 1
+  let newOptionTicket = optionTicket.map(element => element.id == value ? { ...element, sisa: sisaTiket } : element)
+
+  optionTicket = newOptionTicket //Tiket dengan sisa tiket yang baru
+  $(`.price${idClass}`).text(hasil.harga);
   checkStatus();
-  pembelian[idClass - 1] = hasil.harga; //Menyimpan Harga Tiket yang dipilih untuk dihitung totalnya
-  
+  pembelian[idClass - 1] = { id: value, harga: hasil.harga }; //Menyimpan Harga Tiket yang dipilih untuk dihitung totalnya
+  checkStatus();
+  $('.custom-select').empty()
+
+  optionTicket = optionTicket.splice(0, 4)
+  combineTicket(voucherCode)
+
+
+  optionTicket.map((item, index) => {
+    if (optionTicket[index].capacity != null) {
+      if (optionTicket[index].capacity == 0) {
+        $('.custom-select').append(`<option value="${item.id}">${item.nama}</option>`);
+      } else {
+        if (item.sisa == 0) {
+          $('.custom-select').append(`<option value="${item.id}" disabled>${item.nama} (${0})</option>`);
+        } else {
+          $('.custom-select').append(`<option value="${item.id}">${item.nama} (${item.sisa})</option>`);
+        }
+
+      }
+    }
+  });
+
+  pembelian.map((item, index) => {
+    $(`.custom-select#${index + 1}`).val(item.id)
+  })
   total(); // Memanggil Function Total Pembelian
 }
 
@@ -63,7 +93,7 @@ const priceShow = (idClass, value) => {
 const total = () => {
   let total = 0;
   pembelian.map((item) => {
-    total += item;
+    total += item.harga;
   });
   $('#sub-total').val(total);
   $('#discount').val(`-${potonganHarga}`); //Merubah Nilai dari ID Input dari sebuah tag
@@ -73,13 +103,10 @@ const total = () => {
 // Switch untuk Button berdasarkan input
 const checkStatus = () => {
   if (statusPemesanan.indexOf(false) == -1) {
-    for (i = 1; i <= $('.custom-select').length; i++) {
-      if ($(`#${i}`).val() == 0) {
-        $('.btn-checkout').prop('disabled', true);
-        break;
-      } else {
-        $('.btn-checkout').prop('disabled', false);
-      }
+    if (pembelian.findIndex(item => item.id == 0) == -1) {
+      $('.btn-checkout').prop('disabled', false);
+    } else {
+      $('.btn-checkout').prop('disabled', true);
     }
   } else {
     $('.btn-checkout').prop('disabled', true);
@@ -91,14 +118,41 @@ const showAndExpire = (dataSet) => {
   waktu = moment(dataSet.data[0].invitation_date).utcOffset(420).format("YYYY-MM-DDTHH:mm:ss") //Mengambil data waktu pengundang dari database
   batas = moment(waktu).add(1, 'd') //Batas Waktu Pengisian adalah 1 hari
   sekarang = moment() //Mengambil jam sekarang saat dipanggil
-  
+
   let minutes = batas.diff(sekarang, 'minutes') % 60 //Modulo untuk mendapatkan sisa menit
   let hours = (batas.diff(sekarang, 'minutes') - minutes) / 60 // Untuk mendapatkan jam
-  
-  if (batas.diff(sekarang, 'minutes') <= 0){ // Jika waktu sudah habis maka merubah menjadi expire
+
+  if (batas.diff(sekarang, 'minutes') <= 0) { // Jika waktu sudah habis maka merubah menjadi expire
     $('.remaining-time').text(`Sisa Waktu : Expired`)
   } else {
     $('.remaining-time').text(`Sisa Waktu : ${hours} Jam ${minutes} Menit`) //Jika waktu belum habis maka merubah menjadi sisa waktu
+  }
+}
+
+const combineTicket = (paramsVoucher) => {
+  if (paramsVoucher == null) {
+    let penunjuk = panjangOpsi; //Penunjuk menjadi index untuk ditambahkan tiket jenis baru hasil kombinasi
+    let next = 1; //Untuk Value Tiket Gabungan, setiap menambahkan tiket gabungan next + 1, value untuk tiket gabungan adalah banyak tiket yang didapat ditambah next
+    for (i = 1; i < panjangOpsi; i++) {
+      for (j = i + 1; j < panjangOpsi; j++) {
+        if ((optionTicket[i].nama).includes("Only") == true &&
+          (optionTicket[j].nama).includes("Only") == true
+        ) { //Melakukan Penggabungan Jenis jika mengandung kata "Only"
+          optionTicket.splice(penunjuk, 0, {
+            id: panjangOpsi + next,
+            nama: `${optionTicket[i].nama} & ${optionTicket[j].nama}`,
+            harga: optionTicket[i].harga + optionTicket[j].harga,
+            capacity: Math.min(optionTicket[i].capacity, optionTicket[j].capacity),
+            sisa: Math.min(optionTicket[i].sisa, optionTicket[j].sisa)
+          });
+
+          // sumTicket.splice(penunjuk, 0, Math.max(sumTicket[i], sumTicket[j]));
+          penunjuk++;
+          next++;
+        }
+
+      }
+    }
   }
 }
 
@@ -109,23 +163,22 @@ const getData = () => {
   const url = new URL(link);
 
   let params = url.searchParams.get('m'); //Mengambil Data dari params keyword 'm'
-  let paramsVoucher = url.searchParams.get('voucher_id') //Mengambil Data dari params keyword 'voucher_id'
-  getDiscount(paramsVoucher) //Mengambil Besaran Diskon dari Voucher ID
+  voucherCode = paramsVoucher = url.searchParams.get('voucher_id') //Mengambil Data dari params keyword 'voucher_id'
+  getDiscount(voucherCode) //Mengambil Besaran Diskon dari Voucher ID
 
   // AJAX jenis Tiket
   $.ajax({
-    url: getTicket(paramsVoucher), //Memanggil Function getTicket untuk mendapatkan return IP yang cocok berdasarkan paramter
+    url: getTicket(voucherCode), //Memanggil Function getTicket untuk mendapatkan return IP yang cocok berdasarkan paramter
     type: 'GET',
     dataType: 'json',
-    beforeSend: function(){
+    beforeSend: function () {
       getTicketSold()
     },
     success: function (data, textStatus, xhr) {
       data.data.map((item) => {
-        console.log(item)
-        if(item.ticket_seat != null){ //Jika seat tidak samadengan null
-          if(paramsVoucher == null){ //Jika paramsVoucher adalah null maka akan menampilkan tiket yang tidak memiliki voucher_id
-            if(item.voucher_id === null && item.ticket_seat != null){
+        if (item.ticket_seat != null) { //Jika seat tidak samadengan null
+          if (voucherCode == null) { //Jika voucherCode adalah null maka akan menampilkan tiket yang tidak memiliki voucher_id
+            if (item.voucher_id === null && item.ticket_seat != null) {
               optionTicket.push({
                 id: item.ticket_id,
                 nama: item.ticket_type,
@@ -134,8 +187,8 @@ const getData = () => {
                 sisa: item.current_seat
               });
             }
-          } else { //Jika paramsVoucher adalah TIDAK NULL maka akan menampilkan hanya tiket yang memiliki voucher_id
-            if(item.voucher_id != null && item.ticket_seat != null){
+          } else { //Jika voucherCode adalah TIDAK NULL maka akan menampilkan hanya tiket yang memiliki voucher_id
+            if (item.voucher_id != null && item.ticket_seat != null) {
               optionTicket.push({
                 id: item.ticket_id,
                 nama: item.ticket_type,
@@ -146,37 +199,14 @@ const getData = () => {
             }
           }
         }
-        
+
       });
 
       // let panjangOpsi = paramsVoucher != null? optionTicket.length : optionTicket.length; //Mencari Length dari Array Jenis Ticket
-      let panjangOpsi = optionTicket.length;
-      
-      // Jika paramsVoucher adalah null maka akan melakukan kombinasi Tiket berdasarkan tiket yang ada kata "Only"
-      if(paramsVoucher == null){
-        let penunjuk = panjangOpsi; //Penunjuk menjadi index untuk ditambahkan tiket jenis baru hasil kombinasi
-        let next = 1; //Untuk Value Tiket Gabungan, setiap menambahkan tiket gabungan next + 1, value untuk tiket gabungan adalah banyak tiket yang didapat ditambah next
-        for (i = 1; i < panjangOpsi; i++) {
-          for (j = i + 1; j < panjangOpsi; j++) {
-            if((optionTicket[i].nama).includes("Only") == true &&
-            (optionTicket[j].nama).includes("Only") == true
-            ){ //Melakukan Penggabungan Jenis jika mengandung kata "Only"
-              optionTicket.splice(penunjuk, 0, {
-                id: panjangOpsi + next,
-                nama: `${optionTicket[i].nama} & ${optionTicket[j].nama}`,
-                harga: optionTicket[i].harga + optionTicket[j].harga,
-                capacity: Math.min(optionTicket[i].capacity, optionTicket[j].capacity),
-                sisa: Math.min(optionTicket[i].sisa, optionTicket[j].sisa)
-              });
+      panjangOpsi = optionTicket.length;
+      console.log(panjangOpsi)
 
-              // sumTicket.splice(penunjuk, 0, Math.max(sumTicket[i], sumTicket[j]));
-              penunjuk++;
-              next++;
-            }
-            
-          }
-        }
-      }
+      combineTicket(voucherCode)
 
       // Mengambil data Peserta yang ada dalam satu Pemesanan
       $.ajax({
@@ -191,21 +221,21 @@ const getData = () => {
           let dataPeserta = data.data
 
           dataPeserta.map((item, index) => {
-            if(item.invitation_status != 2) {
-              pembelian.push(0);
-              
-              tableRow = 
-              `
+            if (item.invitation_status != 2) {
+              pembelian.push({ id: 0, harga: 0 });
+
+              tableRow =
+                `
                 <tr>
                     <td>
                         ${item.customer_id.customer_email}
                     </td>
                     <td>
-                      ${item.customer_id.customer_name == null? "Belum Mengisi" : `${item.customer_id.customer_name}`}
+                      ${item.customer_id.customer_name == null ? "Belum Mengisi" : `${item.customer_id.customer_name}`}
                     </td>
                     ${item.invitation_status == 1 ?
-                      `<td>
-                          <select class="custom-select" id="${index + 1}" name="tiket-peserta-${index + 1}" onchange="priceShow(this.id, this.value)"></select>
+                  `<td>
+                          <select class="custom-select option${index + 1}" id="${index + 1}" name="tiket-peserta-${index + 1}" onchange="priceShow(this.id, this.value)"></select>
                         </td>
                         <td class= "price${index + 1}">${0}</td>
                         <td>
@@ -217,9 +247,9 @@ const getData = () => {
                           Completed
                         </td>
                         `
-                    :
-                    `<td>
-                        <select class="custom-select" id="${index + 1}" onchange="priceShow(this.id, this.value)" disabled></select>
+                  :
+                  `<td>
+                        <select class="custom-select option${index + 1}" id="${index + 1}" onchange="priceShow(this.id, this.value)" disabled></select>
                       </td>
                       <td class= "price${index + 1}">${0}</td>
                       <td>
@@ -230,7 +260,7 @@ const getData = () => {
                         <button class="btn btn-danger" onclick="hapus(${item.invitation_id}, ${item.customer_id.customer_id}, ${2})" type="button">Hapus</button>
                       </td>
                     `
-                  }            
+                }            
                 </tr>    
               `;
 
@@ -242,7 +272,7 @@ const getData = () => {
                 statusPemesanan.push(false);
               }
             }
-            
+
           });
 
           // Menambahkan Option Tiket di Select Box
@@ -252,9 +282,13 @@ const getData = () => {
                 $('.custom-select').append(`<option value="${item.id}">${item.nama}</option>`);
               } else {
                 // $('.custom-select').append(`<option value="${item.id}">${item.nama} (${item.capacity - sumTicket[index]})</option>`);
-                $('.custom-select').append(`<option value="${item.id}">${item.nama} (${item.sisa})</option>`);
+                if (item.sisa == 0) {
+                  $('.custom-select').append(`<option value="${item.id}" disabled>${item.nama} (0)</option>`);
+                } else {
+                  $('.custom-select').append(`<option value="${item.id}">${item.nama} (${item.sisa})</option>`);
+                }
+
               }
-              console.log(item)
             }
           });
 
@@ -309,7 +343,7 @@ $(document).ready(function () {
 });
 
 const getTicket = (voucher) => {
-  if(voucher === null) {
+  if (voucher === null) {
     return `http://${ip}/items/ticket`
   } else {
     return `http://${ip}/items/ticket/?filter[voucher_id]=${voucher}`
@@ -350,19 +384,6 @@ const hapus = (invit, customer, kode) => {
   })
 }
 
-
-// function confirmOrder(){
-//   swal.fire({
-//     title: "Are you sure?",
-//     text: "You will not be able to recover this imaginary file!",
-//     icon: "warning",
-//     buttons: [
-//       'No, cancel it!',
-//       'Yes, I am sure!'
-//     ],
-//     dangerMode: true,
-//   })
-// }
 
 const swalWithBootstrapButtons = Swal.mixin({
   customClass: {
