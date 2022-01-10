@@ -37,45 +37,16 @@
   <div class="container">
   <div class="row">
     <div class="col-sm-7">
-      <div class="card data-cust p-3">
-
-        <h5 class=""><b>Data Peserta</b></h5>
+      <div class="card data-cust">
         
       </div>
     </div>
     
     <div class="col-sm-5 order">
-
-      <div class="card">
-        <div class="card-body orderannya">
-<!--          <h5 class="card-title"><b>Dream World Wide in Jogja</b></h5>-->
-<!--          -->
-<!--            <div class="row">-->
-<!--              <div class="col-sm-6">-->
-<!--              <p class="card-text"><b>ID ORDER</b></p>-->
-<!--              </div>-->
-<!--              <div class="col-sm-6 id-order">-->
-<!--              <p class="card-text">008hGHDGGJS</p>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          <hr>-->
-<!--          -->
-<!--            <div class="row">-->
-<!--              <div class="col-6 col-md-4">Day 1</div>-->
-<!--              <div class="col-6 col-md-4"></div>-->
-<!--              <div class="col-6 col-md-4">Rp 236.000</div>-->
-<!--            </div>-->
-<!--            <hr>-->
-            <div class="row totalnya">
-<!--              <div class="col-6 col-md-4"><b>Total</b></div>-->
-<!--              <div class="col-6 col-md-4"></div>-->
-<!--              <div class="col-6 col-md-4">Rp 800.000</div>-->
-            </div> 
-          <br>
-          <button type="button" class="btn btn-primary bayar">Bayar</button> 
-
-        </div>
+      <div class="card orderannya">
+          
       </div>
+    </div>
 
     </div>
 
