@@ -44,7 +44,7 @@
     
     <div class="col-sm-5 order">
       <div class="card orderannya">
-          
+        <a href='../controller/invoiceProcess.php?m=<?php echo($_GET['m']); ?>' class="btn btn-primary bayar">Bayar</a> 
       </div>
     </div>
 

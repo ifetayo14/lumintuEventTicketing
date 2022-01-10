@@ -72,7 +72,7 @@ $.ajax({
             </div> 
           <br>
           <div class="bayar">
-          <button type="button" class="btn btn-primary bayar">Bayar</button> 
+          
           </div>
       </div>
       `;
