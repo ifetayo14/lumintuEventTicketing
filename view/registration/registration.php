@@ -33,7 +33,8 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        let showPopUp = () => {
+        // Deklarasi Function Show Pop Up Sukses
+        const showPopUp = () => {
             Swal.fire({
                 icon: 'success',
                 title: 'Registration Success!',
@@ -43,7 +44,8 @@
             })
         }
 
-        let showMailExist = () => {
+        // Deklarasi Function Show Pop Up Email Exist
+        const showMailExist = () => {
             Swal.fire({
                 icon: 'error',
                 title: 'Registration Failed!',
@@ -57,7 +59,7 @@
 </head>
 
 <body>
-     <?php
+    <!-- <?php
         if (isset($_GET['scs'])){
             echo '<script type="text/javascript">
                     showPopUp();
@@ -65,19 +67,20 @@
         }elseif(isset($_GET['mailExist'])){
             echo '<script type="text/javascript">showMailExist();</script>';
         }
-    ?>
+    ?> -->
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-8 col-md-6 col-sm-12 col-xs-12"></div> <!-- Col-8 -->
-            <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 p-5 registrasi-side">
-                <!-- Start Registration Side -->
+            <div class="col-xl-8 col-lg-7 col-md-6 col-sm-12 col-xs-12"></div> 
+            <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12 col-xs-12 p-5 registrasi-side">
                 <div class="registrasi-side-header mb-4">
                     <p class="h2 text-center mb-3 text-white">Create an account</p>
                     <blockquote class="blockquote text-center mb-3">
-                        <p class="mb-0 font-italic gold h6">Get to know about something first, before you can love it
-                            better</p>
-                        <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Indonesia</cite>
+                        <p class="mb-0 font-italic gold h6">
+                            Get to know about something first, before you can love it better
+                        </p>
+                        <footer class="blockquote-footer">
+                            Someone famous in <cite title="Source Title">Indonesia</cite>
                         </footer>
                     </blockquote>
                 </div>
@@ -111,7 +114,9 @@
                             </small>
                         </div>
 
-                        <button disabled class="btn btn-registrasi w-100 mt-2" onclick="">Registrasi</button>
+                        <button disabled class="btn btn-registrasi w-100 mt-2 p-2">
+                            Registrasi
+                        </button>
                     </form>
                 </div>
 

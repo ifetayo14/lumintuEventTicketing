@@ -99,7 +99,7 @@ body {
 @media screen and (min-width: 1200px) {
     .banner-event{
         position: relative;
-        height: 50vh;
+        height: 80vh;
         background-image: url('../img/event1.jpg');
         background-size: cover;
         background-repeat: no-repeat;
@@ -109,7 +109,7 @@ body {
     .deskripsi{
         z-index: 2;
         border-radius: 5%;
-        height: 50vh;
+        height: 80vh;
         width: 100%;
     }
 
@@ -126,9 +126,19 @@ body {
 }
 
 
+.btn-invite{
+    width: 100%;
+    background-color: #D4AF37;
+    color: #ffffff;
+}
 
+.btn-invite[disabled]{
+    opacity: 0.4;
+}
 
-
+.btn-invite[disabled]:hover{
+    color: #ffffff;
+}
 
 
 .nama-event{
@@ -139,8 +149,6 @@ body {
     color: #ffffff;
     font-weight: 700;
 }
-
-
 
 .modal-content {
     background-color: #38435F;

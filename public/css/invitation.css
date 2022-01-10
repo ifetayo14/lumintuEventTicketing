@@ -32,4 +32,13 @@ body {
 
 .btn-accept{
     background-color: #D4AF37;
+    color: #FFF;
+}
+
+.btn-accept[disabled]{
+    opacity: 0.4;
+}
+
+.btn-accept[disabled]:hover{
+    color: #fff;
 }

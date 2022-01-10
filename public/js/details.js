@@ -195,11 +195,21 @@ let addInputFieldInvitation = () => {
 
   $('.btn-delete').click(function () {
     $(this).parent().parent().parent().remove();
+    statusOfInput.pop()
     toggleButtonTrash()
+    checkStatus();
     return false;
   });
 };
 
+const checkStatus = () => {
+  if (statusOfInput.find((element) => element.status === false) === undefined) {
+    $('.btn-invite').prop('disabled', false);
+  } else {
+    $('.btn-invite').prop('disabled', true);
+  }
+  return false;
+}
 
 
 
@@ -228,14 +238,16 @@ let validate = (email) => {
     });
   } else {
     RESULT.text('Your email is not valid');
+    statusOfInput.find((item, index) => {
+      if (item.name === `${email}`) {
+        let oldData = statusOfInput[index];
+        statusOfInput[index] = { ...oldData, status: false };
+        return true;
+      }
+    });
   }
 
-  if (statusOfInput.find((element) => element.status === false) === undefined) {
-    $('.btn-invite').prop('disabled', false);
-  } else {
-    $('.btn-invite').prop('disabled', true);
-  }
-  return false;
+  checkStatus()
 };
 
 // Show Voucher Code Field
