@@ -49,7 +49,8 @@
                 <h4 class="h5 tanggal eventClient mb-4"></h4>
                 <p class="text-white eventAddress"></p>
                 <button class="btn btn-buy" data-toggle="modal" data-target="#exampleModalScrollable" type="button">Buy
-                    Ticket</button>
+                    Ticket
+                </button>
             </div>
         </div>
 
@@ -128,7 +129,7 @@
                                                     placeholder="Voucher Code">
                                     </div>
                                     <div class="container text-center">
-                                        <button class="btn btn-buy w-50 btn-invite" type="submit"
+                                        <button class="btn w-50 btn-invite" type="submit"
                                             disabled>Invite</button>
                                     </div>
                                 </div>
@@ -204,14 +205,14 @@
     <script src="../public/js/details.js"></script>
 
     <script type="text/javascript">
-
+        // Mengambil Data Customer Yang Dikirim dari Backend
         var cred = " <?php echo($customerEmail); ?>";
         console.log(cred);
 
         $(document).on('change', '.switchMe', function () {
             let oldData = statusOfInput[0]
             if (this.checked) {
-                $("input#inputPeserta1").val(cred);
+                $("input#inputPeserta1").val(cred); 
                 $("#peserta1 #emailHelpBlock").addClass("d-none")
                 statusOfInput[0] = { ...oldData, status: true }
                 validate("peserta1")

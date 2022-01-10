@@ -45,6 +45,7 @@ class ComposerStaticIniteb0e6d744faf65a5855cf19c24d6f72f
         'M' => 
         array (
             'MyCLabs\\Enum\\' => 13,
+            'Midtrans\\' => 9,
         ),
         'F' => 
         array (
@@ -126,6 +127,10 @@ class ComposerStaticIniteb0e6d744faf65a5855cf19c24d6f72f
         array (
             0 => __DIR__ . '/..' . '/myclabs/php-enum/src',
         ),
+        'Midtrans\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/midtrans/midtrans-php/Midtrans',
+        ),
         'FontLib\\' => 
         array (
             0 => __DIR__ . '/..' . '/phenx/php-font-lib/src/FontLib',
@@ -160,7 +165,6 @@ class ComposerStaticIniteb0e6d744faf65a5855cf19c24d6f72f
 
     public static $classMap = array (
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
-        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Datamatrix' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/barcodes/datamatrix.php',
         'Dompdf\\Cpdf' => __DIR__ . '/..' . '/dompdf/dompdf/lib/Cpdf.php',
         'HTML5_Data' => __DIR__ . '/..' . '/dompdf/dompdf/lib/html5lib/Data.php',
