@@ -2,7 +2,7 @@
     session_start();
     $cred = $_SESSION['cred'];
 
-    $urlIP = '192.168.18.67:8001';
+    $urlIP = 'lumintu-tiket.tamiaindah.xyz:8055';
     $invoiceURL = 'http://' . $urlIP . '/items/invoice';
     $paymentURL = 'http://' . $urlIP . '/items/payment';
     $fileURL = 'http://' . $urlIP . '/files';
