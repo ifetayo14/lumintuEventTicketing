@@ -37,99 +37,17 @@
   <div class="container">
   <div class="row">
     <div class="col-sm-7">
-
       <div class="card data-cust">
-
-        <div class="card-body">
-        <h5 class="card-title"><b>Data Peserta</b></h5>
-          <hr>
-          <!-- ini peserta yang pertama -->
-          <h5 class="card-title peserta-brp urutan-cust"><b>CUSTOMMER 1 :</b></h5>
-          <div class="row">
-            <div class="col-sm-6">
-              <p class="card-text nama"><b>Nama</b></p>
-              <p class="card-text email"><b>Email</b></p>
-              <p class="card-text nohp"><b>No. Hp</b></p>
-            </div>
-            <div class="col-sm-6 isinya-cust">
-              <!-- <p class="card-text isi-nama">Tamia Indah Imanika</p>
-              <p class="card-text isi-email">tamiaindah66000@gmail.com</p>
-              <p class="card-text isi-nohp">085601787850</p> -->
-            </div>
-          </div>  
-        </div>
-      <div class="card data-cust p-3">
-        <h5 class=""><b>Data Peserta</b></h5>
+        
       </div>
     </div>
     
     <div class="col-sm-5 order">
-      <div class="card">
-        <div class="card-body orderannya">
-          <h5 class="card-title"><b>Dream World Wide in Jogja</b></h5>
-           <div class="row">
-            <div class="col-sm-6">
-            <p class="card-text"><b>ID ORDER</b></p>
-            </div>
-            <div class="col-sm-6">
-              <p class="card-text">008hGHDGGJS</p>
-            </div>
-          </div>
-          <hr>
-          <!-- <h5 class="card-title"><b>Dream World Wide in Jogja</b></h5>-->
-<!--          -->
-<!--            <div class="row">-->
-<!--              <div class="col-sm-6">-->
-<!--              <p class="card-text"><b>ID ORDER</b></p>-->
-<!--              </div>-->
-<!--              <div class="col-sm-6 id-order">-->
-<!--              <p class="card-text">008hGHDGGJS</p>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          <hr>-->
-<!--          -->
-<!--            <div class="row">-->
-<!--              <div class="col-6 col-md-4">Day 1</div>-->
-<!--              <div class="col-6 col-md-4"></div>-->
-<!--              <div class="col-6 col-md-4">Rp 236.000</div>-->
-<!--            </div>-->
-<!--            <hr>-->
-            <div class="row totalnya">
-<!--              <div class="col-6 col-md-4"><b>Total</b></div>-->
-<!--              <div class="col-6 col-md-4"></div>-->
-<!--              <div class="col-6 col-md-4">Rp 800.000</div>-->
-            </div> 
-          <br>
-          <div class="row tiketnya">
-            <div class="col-6 col-md-4">Day 1</div>
-            <div class="col-6 col-md-4">1 pax</div>
-            <div class="col-6 col-md-4">Rp 236.000</div>
-          </div>
-          <div class="row tiketnya">
-            <div class="col-6 col-md-4">All Day</div>
-            <div class="col-6 col-md-4">1 pax</div>
-            <div class="col-6 col-md-4">Rp 582.000</div>
-          </div>
-          <hr>
-          <!-- <div class="row subtotal">
-            <div class="col-6 col-md-4">Subtotal</div>
-            <div class="col-6 col-md-4"></div>
-            <div class="col-6 col-md-4">Rp 818.000</div>
-          </div>
-          <div class="row voucher">
-            <div class="col-6 col-md-4">Voucher</div>
-            <div class="col-6 col-md-4">V009</div>
-            <div class="col-6 col-md-4">Rp 18.000</div>
-          </div>
-          <div class="row total">
-            <div class="col-6 col-md-4"><b>Total</b></div>
-            <div class="col-6 col-md-4"></div>
-            <div class="col-6 col-md-4">Rp 800.000</div>
-          </div> 
-          <br> -->
-          <button type="button" class="btn btn-primary bayar">Bayar</button> 
-        </div>
+      <div class="card orderannya">
+          
       </div>
+    </div>
+
     </div>
 
   </div>
