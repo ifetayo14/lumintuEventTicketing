@@ -43,8 +43,26 @@
     </div>
     
     <div class="col-sm-5 order">
-      <div class="card orderannya">
-          
+      <div class="card">
+          <div class="card-body">   
+            <h5 class="card-title"><b>Dream World Wide in Jogja</b></h5>
+            <div class="row id-invoice">
+              
+            </div>
+          <hr>
+    
+            <div class="row orderannya">
+              
+            </div>
+            <hr>
+            <div class="row totalnya">
+              
+            </div> 
+          <br>
+          <div class="bayar">
+          <button type="button" class="btn btn-primary bayar">Bayar</button> 
+          </div>
+      </div>
       </div>
     </div>
 

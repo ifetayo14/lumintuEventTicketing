@@ -39,9 +39,9 @@ $.ajax({
   }
 });
 
-//ambil data orderannya
+//ambil data id invoice
 $.ajax({
-  url: `http://${IP}/items/order?fields=order_id,order_quantity,invoice_id.invoice_total,ticket_id.ticket_type,ticket_id.ticket_price&filter[customer_id][customer_code]=${params}`,
+  url: `http://${IP}/items/invoice?fields=invoice_id&filter[customer_id][customer_code]=${params}`,
   type: 'GET',
   dataType: 'json',
   success: function (data, textStatus, xhr) {
@@ -49,32 +49,31 @@ $.ajax({
     data.data.map((item, index) => {
       console.log(item)
       let dataOrder = `  
-      <div class="card-body">   
-      <h5 class="card-title"><b>Dream World Wide in Jogja</b></h5>
-            <div class="row">
-              <div class="col-6 col-md-4"><b>ID ORDER</b></div>
-              <div class="col-6 col-md-4"></div>
-              <div class="col-6 col-md-4">${item.order_id}</div>
-            </div>
-          <hr>
-          
-          <br>
-            <div class="row">
-              <div class="col-6 col-md-4">${item.ticket_id.ticket_type}</div>
-              <div class="col-6 col-md-4">${item.order_quantity}</div>
-              <div class="col-6 col-md-4">${item.ticket_id.ticket_price}</div>
-            </div>
-            <hr>
-            <div class="row totalnya">
-              <div class="col-6 col-md-4"><b>Total</b></div>
-              <div class="col-6 col-md-4"></div>
-              <div class="col-6 col-md-4">${item.invoice_id.invoice_total}</div>
-            </div> 
-          <br>
-          <div class="bayar">
-          <button type="button" class="btn btn-primary bayar">Bayar</button> 
-          </div>
-      </div>
+        <div class="col-6 col-md-4"><b>ID INVOICE</b></div>
+        <div class="col-6 col-md-4"></div>
+        <div class="col-6 col-md-4">${item.invoice_id}</div>
+      `;
+      console.log(dataOrder)
+      $('.id-invoice').append(dataOrder);
+    });
+  }
+});
+
+
+
+//ambil data orderannya
+$.ajax({
+  url: `http://${IP}/items/order?fields=order_id,order_quantity,ticket_id.ticket_type,ticket_id.ticket_price&filter[customer_id][customer_code]=${params}`,
+  type: 'GET',
+  dataType: 'json',
+  success: function (data, textStatus, xhr) {
+    console.log(data.data);
+    data.data.map((item, index) => {
+      console.log(item)
+      let dataOrder = `      
+        <div class="col-6 col-md-4">${item.ticket_id.ticket_type}</div>
+        <div class="col-6 col-md-4">${item.order_quantity}</div>
+        <div class="col-6 col-md-4">${item.ticket_id.ticket_price}</div>
       `;
       console.log(dataOrder)
       $('.orderannya').append(dataOrder);
@@ -82,3 +81,23 @@ $.ajax({
   }
 });
 
+
+//ambil data orderannya
+$.ajax({
+  url: `http://${IP}/items/invoice?fields=invoice_id,invoice_total&filter[customer_id][customer_code]=${params}`,
+  type: 'GET',
+  dataType: 'json',
+  success: function (data, textStatus, xhr) {
+    console.log(data.data);
+    data.data.map((item, index) => {
+      console.log(item)
+      let dataOrder = `      
+        <div class="col-6 col-md-4"><b>Total</b></div>
+        <div class="col-6 col-md-4"></div>
+        <div class="col-6 col-md-4">${item.invoice_total}</div>
+      `;
+      console.log(dataOrder)
+      $('.totalnya').append(dataOrder);
+    });
+  }
+});
