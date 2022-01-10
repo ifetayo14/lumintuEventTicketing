@@ -3,7 +3,7 @@ const CAROUSEL = $('.owl-carousel');
 const TABLE = $('.table');
 const BUTTON_PLUS = $('.btn-plus');
 let arrayOfSession = [];
-let statusOfInput = [{ name: `peserta1`, status: false }];
+let statusOfInput = [{ name: `peserta1`, status: true }];
 
 const ID_EVENT = 2;
 
@@ -182,24 +182,29 @@ let addInputFieldInvitation = () => {
   $('.body-popup').append(cln);
   toggleButtonTrash()
   statusOfInput.push({ name: `peserta${quantity}`, status: false });
-  document.querySelector;
-  $(`#peserta${quantity} .special`).remove();
-  $(`#peserta${quantity} p`).text(`Peserta ${quantity}`);
-  $(`#peserta${quantity} input`).attr({
+  let jenisPeserta = `peserta${quantity}`
+  $(`#${jenisPeserta} .special`).remove();
+  $(`#${jenisPeserta} p`).text(`Peserta ${quantity}`);
+  $(`#${jenisPeserta} input`).attr({
     name: `peserta${quantity}`,
     id: `peserta${quantity}`,
   });
-  $(`#peserta${quantity} input`).val('');
+  $(`#${jenisPeserta} input`).val('');
+  $(`#${jenisPeserta} input`).prop('disabled', false)
   validate(`peserta${quantity}`);
-  $(`#peserta${quantity} #emailHelpBlock`).removeClass('d-none');
+  $(`#${jenisPeserta} #emailHelpBlock`).removeClass('d-none');
+  $(`#${jenisPeserta} .row .col-2`).html(
+    `<button class="btn btn-danger btn-delete btn-sm rounded-0" type="button"
+    data-toggle="tooltip" data-placement="top" title="Delete" onclick="deleteField('${jenisPeserta}')"><i class="fa fa-trash"></i></button>`
+  );
 
-  $('.btn-delete').click(function () {
-    $(this).parent().parent().parent().remove();
-    statusOfInput.pop()
-    toggleButtonTrash()
-    checkStatus();
-    return false;
-  });
+  // $('.btn-delete').click(function () {
+  //   $(this).parent().parent().parent().remove();
+  //   statusOfInput.pop()
+  //   toggleButtonTrash()
+  //   checkStatus();
+  //   return false;
+  // });
 };
 
 const checkStatus = () => {
@@ -209,6 +214,22 @@ const checkStatus = () => {
     $('.btn-invite').prop('disabled', true);
   }
   return false;
+}
+
+const deleteField = (fieldNameClass) => {
+  $(`#${fieldNameClass}`).remove()
+  console.log(fieldNameClass)
+  statusOfInput.splice(statusOfInput.findIndex(element => element.name === fieldNameClass), 1)
+  checkStatus()
+
+  statusOfInput.map((item, index) => {
+    $(`#${item.name} .row .urutan`).text(`Peserta ${index + 1}`)
+    $(`#${item.name} input`).attr({
+      'name': `peserta${index + 1}`,
+      'id': `peserta${index + 1}`
+    })
+    item.name = `peserta${index + 1}`
+  })
 }
 
 
