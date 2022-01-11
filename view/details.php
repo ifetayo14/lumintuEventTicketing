@@ -95,25 +95,26 @@
                                         </div>
                                         <div class="row input-section mb-1">
                                             <div class="col-12 col-lg-3 col-md-3 col-sm-12 my-auto">
-                                                <p class="m-0 p-0">Peserta 1</p>
+                                                <p class="m-0 p-0 urutan">Peserta 1</p>
                                             </div>
                                             <div class="col-10 col-lg-7 col-md-7 col-sm-10 my-auto">
 
                                                 <input type="email" name="peserta1" class="form-control"
                                                     id="inputPeserta1" aria-describedby="emailHelp"
-                                                    placeholder="example : ex@gmail.com" oninput="validate(this.name)">
-                                                <small id="emailHelpBlock" class="form-text text-danger">
+                                                    placeholder="example : ex@gmail.com" oninput="validate(this.name)" value="<?php echo $customerEmail; ?>"
+                                                    readonly>
+                                                <small id="emailHelpBlock" class="form-text text-danger d-none">
                                                     Your email is not valid!
                                                 </small>
 
                                             </div>
                                             <div class="col-2 col-lg-2 col-md-2 col-sm-2 my-auto">
                                                 <button class="btn btn-danger btn-delete btn-sm rounded-0" type="button"
-                                                    data-toggle="tooltip" data-placement="top" title="Delete"
-                                                    disabled><i class="fa fa-trash"></i></button>
+                                                    data-toggle="tooltip" data-placement="top" title="Delete" disabled
+                                                    onclick="deleteField()"><i class="fa fa-trash"></i></button>
                                             </div>
                                         </div>
-                                        
+
                                     </div>
                                 </div>
                                 <div class="text-right mt-2 mx-4 btn-plus">
@@ -125,12 +126,11 @@
                                 <div class="modal-footer border-0">
                                     <div class="container mb-2 mt-5 d-none input-voucher">
                                         <input type="text" name="voucher" class="form-control text-center"
-                                                    id="inputVoucherCode" aria-describedby="voucherHelp"
-                                                    placeholder="Voucher Code">
+                                            id="inputVoucherCode" aria-describedby="voucherHelp"
+                                            placeholder="Voucher Code">
                                     </div>
                                     <div class="container text-center">
-                                        <button class="btn w-50 btn-invite" type="submit"
-                                            disabled>Invite</button>
+                                        <button class="btn w-50 btn-invite" type="submit">Invite</button>
                                     </div>
                                 </div>
 
@@ -212,7 +212,7 @@
         $(document).on('change', '.switchMe', function () {
             let oldData = statusOfInput[0]
             if (this.checked) {
-                $("input#inputPeserta1").val(cred); 
+                $("input#inputPeserta1").val(cred);
                 $("#peserta1 #emailHelpBlock").addClass("d-none")
                 statusOfInput[0] = { ...oldData, status: true }
                 validate("peserta1")

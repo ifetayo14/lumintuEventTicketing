@@ -43,8 +43,26 @@
     </div>
     
     <div class="col-sm-5 order">
-      <div class="card orderannya">
-        <a href='../controller/invoiceProcess.php?m=<?php echo($_GET['m']); ?>' class="btn btn-primary bayar">Bayar</a> 
+      <div class="card">
+          <div class="card-body">   
+            <h5 class="card-title"><b>Dream World Wide in Jogja</b></h5>
+            <div class="row id-invoice">
+              
+            </div>
+          <hr>
+    
+            <div class="row orderannya">
+              
+            </div>
+            <hr>
+            <div class="row totalnya">
+              
+            </div> 
+          <br>
+          <div class="bayar">
+            <a href='../controller/invoiceProcess.php?m=<?php echo($_GET['m']); ?>' class="btn btn-primary bayar">Bayar</a> 
+          </div>
+      </div>
       </div>
     </div>
 

@@ -33,8 +33,6 @@
 
     curl_close($curl);
 
-    echo '</br>' . $cred;
-
     $voucherID = 0;
 
     if (!empty($_POST['voucher'])) {
@@ -65,7 +63,8 @@
 
         }
     }else{
-        for ($x = 2; $x <= $numberOfPost; $x++){
+        $x = 2;
+        do {
             if ($_POST['peserta'.$x] != ''){
                 $curl = curl_init();
                 curl_setopt($curl, CURLOPT_URL, $customerURL . '?&filter[customer_email]=' . $_POST['peserta'.$x]);
@@ -78,14 +77,16 @@
                 }
 
                 curl_close($curl);
+
+                $x++;
             }
-        }
+        } while (isset($_POST['peserta'.$x]));
 
         if ($counter == 0){
 
             setInviterData($invitationURL, $inviterID, $voucherID);
 
-            for ($x = 2; $x <= $numberOfPost; $x++){
+            for ($x = 2; $x < $numberOfPost; $x++){
                 $pesertaEmail = $_POST['peserta'.$x];
                 
                 $getCusStatus = setCustomer($customerURL, $pesertaEmail);
@@ -112,22 +113,21 @@
                     header('Location: ../view/details.php?errCus');
                 }
             }
+            
+            $sendEmailStatus = sendInviterEmail($inviterEmail, $buyTicketLink, $cred, $voucherID);
 
-            for ($x = 1; $x <= $numberOfPost; $x++){
-                $pesertaEmail = $_POST['peserta'.$x];
-                if ($x == 1){
-                    $sendEmailStatus = sendInviterEmail($inviterEmail, $buyTicketLink, $cred, $voucherID);
-                }
-                else{
+            if ($sendEmailStatus == 'scs') {
+                for ($i=2; $i < $numberOfPost; $i++) { 
                     $mailStatus = sendInvitedEmail($pesertaEmail, $inviterEmail, $bioLink);
+
+                    if ($mailStatus != 'scs'){
+                        echo 'ajg';
+                    }
                 }
 
-                if ($mailStatus == 'scs'){
-                    header('Location: ../view/details.php?allScs');
-                }else{
-                    header('Location: ../view/details.php?mailFailed');
-                }
+                echo 'done';
             }
+            header('Location: ../view/details.php?' . $mailStatus);
         }else{
             header('Location: ../view/details.php?dupEm');
         }
@@ -262,6 +262,7 @@
         $mail->addAddress($receiverEmail);
         $mail->Subject = "[Lumintu Events] Link Pemesanan Tiket";
         $mail->isHTML(true);
+
         $mailLocation = '../view/email/emailToOrder.html';
         $message = file_get_contents($mailLocation);
         $message = str_replace('%inviterMail%', $receiverEmail, $message);
@@ -273,9 +274,10 @@
         $mail->msgHTML($message);
 
         if ($mail->send()) {
+            $mail->clearAddresses();
             return 'scs';
         }else {
-            return 'mailErrInviter';
+            return $mail->ErrorInfo;
         }
     }
 
@@ -295,6 +297,7 @@
         $mail->addAddress($invitedEmail);
         $mail->Subject = "[Lumintu Events] Link Pengisian Biodata Pemesanan Tiket";
         $mail->isHTML(true);
+        
         $mailLocation = '../view/email/emailInvitation.html';
         $message = file_get_contents($mailLocation);
         $message = str_replace('%receiverMail%', $invitedEmail, $message);
@@ -303,12 +306,11 @@
         $mail->msgHTML($message);
 
         if ($mail->send()) {
+            $mail->clearAddresses();
             return 'scs';
         }else {
-            return 'mailErrInvited';
+            return 'errInvited';
         }
-
-        $mail->clearAddresses();
     }
 
 ?>
